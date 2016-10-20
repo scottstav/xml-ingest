@@ -17,6 +17,11 @@
 package org.apache.geode.cache.query.internal.aggregate;
 
 import org.apache.geode.cache.query.QueryService;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import no.uib.cipr.matrix.DenseVector;
+import no.uib.cipr.matrix.Vector;
+
+import no.uib.cipr.matrix.VectorEntry;
 
 /**
  * Computes the sum for replicated & PR based queries.
@@ -25,13 +30,23 @@ import org.apache.geode.cache.query.QueryService;
  */
 public class Sum extends AbstractAggregator {
 
+  private boolean isVectorAggregate = false;
   private double result = 0;
-
+  private Vector VectorSumResult = new DenseVector(2000000).zero();
+  public Sum() {
+    //...
+  }
   @Override
   public void accumulate(Object value) {
     if (value != null && value != QueryService.UNDEFINED) {
-      Number number = (Number) value;
-      result += number.doubleValue();
+      if (value instanceof Number) {
+        Number number = (Number) value;
+        result += number.doubleValue();
+      } else if (value instanceof Vector) {
+        VectorSumResult = VectorSumResult.add((Vector) value);
+      } else {
+        throw new RuntimeException("Invalid SUM class");
+      }
     }
   }
 

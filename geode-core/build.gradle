@@ -29,6 +29,7 @@ configurations {
 
 dependencies {
    // Source Dependencies
+  compile group: 'com.googlecode.matrix-toolkits-java', name: 'mtj', version: '1.0.4'
   // External 
   provided files("${System.getProperty('java.home')}/../lib/tools.jar")
   compile 'com.github.stephenc.findbugs:findbugs-annotations:' + project.'stephenc-findbugs.version'
