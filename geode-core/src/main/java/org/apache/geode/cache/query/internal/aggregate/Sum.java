@@ -38,6 +38,7 @@ public class Sum extends AbstractAggregator {
   }
   @Override
   public void accumulate(Object value) {
+    System.out.println("=== DEBUG === AGGREGATE SUM ===");
     if (value != null && value != QueryService.UNDEFINED) {
       if (value instanceof Number) {
         Number number = (Number) value;
@@ -47,6 +48,7 @@ public class Sum extends AbstractAggregator {
       } else {
 //        throw new RuntimeException("Invalid SUM class");
         System.err.println("=== DEBUG === CLASS === " + value.getClass());
+        System.out.println("=== DEBUG === CLASS === " + value.getClass());
       }
     }
   }
