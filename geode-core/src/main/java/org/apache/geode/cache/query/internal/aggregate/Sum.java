@@ -45,7 +45,8 @@ public class Sum extends AbstractAggregator {
       } else if (value instanceof Vector) {
         VectorSumResult = VectorSumResult.add((Vector) value);
       } else {
-        throw new RuntimeException("Invalid SUM class");
+//        throw new RuntimeException("Invalid SUM class");
+        System.err.println("=== DEBUG === CLASS === " + value.getClass());
       }
     }
   }
