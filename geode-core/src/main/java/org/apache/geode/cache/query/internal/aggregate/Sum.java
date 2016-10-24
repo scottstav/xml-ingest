@@ -22,6 +22,7 @@ import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.Vector;
 
 import no.uib.cipr.matrix.VectorEntry;
+import no.uib.cipr.matrix.sparse.SparseVector;
 
 /**
  * Computes the sum for replicated & PR based queries.
@@ -32,7 +33,7 @@ public class Sum extends AbstractAggregator {
 
   private boolean isVectorAggregate = false;
   private double result = 0;
-  private Vector VectorSumResult = new DenseVector(2000000).zero();
+  private Vector VectorSumResult;
   public Sum() {
     //...
   }
@@ -44,6 +45,9 @@ public class Sum extends AbstractAggregator {
         Number number = (Number) value;
         result += number.doubleValue();
       } else if (value instanceof Vector) {
+        if (value == null) {
+          value = new SparseVector(200000, 500);
+        }
         VectorSumResult = VectorSumResult.add((Vector) value);
       } else {
 //        throw new RuntimeException("Invalid SUM class");
