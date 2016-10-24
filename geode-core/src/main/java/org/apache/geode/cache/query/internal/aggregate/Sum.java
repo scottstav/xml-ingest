@@ -45,6 +45,7 @@ public class Sum extends AbstractAggregator {
         Number number = (Number) value;
         result += number.doubleValue();
       } else if (value instanceof Vector) {
+        isVectorAggregate = true;
         if (value == null) {
           value = new SparseVector(200000, 500);
         }
@@ -64,6 +65,9 @@ public class Sum extends AbstractAggregator {
 
   @Override
   public Object terminate() {
-    return downCast(result);
+    if ( !isVectorAggregate )
+      return downCast(result);
+
+    return VectorSumResult;
   }
 }
