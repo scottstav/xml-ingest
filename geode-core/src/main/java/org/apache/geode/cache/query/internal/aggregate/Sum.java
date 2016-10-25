@@ -24,7 +24,6 @@ import no.uib.cipr.matrix.Vector;
 import no.uib.cipr.matrix.VectorEntry;
 import no.uib.cipr.matrix.sparse.SparseVector;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -49,22 +48,25 @@ public class Sum extends AbstractAggregator {
     try {
       bw = new BufferedWriter(new FileWriter("/tmp/accumulate.log"));
 
-      bw.write("=== DEBUG === AGGREGATE SUM ===\n");
-      bw.write("=== DEBUG === OBJCLASS === " + value.getClass() + "\n");
+      bw.write("=== DEBUG === entered aggregate sum ===\n");
+      bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
       if (value != null && value != QueryService.UNDEFINED) {
         if (value instanceof Number) {
+          bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
           Number number = (Number) value;
           result += number.doubleValue();
         } else if (value instanceof SparseVector) {
+          bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
           SparseVector svvalue = (SparseVector) value;
           isVectorAggregate = true;
           if (VectorSumResult == null) {
+            bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
             VectorSumResult = new SparseVector(200000, 500);
           }
           VectorSumResult = VectorSumResult.add(svvalue);
         } else {
 //        throw new RuntimeException("Invalid SUM class");
-          bw.write("=== DEBUG === INVALCLASS === " + value.getClass() + "\n");
+          bw.write("=== DEBUG === unknown class === " + value.getClass() + "\n");
         }
       }
 
