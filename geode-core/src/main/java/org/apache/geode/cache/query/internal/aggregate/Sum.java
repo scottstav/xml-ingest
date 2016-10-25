@@ -55,12 +55,13 @@ public class Sum extends AbstractAggregator {
         if (value instanceof Number) {
           Number number = (Number) value;
           result += number.doubleValue();
-        } else if (value instanceof Vector) {
+        } else if (value instanceof SparseVector) {
+          SparseVector svvalue = (SparseVector) value;
           isVectorAggregate = true;
-          if (value == null) {
-            value = new SparseVector(200000, 500);
+          if (VectorSumResult == null) {
+            VectorSumResult = new SparseVector(200000, 500);
           }
-          VectorSumResult = VectorSumResult.add((Vector) value);
+          VectorSumResult = VectorSumResult.add(svvalue);
         } else {
 //        throw new RuntimeException("Invalid SUM class");
           bw.write("=== DEBUG === INVALCLASS === " + value.getClass() + "\n");
