@@ -45,8 +45,9 @@ public class Sum extends AbstractAggregator {
   }
   @Override
   public void accumulate(Object value) {
+    BufferedWriter bw = null;
     try {
-      BufferedWriter bw = new BufferedWriter(new FileWriter("accumulate.log"));
+      bw = new BufferedWriter(new FileWriter("/tmp/accumulate.log"));
 
       bw.write("=== DEBUG === AGGREGATE SUM ===\n");
       bw.write("=== DEBUG === OBJCLASS === " + value.getClass() + "\n");
@@ -65,9 +66,12 @@ public class Sum extends AbstractAggregator {
           bw.write("=== DEBUG === INVALCLASS === " + value.getClass() + "\n");
         }
       }
+
+      bw.flush();
     } catch (IOException e) {
 
     }
+
   }
 
   @Override
