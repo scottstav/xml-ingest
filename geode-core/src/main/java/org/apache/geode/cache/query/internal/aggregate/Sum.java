@@ -55,16 +55,20 @@ public class Sum extends AbstractAggregator {
           bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
           Number number = (Number) value;
           result += number.doubleValue();
-        } else if (value instanceof no.uib.cipr.matrix.sparse.SparseVector) {
+        } else if (value instanceof SparseVector) {
           bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
-          SparseVector svvalue = (no.uib.cipr.matrix.sparse.SparseVector) value;
+          SparseVector svvalue = (SparseVector) value;
           isVectorAggregate = true;
           if (VectorSumResult == null) {
             bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
-            VectorSumResult = new no.uib.cipr.matrix.sparse.SparseVector(200000, 500);
+            VectorSumResult = new SparseVector(200000, 500);
           }
           VectorSumResult = VectorSumResult.add(svvalue);
         } else {
+          bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
+          SparseVector svvalue = (SparseVector) value;
+          isVectorAggregate = true;
+          VectorSumResult = VectorSumResult.add(svvalue);
 //        throw new RuntimeException("Invalid SUM class");
           bw.write("=== DEBUG === unknown class === " + value.getClass() + "\n");
         }
