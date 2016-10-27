@@ -20,10 +20,10 @@ import org.apache.geode.cache.query.QueryService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.Vector;
-
 import no.uib.cipr.matrix.VectorEntry;
+import java.lang.*;
 import no.uib.cipr.matrix.sparse.SparseVector;
-
+import java.net.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,6 +44,22 @@ public class Sum extends AbstractAggregator {
   }
   @Override
   public void accumulate(Object value) {
+    try {
+      URL dirUrl = new URL("/home/rohith/geode-node1/libs/mtj-1.0.4.jar");             // 1
+      URLClassLoader cl = new URLClassLoader(new URL[]{dirUrl}, getClass().getSuperclass().getClassLoader());  // 2
+      Class loadedClass = cl.loadClass("no.uib.cipr.matrix.sparse.SparseVector");
+      Vector obj = (Vector) loadedClass.newInstance();
+      throw new RuntimeException("Invalid class path");
+    }
+    catch (IOException e) {
+
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
     BufferedWriter bw = null;
     try {
       bw = new BufferedWriter(new FileWriter("/tmp/accumulate.log"));
