@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.Vector;
 import no.uib.cipr.matrix.VectorEntry;
+import java.io.PrintWriter;
 import java.lang.*;
 import no.uib.cipr.matrix.sparse.SparseVector;
 import java.net.*;
@@ -77,8 +78,15 @@ public class Sum extends AbstractAggregator {
       bw.flush();
     } catch (IOException e) {
 
-    }
+      PrintWriter out = null;
+      try {
+        out = new PrintWriter(new FileWriter("/tmp/exceptions.log", true));
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      }
+      e.printStackTrace(out);
 
+    }
   }
 
   @Override
