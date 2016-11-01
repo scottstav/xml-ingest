@@ -24,10 +24,11 @@ import no.uib.cipr.matrix.VectorEntry;
 import java.io.PrintWriter;
 import java.lang.*;
 import no.uib.cipr.matrix.sparse.SparseVector;
-import java.net.*;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 
 /**
@@ -45,39 +46,48 @@ public class Sum extends AbstractAggregator {
   }
   @Override
   public void accumulate(Object value) {
-    BufferedWriter bw = null;
     try {
-      bw = new BufferedWriter(new FileWriter("/tmp/accumulate.log"));
+      BufferedWriter bw = null;
+      try {
+        bw = new BufferedWriter(new FileWriter("/tmp/accumulate.log"));
 
-      bw.write("=== DEBUG === entered aggregate sum ===\n");
-      bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
-      if (value != null && value != QueryService.UNDEFINED) {
-        if (value instanceof Number) {
-          bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
-          Number number = (Number) value;
-          result += number.doubleValue();
-        } else if (value instanceof SparseVector) {
-          bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
-          SparseVector svvalue = (SparseVector) value;
-          isVectorAggregate = true;
-          if (VectorSumResult == null) {
-            bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
-            VectorSumResult = new SparseVector(200000, 500);
-          }
-          VectorSumResult = VectorSumResult.add(svvalue);
-        } else {
-          bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
-          SparseVector svvalue = (SparseVector) value;
-          isVectorAggregate = true;
-          VectorSumResult = VectorSumResult.add(svvalue);
+        bw.write("=== DEBUG === entered aggregate sum ===\n");
+        bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
+        if (value != null && value != QueryService.UNDEFINED) {
+          if (value instanceof Number) {
+            bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
+            Number number = (Number) value;
+            result += number.doubleValue();
+          } else if (value instanceof SparseVector) {
+            bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
+            SparseVector svvalue = (SparseVector) value;
+            isVectorAggregate = true;
+            if (VectorSumResult == null) {
+              bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
+              VectorSumResult = new SparseVector(200000, 500);
+            }
+            VectorSumResult = VectorSumResult.add(svvalue);
+          } else {
+            bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
+            SparseVector svvalue = (SparseVector) value;
+            isVectorAggregate = true;
+            VectorSumResult = VectorSumResult.add(svvalue);
 //        throw new RuntimeException("Invalid SUM class");
-          bw.write("=== DEBUG === unknown class === " + value.getClass() + "\n");
+            bw.write("=== DEBUG === unknown class === " + value.getClass() + "\n");
+          }
         }
+
+        bw.flush();
+      } catch (IOException e) {
+        PrintWriter out = null;
+        try {
+          out = new PrintWriter(new FileWriter("/tmp/exceptions.log", true));
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        }
+        e.printStackTrace(out);
       }
-
-      bw.flush();
-    } catch (IOException e) {
-
+    } catch (Exception e) {
       PrintWriter out = null;
       try {
         out = new PrintWriter(new FileWriter("/tmp/exceptions.log", true));
@@ -85,7 +95,6 @@ public class Sum extends AbstractAggregator {
         e1.printStackTrace();
       }
       e.printStackTrace(out);
-
     }
   }
 
