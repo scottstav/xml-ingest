@@ -67,6 +67,13 @@ public class Sum extends AbstractAggregator {
             VectorSumResult = VectorSumResult.add(svvalue);
           } else {
             bw.write("=== DEBUG === value is unknown class === " + value.getClass() + "\n");
+
+            Class c = value.getClass();
+
+            while (!c.equals(Object.class)) {
+              c = c.getSuperclass();
+              bw.write("\t -> " + c);
+            }
 //
 //            SparseVector svvalue = (SparseVector) value;
 //            isVectorAggregate = true;
