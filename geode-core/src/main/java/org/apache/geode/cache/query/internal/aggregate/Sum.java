@@ -57,7 +57,7 @@ public class Sum extends AbstractAggregator {
             Number number = (Number) value;
             result += number.doubleValue();
           } else if (value instanceof SparseVector
-                     || value.getClass().getSuperclass().equals(SparseVector.class)) {
+                     || value.getClass().getSuperclass().equals(no.uib.cipr.matrix.sparse.SparseVector.class)) {
             bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
 //
             SparseVector svvalue = (SparseVector) value;
@@ -73,7 +73,7 @@ public class Sum extends AbstractAggregator {
 
             while (!c.equals(Object.class)) {
               c = c.getSuperclass();
-              bw.write("\t -> " + c);
+              bw.write("\t -> " + c + "\n");
             }
 //
 //            SparseVector svvalue = (SparseVector) value;
