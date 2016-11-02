@@ -49,7 +49,7 @@ public class Sum extends AbstractAggregator {
     try {
       BufferedWriter bw = null;
       try {
-        bw = new BufferedWriter(new FileWriter("/tmp/accumulate.log"));
+        bw = new BufferedWriter(new FileWriter("/tmp/accumulate.log", true));
 
         bw.write("=== DEBUG === entered aggregate sum ===\n");
         bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
@@ -88,7 +88,7 @@ public class Sum extends AbstractAggregator {
       } catch (IOException e) {
         PrintWriter out = null;
         try {
-          out = new PrintWriter(new FileWriter("/tmp/exceptions.log", true));
+          out = new PrintWriter(new FileWriter("0.log", true));
         } catch (IOException e1) {
           e1.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class Sum extends AbstractAggregator {
     } catch (Exception e) {
       PrintWriter out = null;
       try {
-        out = new PrintWriter(new FileWriter("/tmp/exceptions.log", true));
+        out = new PrintWriter(new FileWriter("0.log", true));
       } catch (IOException e1) {
         e1.printStackTrace();
       }
