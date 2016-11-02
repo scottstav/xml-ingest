@@ -56,7 +56,8 @@ public class Sum extends AbstractAggregator {
             bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
             Number number = (Number) value;
             result += number.doubleValue();
-          } else if (value instanceof SparseVector) {
+          } else if (value instanceof SparseVector
+                     || value.getClass().getSuperclass().equals(SparseVector.class)) {
             bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
 //
             SparseVector svvalue = (SparseVector) value;
