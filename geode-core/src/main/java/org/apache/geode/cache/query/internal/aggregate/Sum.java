@@ -55,14 +55,12 @@ public class Sum extends AbstractAggregator {
           } else if (value instanceof SparseVector) {
 //            bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
 //
-//            SparseVector svvalue = (SparseVector) value;
-//            isVectorAggregate = true;
-//            if (VectorSumResult == null) {
-//              bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
-//              VectorSumResult = new SparseVector(200000, 500);
-//            }
-//
-//            VectorSumResult = VectorSumResult.add(svvalue);
+            SparseVector svvalue = (SparseVector) value;
+            isVectorAggregate = true;
+            if (VectorSumResult == null) {
+              VectorSumResult = new SparseVector(200000, 500);
+            }
+            VectorSumResult = VectorSumResult.add(svvalue);
           } else {
 //            bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
 //
