@@ -72,9 +72,19 @@ public class Sum extends AbstractAggregator {
 
             Class c = value.getClass();
 
+            final Class etalon = no.uib.cipr.matrix.sparse.SparseVector.class;
+
             while (!c.equals(Object.class)) {
+              bw.write("\t -> "
+                      + c
+                      + " "
+                      + etalon.toString()
+                      + " "
+                      + (Objects.equals(etalon.toString(), c.toString()))
+                      + " "
+                      + c.toString()
+                      + "\n");
               c = c.getSuperclass();
-              bw.write("\t -> " + c + "\n");
             }
 //
 //            SparseVector svvalue = (SparseVector) value;
