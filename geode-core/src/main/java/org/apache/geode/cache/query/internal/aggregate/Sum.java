@@ -55,32 +55,32 @@ public class Sum extends AbstractAggregator {
         bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
         if (value != null && value != QueryService.UNDEFINED) {
           if (value instanceof Number) {
-            bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
+//            bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
             Number number = (Number) value;
             result += number.doubleValue();
           } else if (value instanceof SparseVector) {
-            bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
-
-            SparseVector svvalue = (SparseVector) value;
-            isVectorAggregate = true;
-            if (VectorSumResult == null) {
-              bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
-              VectorSumResult = new SparseVector(200000, 500);
-            }
-
-            VectorSumResult = VectorSumResult.add(svvalue);
+//            bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
+//
+//            SparseVector svvalue = (SparseVector) value;
+//            isVectorAggregate = true;
+//            if (VectorSumResult == null) {
+//              bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
+//              VectorSumResult = new SparseVector(200000, 500);
+//            }
+//
+//            VectorSumResult = VectorSumResult.add(svvalue);
           } else {
-            bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
-
-            SparseVector svvalue = (SparseVector) value;
-            isVectorAggregate = true;
-            if (VectorSumResult == null) {
-              bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
-              VectorSumResult = new SparseVector(200000, 500);
-            }
-            VectorSumResult = VectorSumResult.add(svvalue);
-
-            bw.write("=== DEBUG === unknown class === " + value.getClass() + "\n");
+//            bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
+//
+//            SparseVector svvalue = (SparseVector) value;
+//            isVectorAggregate = true;
+//            if (VectorSumResult == null) {
+//              bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
+//              VectorSumResult = new SparseVector(200000, 500);
+//            }
+//            VectorSumResult = VectorSumResult.add(svvalue);
+//
+//            bw.write("=== DEBUG === unknown class === " + value.getClass() + "\n");
           }
         }
 
