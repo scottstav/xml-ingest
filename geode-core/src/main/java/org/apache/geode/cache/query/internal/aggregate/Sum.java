@@ -28,6 +28,7 @@ import no.uib.cipr.matrix.sparse.SparseVector;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 
 /**
@@ -57,7 +58,7 @@ public class Sum extends AbstractAggregator {
             Number number = (Number) value;
             result += number.doubleValue();
           } else if (value instanceof SparseVector
-                     || value.getClass().getSuperclass().toString().equals(no.uib.cipr.matrix.sparse.SparseVector.class.toString())) {
+                     || Objects.equals(value.getClass().getSuperclass().toString(), no.uib.cipr.matrix.sparse.SparseVector.class.toString())) {
             bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
 //
             SparseVector svvalue = (SparseVector) value;
