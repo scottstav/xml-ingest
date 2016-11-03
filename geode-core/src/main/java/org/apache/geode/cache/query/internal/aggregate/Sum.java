@@ -46,7 +46,7 @@ public class Sum extends AbstractAggregator {
   }
   @Override
   public void accumulate(Object value) {
-    try {
+//    try {
       BufferedWriter bw = null;
       try {
         bw = new BufferedWriter(new FileWriter("/tmp/accumulate" + Thread.currentThread().getId() + ".log", true));
@@ -100,16 +100,16 @@ public class Sum extends AbstractAggregator {
 //        }
 //        e.printStackTrace(out);
       }
-    } catch (Exception e) {
-//      PrintWriter out = null;
-//      try {
-//        out = new PrintWriter(new FileWriter("0.log", true));
-//      } catch (IOException e1) {
-//        e1.printStackTrace();
-//      }
-//      e.printStackTrace(out);
-      throw e;
-    }
+//    } catch (Exception e) {
+////      PrintWriter out = null;
+////      try {
+////        out = new PrintWriter(new FileWriter("0.log", true));
+////      } catch (IOException e1) {
+////        e1.printStackTrace();
+////      }
+////      e.printStackTrace(out);
+//      throw e;
+//    }
   }
 
   @Override
