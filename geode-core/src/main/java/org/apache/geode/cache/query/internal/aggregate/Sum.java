@@ -69,34 +69,24 @@ public class Sum extends AbstractAggregator {
             }
             VectorSumResult = VectorSumResult.add(svvalue);
           } else {
-            bw.write("=== DEBUG === value is unknown class === " + value.getClass() + "\n");
-
-            Class c = value.getClass();
-
-            final Class etalon = no.uib.cipr.matrix.sparse.SparseVector.class;
-
-            while (!c.equals(Object.class)) {
-              bw.write("\t -> "
-                      + c
-                      + " "
-                      + etalon.toString()
-                      + " "
-                      + (Objects.equals(etalon.toString(), c.toString()))
-                      + " "
-                      + c.toString()
-                      + "\n");
-              c = c.getSuperclass();
-            }
+//            bw.write("=== DEBUG === value is unknown class === " + value.getClass() + "\n");
 //
-//            SparseVector svvalue = (SparseVector) value;
-//            isVectorAggregate = true;
-//            if (VectorSumResult == null) {
-//              bw.write("=== DEBUG === create sum result === " + value.getClass() + "\n");
-//              VectorSumResult = new SparseVector(200000, 500);
+//            Class c = value.getClass();
+//
+//            final Class etalon = no.uib.cipr.matrix.sparse.SparseVector.class;
+//
+//            while (!c.equals(Object.class)) {
+//              bw.write("\t -> "
+//                      + c
+//                      + " "
+//                      + etalon.toString()
+//                      + " "
+//                      + (Objects.equals(etalon.toString(), c.toString()))
+//                      + " "
+//                      + c.toString()
+//                      + "\n");
+//              c = c.getSuperclass();
 //            }
-//            VectorSumResult = VectorSumResult.add(svvalue);
-//
-//            bw.write("=== DEBUG === unknown class === " + value.getClass() + "\n");
           }
         }
 
