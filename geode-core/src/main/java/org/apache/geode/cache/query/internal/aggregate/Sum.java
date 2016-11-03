@@ -108,6 +108,7 @@ public class Sum extends AbstractAggregator {
 //        e1.printStackTrace();
 //      }
 //      e.printStackTrace(out);
+      throw e;
     }
   }
 
@@ -121,6 +122,9 @@ public class Sum extends AbstractAggregator {
     if ( !isVectorAggregate )
       return downCast(result);
 
-    return VectorSumResult;
+    if (VectorSumResult != null)
+      return VectorSumResult;
+
+    return 42;
   }
 }
