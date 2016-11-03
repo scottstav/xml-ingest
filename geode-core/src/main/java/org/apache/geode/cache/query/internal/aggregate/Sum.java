@@ -49,7 +49,7 @@ public class Sum extends AbstractAggregator {
     try {
       BufferedWriter bw = null;
       try {
-        bw = new BufferedWriter(new FileWriter("/tmp/accumulate.log", true));
+        bw = new BufferedWriter(new FileWriter("/tmp/accumulate" + Thread.currentThread().getId() + ".log", true));
         bw.write("=== DEBUG === entered aggregate sum ===\n");
         bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
         if (value != null && value != QueryService.UNDEFINED) {
