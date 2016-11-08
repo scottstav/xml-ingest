@@ -45,7 +45,7 @@ public class Sum extends AbstractAggregator {
     //...
   }
   @Override
-  public void accumulate(Object value) {
+  public void accumulate(Object value) throws IOException {
 //    try {
       try (BufferedWriter bw = new BufferedWriter(new FileWriter("/tmp/accumulate" + Thread.currentThread().getId() + ".log", true))) {
         bw.write("=== DEBUG === entered aggregate sum ===\n");
@@ -61,13 +61,20 @@ public class Sum extends AbstractAggregator {
                   ) {
             bw.write("=== DEBUG === value is a sparse vector === " + value.getClass() + "\n");
 //
-            SparseVector svvalue = (SparseVector) value;
-            isVectorAggregate = true;
-            if (VectorSumResult == null) {
-              VectorSumResult = new SparseVector(200000, 500);
+//
+            try {
+              Class c = value.getClass().getClassLoader().loadClass("no.uib.cipr.matrix.sparse.SparseVector");
+
+              SparseVector svvalue = (SparseVector) value;
+              isVectorAggregate = true;
+              if (VectorSumResult == null) {
+                VectorSumResult = new SparseVector(200000, 500);
+              }
+              VectorSumResult = VectorSumResult.add(svvalue);
+            } catch (ClassNotFoundException e) {
+              bw.write("=== DEBUG === class not found");
             }
-            VectorSumResult = VectorSumResult.add(svvalue);
-          } else {
+            }else {
 //            bw.write("=== DEBUG === value is unknown class === " + value.getClass() + "\n");
 //
 //            Class c = value.getClass();
@@ -86,6 +93,9 @@ public class Sum extends AbstractAggregator {
 //                      + "\n");
 //              c = c.getSuperclass();
 //            }
+
+
+
           }
         }
 

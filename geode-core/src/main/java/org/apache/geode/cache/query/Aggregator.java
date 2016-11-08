@@ -16,6 +16,8 @@
  */
 package org.apache.geode.cache.query;
 
+import java.io.IOException;
+
 /**
  * Behavior of a user-defined aggregator. Aggregates values and returns a
  * result. In addition to the methods in the interface, implementing classes
@@ -30,7 +32,7 @@ public interface Aggregator {
    * 
    * @param value
    */
-  public void accumulate(Object value);
+  public void accumulate(Object value) throws IOException;
 
   /**
    * Initialize the Aggregator
