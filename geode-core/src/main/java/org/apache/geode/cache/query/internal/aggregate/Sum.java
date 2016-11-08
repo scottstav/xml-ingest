@@ -65,6 +65,13 @@ public class Sum extends AbstractAggregator {
             try {
               Class c = value.getClass().getClassLoader().loadClass("no.uib.cipr.matrix.sparse.SparseVector");
 
+              SparseVector svvalue = (SparseVector) value;
+              isVectorAggregate = true;
+              if (VectorSumResult == null) {
+                VectorSumResult = new SparseVector(200000, 500);
+              }
+              VectorSumResult = VectorSumResult.add(svvalue);
+              bw.write("=== DEBUG === add has been called");
             } catch (ClassNotFoundException e) {
               bw.write("=== DEBUG === class not found");
             }
