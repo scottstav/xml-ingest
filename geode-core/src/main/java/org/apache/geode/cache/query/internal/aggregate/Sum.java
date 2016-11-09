@@ -50,6 +50,7 @@ public class Sum extends AbstractAggregator {
       try (BufferedWriter bw = new BufferedWriter(new FileWriter("/tmp/accumulate" + Thread.currentThread().getId() + ".log", true))) {
         bw.write("=== DEBUG === entered aggregate sum ===\n");
         bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
+<<<<<<< HEAD:geode-core/src/main/java/org/apache/geode/cache/query/internal/aggregate/Sum.java
         CustomClass d = new CustomClass();
         final int c1 = d.c;
         try (BufferedWriter bw1 = new BufferedWriter(new FileWriter("/tmp/testclass" + Thread.currentThread().getId() + ".log", true))) {
@@ -57,6 +58,14 @@ public class Sum extends AbstractAggregator {
           bw1.write(c1);
         }catch (IOException e){
           //..
+=======
+
+        CustomExample ce = new CustomExample();
+        try (BufferedWriter bw1 = new BufferedWriter(new FileWriter("/tmp/custom" + Thread.currentThread().getId() + ".log", true))) {
+          bw1.write(String.format("=== DEBUG === custom class value %d\n", 42));
+        } catch (IOException e) {
+          // ...
+>>>>>>> try loading custom class as suggested by Dr Gubanov:geode-core/src/main/java/com/gemstone/gemfire/cache/query/internal/aggregate/Sum.java
         }
 
         if (value != null && value != QueryService.UNDEFINED) {
