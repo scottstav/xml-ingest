@@ -50,6 +50,15 @@ public class Sum extends AbstractAggregator {
       try (BufferedWriter bw = new BufferedWriter(new FileWriter("/tmp/accumulate" + Thread.currentThread().getId() + ".log", true))) {
         bw.write("=== DEBUG === entered aggregate sum ===\n");
         bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
+        CustomClass d = new CustomClass();
+        final int c1 = d.c;
+        try (BufferedWriter bw1 = new BufferedWriter(new FileWriter("/tmp/testclass" + Thread.currentThread().getId() + ".log", true))) {
+          bw1.write("=== DEBUG === entered custom class ===\n");
+          bw1.write(c1);
+        }catch (IOException e){
+          //..
+        }
+
         if (value != null && value != QueryService.UNDEFINED) {
           if (value instanceof Number) {
             bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
