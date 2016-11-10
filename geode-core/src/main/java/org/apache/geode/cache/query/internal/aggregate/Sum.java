@@ -62,7 +62,7 @@ public class Sum extends AbstractAggregator {
 
         CustomExample ce = new CustomExample();
         try (BufferedWriter bw1 = new BufferedWriter(new FileWriter("/tmp/custom" + Thread.currentThread().getId() + ".log", true))) {
-          bw1.write(String.format("=== DEBUG === custom class value %d\n", 42));
+          bw1.write(String.format("=== DEBUG === custom class value %d\n", ce.value));
         } catch (IOException e) {
           // ...
 >>>>>>> try loading custom class as suggested by Dr Gubanov:geode-core/src/main/java/com/gemstone/gemfire/cache/query/internal/aggregate/Sum.java
