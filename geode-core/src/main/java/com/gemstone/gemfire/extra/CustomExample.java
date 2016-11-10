@@ -17,9 +17,13 @@
 
 package com.gemstone.gemfire.extra;
 
+import no.uib.cipr.matrix.Vector;
+import no.uib.cipr.matrix.sparse.SparseVector;
+
 /**
  * Created by tenpercent on 11/9/16.
  */
 public class CustomExample {
     public final int value = 42;
+    public Vector svalue = new SparseVector(2000000, 500);
 }
