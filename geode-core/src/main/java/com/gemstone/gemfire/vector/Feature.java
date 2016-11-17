@@ -21,7 +21,19 @@ import java.io.Serializable;
  * Created by rohith on 11/16/16.
  */
 public class Feature implements Serializable{
-    Vector v;
-    int c;
+    public Vector v;
+    public int c;
+    public int featureID;
 
+    public Feature() {
+        v = new Vector(0);
+        c = 0;
+        featureID =0;
+    }
+
+    public Feature(Vector v, Integer c, Integer featureID) {
+        this.v = v;
+        this.c = c;
+        this.featureID = featureID;
+    }
 }

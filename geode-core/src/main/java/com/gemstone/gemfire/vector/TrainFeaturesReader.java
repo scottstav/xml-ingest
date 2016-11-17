@@ -28,20 +28,17 @@ import java.util.List;
 public class TrainFeaturesReader {
     InputStreamReader inputStreamReader;
 
-    double [] features;
-    double [] classIDs;
+    public List<Feature> featureVectors;
     //double [] featureVectors;
 
-    int numberReadLines = 0;
+   public int numberReadLines = 0;
 
-    TrainFeaturesReader(InputStream inputStream) {
+    public TrainFeaturesReader(InputStream inputStream) {
         this.inputStreamReader = new InputStreamReader(inputStream);
-        features = new double[200000];
-        classIDs = new double[200000];
-        //featureVectors  = new LinkedList<>();
+        featureVectors  = new LinkedList<>();
     }
 
-    void readLines() {
+   public void readLines() {
         new BufferedReader(inputStreamReader)
                 .lines()
                 .forEach(this::parseLine);
@@ -54,15 +51,17 @@ public class TrainFeaturesReader {
 
         // next lines are same for test data reader
 
-        double[] feature = new double[200000];
-        final double classID = docId;
+        Vector feature = new Vector(200000);
 
         for (String wordIdAndOccurences : entries) {
             final String[] wordIdAndOccurencesSplit = wordIdAndOccurences.split(":");
             final Integer wordId = Integer.parseInt(wordIdAndOccurencesSplit[0]);
             final Integer wordOccurences = Integer.parseInt(wordIdAndOccurencesSplit[1]);
-            feature[wordId] = wordOccurences;
+
+            feature.setData(wordId, wordOccurences);
         }
+
+        featureVectors.add(new Feature(feature, docId,numberReadLines));
 
         //featureVectors.add(new FeatureVector(feature, classID, numberReadLines));
         ++numberReadLines;
