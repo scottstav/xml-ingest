@@ -19,6 +19,7 @@ package org.apache.geode.cache.query.internal.aggregate;
 import org.apache.geode.cache.query.QueryService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import no.uib.cipr.matrix.DenseVector;
+import com.gemstone.gemfire.extra.CustomExample;
 import no.uib.cipr.matrix.Vector;
 import no.uib.cipr.matrix.VectorEntry;
 import java.io.PrintWriter;
@@ -29,7 +30,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
-
 
 /**
  * Computes the sum for replicated & PR based queries.
