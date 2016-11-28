@@ -44,7 +44,7 @@ public class TrainFeaturesReader {
                 .forEach(this::parseLine);
     }
 
-    private void parseLine(String line) {
+    public void parseLine(String line) {
         List<String> entries = new LinkedList<>(Arrays.asList(line.split("\\s+")));
 
         final Integer docId = Integer.parseInt(entries.remove(0));
