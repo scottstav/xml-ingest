@@ -23,30 +23,34 @@ public class Vector implements Serializable {
 
     double [] data;
     int size;
+
     public Vector(int size){
         data = new double[size];
         this.size=size;
 
     }
+
     public Vector plus(Vector v2){
         Vector sum = new Vector(size);
-        for (int i=0; i<=size; i++) {
-            sum.setData(i,getData(i)+v2.getData(i));
+        for (int i = 0; i < size; i++) {
+            sum.setData(i,getData(i) + v2.getData(i));
         }
         return sum;
     }
+
     public double dot(Vector v2){
         double sum=0;
-        for(int i=0; i<=size; i++){
-            sum += getData(i)*v2.getData(i);
+        for(int i = 0; i < size; i++){
+            sum += getData(i) * v2.getData(i);
         }
         return sum;
     }
+
     public void setData(int index, double value) {
         data[index] = value;
     }
-    public double getData(int index){
 
+    public double getData(int index){
         return data[index];
     }
 
