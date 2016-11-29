@@ -18,6 +18,7 @@
 package com.gemstone.gemfire.vector;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Vector implements Serializable {
 
@@ -56,7 +57,7 @@ public class Vector implements Serializable {
 
     @Override
     public String toString() {
-        return data.toString();
+        return Arrays.toString(data);
     }
 }
 
