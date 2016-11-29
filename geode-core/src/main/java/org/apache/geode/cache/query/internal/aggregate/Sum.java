@@ -25,12 +25,10 @@ import no.uib.cipr.matrix.VectorEntry;
 import java.io.PrintWriter;
 import java.lang.*;
 import no.uib.cipr.matrix.sparse.SparseVector;
-
+import com.gemstone.gemfire.vector.Vector;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Objects;
-
 /**
  * Computes the sum for replicated & PR based queries.
  * 
@@ -46,7 +44,6 @@ public class Sum extends AbstractAggregator {
   }
   @Override
   public void accumulate(Object value) {
-//    try {
       try (BufferedWriter bw = new BufferedWriter(new FileWriter("/tmp/accumulate" + Thread.currentThread().getId() + ".log", true))) {
         bw.write("=== DEBUG === entered aggregate sum ===\n");
         bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
@@ -60,6 +57,7 @@ public class Sum extends AbstractAggregator {
           //..
 =======
 
+<<<<<<< HEAD:geode-core/src/main/java/org/apache/geode/cache/query/internal/aggregate/Sum.java
         CustomExample ce = new CustomExample();
         try (BufferedWriter bw1 = new BufferedWriter(new FileWriter("/tmp/custom" + Thread.currentThread().getId() + ".log", true))) {
           bw1.write(String.format("=== DEBUG === custom class value %d\n", ce.value));
@@ -69,11 +67,14 @@ public class Sum extends AbstractAggregator {
 >>>>>>> try loading custom class as suggested by Dr Gubanov:geode-core/src/main/java/com/gemstone/gemfire/cache/query/internal/aggregate/Sum.java
         }
 
+=======
+>>>>>>> try to sum dense vectors in server:geode-core/src/main/java/com/gemstone/gemfire/cache/query/internal/aggregate/Sum.java
         if (value != null && value != QueryService.UNDEFINED) {
           if (value instanceof Number) {
             bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
             Number number = (Number) value;
             result += number.doubleValue();
+<<<<<<< HEAD:geode-core/src/main/java/org/apache/geode/cache/query/internal/aggregate/Sum.java
           } else if (value instanceof SparseVector
                   || Objects.equals(value.getClass().getSuperclass().toString(),
                                     no.uib.cipr.matrix.sparse.SparseVector.class.toString())
@@ -94,55 +95,24 @@ public class Sum extends AbstractAggregator {
             } catch (ClassNotFoundException e) {
               bw.write("=== DEBUG === class not found");
             }
+=======
+          } else if (value instanceof com.gemstone.gemfire.vector.Vector) {
+            bw.write("=== DEBUG === value is a vector === " + value.getClass() + "\n");
+>>>>>>> try to sum dense vectors in server:geode-core/src/main/java/com/gemstone/gemfire/cache/query/internal/aggregate/Sum.java
 
-            SparseVector svvalue = (SparseVector) value;
+            Vector svvalue = (Vector) value;
             isVectorAggregate = true;
             if (VectorSumResult == null) {
-              VectorSumResult = new SparseVector(200000, 500);
+              VectorSumResult = new Vector(200000);
             }
-            VectorSumResult = VectorSumResult.add(svvalue);
+            VectorSumResult = VectorSumResult.plus(svvalue);
           } else {
-//            bw.write("=== DEBUG === value is unknown class === " + value.getClass() + "\n");
-//
-//            Class c = value.getClass();
-//
-//            final Class etalon = no.uib.cipr.matrix.sparse.SparseVector.class;
-//
-//            while (!c.equals(Object.class)) {
-//              bw.write("\t -> "
-//                      + c
-//                      + " "
-//                      + etalon.toString()
-//                      + " "
-//                      + (Objects.equals(etalon.toString(), c.toString()))
-//                      + " "
-//                      + c.toString()
-//                      + "\n");
-//              c = c.getSuperclass();
-//            }
+            // ... unknown object
           }
         }
-
-//        bw.flush();
       } catch (IOException e) {
-//        PrintWriter out = null;
-//        try {
-//          out = new PrintWriter(new FileWriter("0.log", true));
-//        } catch (IOException e1) {
-//          e1.printStackTrace();
-//        }
-//        e.printStackTrace(out);
+        // TODO do something
       }
-//    } catch (Exception e) {
-////      PrintWriter out = null;
-////      try {
-////        out = new PrintWriter(new FileWriter("0.log", true));
-////      } catch (IOException e1) {
-////        e1.printStackTrace();
-////      }
-////      e.printStackTrace(out);
-//      throw e;
-//    }
   }
 
   @Override

@@ -49,5 +49,10 @@ public class Vector implements Serializable {
 
         return data[index];
     }
+
+    @Override
+    public String toString() {
+        return data.toString();
+    }
 }
 
