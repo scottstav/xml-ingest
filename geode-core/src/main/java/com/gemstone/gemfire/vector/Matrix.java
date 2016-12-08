@@ -51,6 +51,74 @@ public class Matrix {
         }
         return prod;
     }
+    /**
+     * Multiplies matrix by matrix
+     *
+     * @param B
+     * @return AB
+     */
+    public Matrix multiply(Matrix B){
+        Matrix A = this;
+        if (A.height != B.width) throw new RuntimeException("Illegal matrix dimensions.");
+        Matrix C = new Matrix(A.width, B.height);
+        for (int i = 0; i < C.width; i++)
+            for (int j = 0; j < C.height; j++)
+                for (int k = 0; k < A.height; k++)
+                    C.setData(i, j, (A.getData(i, k) * B.getData(k, j)));
+        return C;
+    }
+
+    /**
+     * Adds matrix plus matrix
+     *
+     * @param B
+     * @return A + B
+     */
+    public Matrix plus(Matrix B){
+        Matrix A = this;
+        if (B.width != A.width || B.height != A.height) throw new RuntimeException("Illegal matrix dimensions.");
+        Matrix C = new Matrix(width, height);
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+                C.setData(i, j, A.getData(i,j) + B.getData(i,j));
+        return C;
+    }
+
+    /**
+     * Substract matrix minus matrix
+     *
+     * @param B
+     * @return A - B
+     */
+    public Matrix minus(Matrix B){
+        Matrix A = this;
+        if (B.width != A.width || B.height != A.height) throw new RuntimeException("Illegal matrix dimensions.");
+        Matrix C = new Matrix(width, height);
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+                C.setData(i, j, A.getData(i,j) - B.getData(i,j));
+        return C;
+    }
+
+    /**
+     *
+     * does A = B ?
+     *
+     * @param B
+     * @return boolean
+     */
+    public boolean equals(Matrix B) {
+        Matrix A = this;
+        if (B.width != A.width || B.height != A.height) throw new RuntimeException("Illegal matrix dimensions.");
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++){
+                int c = Double.compare(A.getData(i, j), B.getData(i, j));
+                if (c != 0)
+                    return false;
+            }
+
+        return true;
+    }
 
     /**
      * Multiplies matrix by vector from the left
@@ -72,6 +140,7 @@ public class Matrix {
         }
         return prod;
     }
+
 
     public void setRow(int iRow, final Vector v) {
         assert v.size == this.width;

@@ -39,6 +39,37 @@ public class Vector implements Serializable {
         return sum;
     }
 
+    public Vector difference(Vector v2){
+        Vector minus = new Vector(size);
+        for (int i = 0; i < size; i++){
+            minus.setData(i, getData(i) - v2.getData(i));
+        }
+
+        return minus;
+    }
+
+    public Vector multiplyByScalar(double c){
+        Vector times = new Vector(size);
+        for (int i = 0; i < size; i++){
+            times.data[i] = c * getData(i);
+        }
+
+        return times;
+    }
+
+    public boolean equals(Vector v2) {
+        Vector eq = new Vector(size);
+        for (int i = 0; i < size; i++) {
+            int c = Double.compare(this.getData(i), v2.getData(i));
+            if (c != 0)
+                return false;
+        }
+
+        return true;
+
+    }
+
+
     public double dot(Vector v2){
         double sum=0;
         for(int i = 0; i < size; i++){

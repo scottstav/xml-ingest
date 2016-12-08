@@ -32,7 +32,6 @@ import com.gemstone.gemfire.internal.cache.LocalDataSet;
 import com.gemstone.gemfire.internal.cache.LocalRegion;
 import com.gemstone.gemfire.internal.logging.LogService;
 import org.apache.logging.log4j.Logger;
-
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
@@ -56,7 +55,6 @@ public class CopyRegion implements Function, Declarable{
                 Cache cache = CacheFactory.getAnyInstance();
                 RegionFunctionContext rfc = (RegionFunctionContext) context;
                 final String toRegionName = extractToRegionName(context);
-
                 final Region toRegion = cache.getRegion(toRegionName);
                 LocalDataSet fromRegion = (LocalDataSet) PartitionRegionHelper.getLocalDataForContext(rfc);
 
