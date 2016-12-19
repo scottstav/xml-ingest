@@ -64,7 +64,7 @@ public class Matrix {
         for (int i = 0; i < C.width; i++)
             for (int j = 0; j < C.height; j++)
                 for (int k = 0; k < A.height; k++)
-                    C.setData(i, j, (A.getData(i, k) * B.getData(k, j)));
+                    C.setData(i, j, C.getData(i, j) + (A.getData(i, k) * B.getData(k, j)));
         return C;
     }
 
