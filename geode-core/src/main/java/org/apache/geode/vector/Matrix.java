@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.gemstone.gemfire.vector;
+package org.apache.geode.vector;
 
 /**
  * Created by tenpercent on 12/1/16.

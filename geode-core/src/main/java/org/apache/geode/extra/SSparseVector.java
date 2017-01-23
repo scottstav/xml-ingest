@@ -15,15 +15,22 @@
  * limitations under the License.
  */
 
-package com.gemstone.gemfire.extra;
+package org.apache.geode.extra;
 
 import no.uib.cipr.matrix.Vector;
 import no.uib.cipr.matrix.sparse.SparseVector;
 
-/**
- * Created by tenpercent on 11/9/16.
- */
-public class CustomExample {
-    public final int value = 42;
-    public Vector svalue = new SparseVector(2000000, 500);
+import java.util.Arrays;
+
+public class SSparseVector extends SparseVector {
+    private final static long serialVersionUID = 0;
+
+    public SSparseVector(Vector x) {
+        super(x);
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(getData());
+    }
 }

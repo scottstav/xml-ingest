@@ -1,4 +1,4 @@
-package com.gemstone.gemfire.functions;
+package org.apache.geode.functions;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -15,20 +15,21 @@ package com.gemstone.gemfire.functions;
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-
-import com.gemstone.gemfire.cache.Declarable;
-import com.gemstone.gemfire.cache.Region;
-import com.gemstone.gemfire.cache.execute.Function;
-import com.gemstone.gemfire.cache.execute.FunctionContext;
-import com.gemstone.gemfire.cache.execute.RegionFunctionContext;
-import com.gemstone.gemfire.cache.partition.PartitionRegionHelper;
-import java.util.Properties;
-
-
 /**
  * Created by rohith on 12/6/16.
  */
-public class ClearRegionRemoveAllFunction implements Function, Declarable {
+
+import org.apache.geode.cache.Declarable;
+import org.apache.geode.cache.Region;
+import org.apache.geode.cache.execute.Function;
+import org.apache.geode.cache.execute.FunctionContext;
+import org.apache.geode.cache.execute.RegionFunctionContext;
+import org.apache.geode.cache.partition.PartitionRegionHelper;
+
+import java.util.Iterator;
+import java.util.Properties;
+
+public class ClearRegionFunction implements Function, Declarable {
     public void execute(FunctionContext context) {
         System.out.println(Thread.currentThread().getName() + ": Executing " + getId());
         RegionFunctionContext rfc = (RegionFunctionContext) context;
@@ -38,7 +39,10 @@ public class ClearRegionRemoveAllFunction implements Function, Declarable {
         // Destroy each entry
         long start=0, end=0;
         start = System.currentTimeMillis();
-        localRegion.removeAll(localRegion.keySet());
+        for (Iterator i = localRegion.keySet().iterator(); i.hasNext();) {
+            i.next();
+            i.remove();
+        }
         end = System.currentTimeMillis();
         System.out.println(Thread.currentThread().getName() + ": Cleared " + numLocalEntries + " entries in " + (end-start) + " ms");
         context.getResultSender().lastResult(true);
@@ -62,5 +66,4 @@ public class ClearRegionRemoveAllFunction implements Function, Declarable {
 
     public void init(Properties properties) {
     }
-
 }

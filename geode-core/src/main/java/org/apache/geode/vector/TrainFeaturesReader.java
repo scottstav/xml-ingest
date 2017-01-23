@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.gemstone.gemfire.vector;
+package org.apache.geode.vector;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

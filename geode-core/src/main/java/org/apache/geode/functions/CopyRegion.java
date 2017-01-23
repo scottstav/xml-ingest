@@ -1,4 +1,4 @@
-package com.gemstone.gemfire.functions;
+package org.apache.geode.functions;
 /* Licensed to the Apache Software Foundation (ASF) under one or more
 * contributor license agreements.  See the NOTICE file distributed with
 * this work for additional information regarding copyright ownership.
@@ -18,19 +18,18 @@ package com.gemstone.gemfire.functions;
  * Created by rohith on 12/6/16.
  */
 
-import com.gemstone.gemfire.cache.Cache;
-import com.gemstone.gemfire.cache.CacheFactory;
-import com.gemstone.gemfire.cache.Declarable;
-import com.gemstone.gemfire.cache.Region;
-import com.gemstone.gemfire.cache.Region.Entry;
-import com.gemstone.gemfire.cache.execute.Function;
-import com.gemstone.gemfire.cache.execute.FunctionContext;
-import com.gemstone.gemfire.cache.execute.FunctionException;
-import com.gemstone.gemfire.cache.execute.RegionFunctionContext;
-import com.gemstone.gemfire.cache.partition.PartitionRegionHelper;
-import com.gemstone.gemfire.internal.cache.LocalDataSet;
-import com.gemstone.gemfire.internal.cache.LocalRegion;
-import com.gemstone.gemfire.internal.logging.LogService;
+import org.apache.geode.cache.Cache;
+import org.apache.geode.cache.CacheFactory;
+import org.apache.geode.cache.Declarable;
+import org.apache.geode.cache.Region;
+import org.apache.geode.cache.execute.Function;
+import org.apache.geode.cache.execute.FunctionContext;
+import org.apache.geode.cache.execute.FunctionException;
+import org.apache.geode.cache.execute.RegionFunctionContext;
+import org.apache.geode.cache.partition.PartitionRegionHelper;
+import org.apache.geode.internal.cache.LocalDataSet;
+import org.apache.geode.internal.cache.LocalRegion;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.logging.log4j.Logger;
 import java.util.Iterator;
 import java.util.Properties;
@@ -38,7 +37,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.LongAdder;
 
-public class CopyRegion implements Function, Declarable{
+public class CopyRegion implements Function, Declarable {
 
         private static final int BATCH_SIZE = 1000;
         private LongAdder keyCounter = new LongAdder();
@@ -61,7 +60,7 @@ public class CopyRegion implements Function, Declarable{
                 if (!checkArguments(toRegionName, toRegion, fromRegion)) {
                     logger.error("Error validating arguments.");
                 } else {
-                    Set<Entry> localEntrySet = fromRegion.localEntrySet();
+                    Set<Region.Entry> localEntrySet = fromRegion.localEntrySet();
                     ConcurrentHashMap entryBatch = new ConcurrentHashMap();
                     Iterator iterator = localEntrySet.iterator();
 
