@@ -343,6 +343,7 @@ tokens {
     COUNT;
     MAX;
     MIN;
+    INTO;
 }
 
 queryProgram :
@@ -492,6 +493,7 @@ selectExpr :
         ( groupClause )?
         ( orderClause )?
         ( limitClause )?
+        ( intoClause )?
     ;
 
 fromClause :
@@ -521,6 +523,10 @@ iteratorDef! :
             ( "type"! t2:type )?
 
             { #iteratorDef = #([ITERATOR_DEF, "iterDef", "org.apache.geode.cache.query.internal.parse.ASTIteratorDef"], #ex2, #id2, #t2); }
+    ;
+
+intoClause :
+        "into"! iteratorDef
     ;
 
 whereClause :
