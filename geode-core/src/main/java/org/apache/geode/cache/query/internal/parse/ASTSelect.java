@@ -53,6 +53,7 @@ public class ASTSelect extends GemFireAST {
     // 7) group by clause
     // 8) order by clause
     // 9) limit
+    // 10) into
     while (child != null) {
       int clauseType = child.getType();
       ((GemFireAST) child).compile(compiler);

@@ -234,6 +234,8 @@ public class QCompiler implements OQLLexerTokenTypes {
     List<CompiledValue> groupByClause = (List<CompiledValue>) queryComponents
         .remove(OQLLexerTokenTypes.LITERAL_group);
 
+    CompiledValue into = (CompiledValue) queryComponents.remove(OQLLexerTokenTypes.LITERAL_into);
+
     // whatever remains , treat it as where
     // whereClause
     CompiledValue where = null;
