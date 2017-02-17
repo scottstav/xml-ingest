@@ -121,6 +121,7 @@ public OQLParser(ParserSharedInputState state) {
 			else if ((LA(1)==EOF)) {
 			}
 			else {
+				System.err.println("== DEBUG: " + LA(1));
 				throw new NoViableAltException(LT(1), getFilename());
 			}
 			
