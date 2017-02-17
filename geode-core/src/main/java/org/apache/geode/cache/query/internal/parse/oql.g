@@ -492,8 +492,8 @@ selectExpr :
         ( whereClause )?
         ( groupClause )?
         ( orderClause )?
-        ( limitClause )?
         ( intoClause )?
+        ( limitClause )?
     ;
 
 fromClause :

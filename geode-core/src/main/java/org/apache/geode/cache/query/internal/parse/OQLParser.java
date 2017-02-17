@@ -1,4 +1,4 @@
-// $ANTLR 2.7.7 (2006-11-01): "oql.g" -> "OQLParser.java"$
+// $ANTLR 2.7.7 (2006-11-01): "oqL.g" -> "OQLParser.java"$
 
 package org.apache.geode.cache.query.internal.parse;
 import java.util.*;
@@ -121,7 +121,6 @@ public OQLParser(ParserSharedInputState state) {
 			else if ((LA(1)==EOF)) {
 			}
 			else {
-				System.err.println("== DEBUG: " + LA(1));
 				throw new NoViableAltException(LT(1), getFilename());
 			}
 			
@@ -1166,8 +1165,8 @@ inputState.guessing--;
 		
 		}
 		{
-		if ((LA(1)==LITERAL_limit)) {
-			limitClause();
+		if ((LA(1)==LITERAL_into)) {
+			intoClause();
 			astFactory.addASTChild(currentAST, returnAST);
 		}
 		else if ((_tokenSet_14.member(LA(1)))) {
@@ -1178,8 +1177,8 @@ inputState.guessing--;
 		
 		}
 		{
-		if ((LA(1)==LITERAL_into)) {
-			intoClause();
+		if ((LA(1)==LITERAL_limit)) {
+			limitClause();
 			astFactory.addASTChild(currentAST, returnAST);
 		}
 		else if ((LA(1)==EOF||LA(1)==TOK_RPAREN||LA(1)==TOK_SEMIC)) {
@@ -1341,6 +1340,19 @@ inputState.guessing--;
 		returnAST = orderClause_AST;
 	}
 	
+	public final void intoClause() throws RecognitionException, TokenStreamException {
+		
+		returnAST = null;
+		ASTPair currentAST = new ASTPair();
+		AST intoClause_AST = null;
+		
+		match(LITERAL_into);
+		iteratorDef();
+		astFactory.addASTChild(currentAST, returnAST);
+		intoClause_AST = (AST)currentAST.root;
+		returnAST = intoClause_AST;
+	}
+	
 	public final void limitClause() throws RecognitionException, TokenStreamException {
 		
 		returnAST = null;
@@ -1352,15 +1364,15 @@ inputState.guessing--;
 		match(LITERAL_limit);
 		{
 		if ((LA(1)==TOK_DOLLAR)) {
-			AST tmp71_AST = null;
-			tmp71_AST = astFactory.create(LT(1));
-			match(TOK_DOLLAR);
 			AST tmp72_AST = null;
 			tmp72_AST = astFactory.create(LT(1));
+			match(TOK_DOLLAR);
+			AST tmp73_AST = null;
+			tmp73_AST = astFactory.create(LT(1));
 			match(NUM_INT);
 			if ( inputState.guessing==0 ) {
 				limitClause_AST = (AST)currentAST.root;
-				limitClause_AST = (AST)astFactory.make( (new ASTArray(2)).add((AST)astFactory.create(LIMIT,"limitParam","org.apache.geode.cache.query.internal.parse.ASTParameter")).add(tmp72_AST));
+				limitClause_AST = (AST)astFactory.make( (new ASTArray(2)).add((AST)astFactory.create(LIMIT,"limitParam","org.apache.geode.cache.query.internal.parse.ASTParameter")).add(tmp73_AST));
 				currentAST.root = limitClause_AST;
 				currentAST.child = limitClause_AST!=null &&limitClause_AST.getFirstChild()!=null ?
 					limitClause_AST.getFirstChild() : limitClause_AST;
@@ -1386,19 +1398,6 @@ inputState.guessing--;
 		
 		}
 		returnAST = limitClause_AST;
-	}
-	
-	public final void intoClause() throws RecognitionException, TokenStreamException {
-		
-		returnAST = null;
-		ASTPair currentAST = new ASTPair();
-		AST intoClause_AST = null;
-		
-		match(LITERAL_into);
-		iteratorDef();
-		astFactory.addASTChild(currentAST, returnAST);
-		intoClause_AST = (AST)currentAST.root;
-		returnAST = intoClause_AST;
 	}
 	
 	public final void projection() throws RecognitionException, TokenStreamException {
@@ -3789,7 +3788,7 @@ inputState.guessing--;
 	}
 	public static final BitSet _tokenSet_13 = new BitSet(mk_tokenSet_13());
 	private static final long[] mk_tokenSet_14() {
-		long[] data = { 146L, 65536L, 0L, 0L};
+		long[] data = { 146L, 262144L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_14 = new BitSet(mk_tokenSet_14());
