@@ -60,7 +60,9 @@ public class CompiledIteratorDef extends AbstractCompiledValue {
   public Object evaluate(ExecutionContext context)
       throws FunctionDomainException, TypeMismatchException,
       NameResolutionException, QueryInvocationTargetException {
-    throw new UnsupportedOperationException(LocalizedStrings.CompiledIteratorDef_NOT_TO_BE_EVALUATED_DIRECTLY.toLocalizedString());
+    UnsupportedOperationException e = new UnsupportedOperationException(LocalizedStrings.CompiledIteratorDef_NOT_TO_BE_EVALUATED_DIRECTLY.toLocalizedString());
+    LogService.getLogger().info(e.getStackTrace());
+    throw e;
   }
 
   public RuntimeIterator getRuntimeIterator(ExecutionContext context)
