@@ -61,7 +61,7 @@ public class CompiledIteratorDef extends AbstractCompiledValue {
       throws FunctionDomainException, TypeMismatchException,
       NameResolutionException, QueryInvocationTargetException {
     UnsupportedOperationException e = new UnsupportedOperationException(LocalizedStrings.CompiledIteratorDef_NOT_TO_BE_EVALUATED_DIRECTLY.toLocalizedString());
-    LogService.getLogger().info(e.getStackTrace());
+    LogService.getLogger().info(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
     throw e;
   }
 
