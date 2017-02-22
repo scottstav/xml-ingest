@@ -1,4 +1,4 @@
-// $ANTLR 2.7.7 (2006-11-01): "oqL.g" -> "OQLLexer.java"$
+// $ANTLR 2.7.7 (2006-11-01): "oql.g" -> "OQLLexer.java"$
 
 package org.apache.geode.cache.query.internal.parse;
 import java.util.*;

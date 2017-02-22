@@ -1,4 +1,4 @@
-// $ANTLR 2.7.7 (2006-11-01): "oqL.g" -> "OQLParser.java"$
+// $ANTLR 2.7.7 (2006-11-01): "oql.g" -> "OQLParser.java"$
 
 package org.apache.geode.cache.query.internal.parse;
 import java.util.*;
@@ -1129,11 +1129,23 @@ inputState.guessing--;
 		fromClause();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
+		if ((LA(1)==LITERAL_into)) {
+			intoClause();
+			astFactory.addASTChild(currentAST, returnAST);
+		}
+		else if ((_tokenSet_11.member(LA(1)))) {
+		}
+		else {
+			throw new NoViableAltException(LT(1), getFilename());
+		}
+		
+		}
+		{
 		if ((LA(1)==LITERAL_where)) {
 			whereClause();
 			astFactory.addASTChild(currentAST, returnAST);
 		}
-		else if ((_tokenSet_11.member(LA(1)))) {
+		else if ((_tokenSet_12.member(LA(1)))) {
 		}
 		else {
 			throw new NoViableAltException(LT(1), getFilename());
@@ -1145,7 +1157,7 @@ inputState.guessing--;
 			groupClause();
 			astFactory.addASTChild(currentAST, returnAST);
 		}
-		else if ((_tokenSet_12.member(LA(1)))) {
+		else if ((_tokenSet_13.member(LA(1)))) {
 		}
 		else {
 			throw new NoViableAltException(LT(1), getFilename());
@@ -1155,18 +1167,6 @@ inputState.guessing--;
 		{
 		if ((LA(1)==LITERAL_order)) {
 			orderClause();
-			astFactory.addASTChild(currentAST, returnAST);
-		}
-		else if ((_tokenSet_13.member(LA(1)))) {
-		}
-		else {
-			throw new NoViableAltException(LT(1), getFilename());
-		}
-		
-		}
-		{
-		if ((LA(1)==LITERAL_into)) {
-			intoClause();
 			astFactory.addASTChild(currentAST, returnAST);
 		}
 		else if ((_tokenSet_14.member(LA(1)))) {
@@ -1266,6 +1266,19 @@ inputState.guessing--;
 		returnAST = fromClause_AST;
 	}
 	
+	public final void intoClause() throws RecognitionException, TokenStreamException {
+		
+		returnAST = null;
+		ASTPair currentAST = new ASTPair();
+		AST intoClause_AST = null;
+		
+		match(LITERAL_into);
+		iteratorDef();
+		astFactory.addASTChild(currentAST, returnAST);
+		intoClause_AST = (AST)currentAST.root;
+		returnAST = intoClause_AST;
+	}
+	
 	public final void whereClause() throws RecognitionException, TokenStreamException {
 		
 		returnAST = null;
@@ -1285,9 +1298,9 @@ inputState.guessing--;
 		ASTPair currentAST = new ASTPair();
 		AST groupClause_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTGroupBy tmp64_AST = null;
-		tmp64_AST = (org.apache.geode.cache.query.internal.parse.ASTGroupBy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTGroupBy");
-		astFactory.makeASTRoot(currentAST, tmp64_AST);
+		org.apache.geode.cache.query.internal.parse.ASTGroupBy tmp65_AST = null;
+		tmp65_AST = (org.apache.geode.cache.query.internal.parse.ASTGroupBy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTGroupBy");
+		astFactory.makeASTRoot(currentAST, tmp65_AST);
 		match(LITERAL_group);
 		match(LITERAL_by);
 		groupByList();
@@ -1298,7 +1311,7 @@ inputState.guessing--;
 			expr();
 			astFactory.addASTChild(currentAST, returnAST);
 		}
-		else if ((_tokenSet_12.member(LA(1)))) {
+		else if ((_tokenSet_13.member(LA(1)))) {
 		}
 		else {
 			throw new NoViableAltException(LT(1), getFilename());
@@ -1315,9 +1328,9 @@ inputState.guessing--;
 		ASTPair currentAST = new ASTPair();
 		AST orderClause_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTOrderBy tmp67_AST = null;
-		tmp67_AST = (org.apache.geode.cache.query.internal.parse.ASTOrderBy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTOrderBy");
-		astFactory.makeASTRoot(currentAST, tmp67_AST);
+		org.apache.geode.cache.query.internal.parse.ASTOrderBy tmp68_AST = null;
+		tmp68_AST = (org.apache.geode.cache.query.internal.parse.ASTOrderBy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTOrderBy");
+		astFactory.makeASTRoot(currentAST, tmp68_AST);
 		match(LITERAL_order);
 		match(LITERAL_by);
 		sortCriterion();
@@ -1338,19 +1351,6 @@ inputState.guessing--;
 		}
 		orderClause_AST = (AST)currentAST.root;
 		returnAST = orderClause_AST;
-	}
-	
-	public final void intoClause() throws RecognitionException, TokenStreamException {
-		
-		returnAST = null;
-		ASTPair currentAST = new ASTPair();
-		AST intoClause_AST = null;
-		
-		match(LITERAL_into);
-		iteratorDef();
-		astFactory.addASTChild(currentAST, returnAST);
-		intoClause_AST = (AST)currentAST.root;
-		returnAST = intoClause_AST;
 	}
 	
 	public final void limitClause() throws RecognitionException, TokenStreamException {
@@ -1752,7 +1752,6 @@ inputState.guessing--;
 		case TOK_RPAREN:
 		case TOK_COMMA:
 		case TOK_SEMIC:
-		case LITERAL_into:
 		case LITERAL_limit:
 		{
 			break;
@@ -3773,17 +3772,17 @@ inputState.guessing--;
 	}
 	public static final BitSet _tokenSet_10 = new BitSet(mk_tokenSet_10());
 	private static final long[] mk_tokenSet_11() {
-		long[] data = { 146L, 9240576L, 0L, 0L};
+		long[] data = { 146L, 9306112L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_11 = new BitSet(mk_tokenSet_11());
 	private static final long[] mk_tokenSet_12() {
-		long[] data = { 146L, 8716288L, 0L, 0L};
+		long[] data = { 146L, 9175040L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_12 = new BitSet(mk_tokenSet_12());
 	private static final long[] mk_tokenSet_13() {
-		long[] data = { 146L, 327680L, 0L, 0L};
+		long[] data = { 146L, 8650752L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_13 = new BitSet(mk_tokenSet_13());

@@ -237,9 +237,9 @@ public class QCompiler implements OQLLexerTokenTypes {
     CompiledValue into = (CompiledValue) queryComponents.remove(OQLLexerTokenTypes.LITERAL_into);
 
     if (into != null) {
-      LogService.getLogger().debug("== into ==");
+      LogService.getLogger().info("== into ==");
     } else {
-      LogService.getLogger().debug("== no into ==");
+      LogService.getLogger().info("== no into ==");
     }
 
     // whatever remains , treat it as where

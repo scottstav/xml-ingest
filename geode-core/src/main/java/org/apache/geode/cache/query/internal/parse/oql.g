@@ -489,10 +489,10 @@ selectExpr :
           projectionAttributes
 		)
         fromClause
+        ( intoClause )?
         ( whereClause )?
         ( groupClause )?
         ( orderClause )?
-        ( intoClause )?
         ( limitClause )?
     ;
 
