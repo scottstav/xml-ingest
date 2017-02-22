@@ -526,7 +526,8 @@ iteratorDef! :
     ;
 
 intoClause :
-        "into"! iteratorDef
+        "into"^
+        iteratorDef
     ;
 
 whereClause :
