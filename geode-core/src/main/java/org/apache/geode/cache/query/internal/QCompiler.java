@@ -240,6 +240,9 @@ public class QCompiler implements OQLLexerTokenTypes {
       LogService.getLogger().error("== into ==");
     } else {
       LogService.getLogger().error("== no into ==");
+      for (Map.Entry<Integer, Object> e : queryComponents.entrySet()) {
+        LogService.getLogger().error("key: " + e.getKey());
+      }
     }
 
     // whatever remains , treat it as where
