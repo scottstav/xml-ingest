@@ -1272,8 +1272,8 @@ inputState.guessing--;
 		ASTPair currentAST = new ASTPair();
 		AST intoClause_AST = null;
 		
-		AST tmp63_AST = null;
-		tmp63_AST = astFactory.create(LT(1));
+		org.apache.geode.cache.query.internal.parse.ASTInto tmp63_AST = null;
+		tmp63_AST = (org.apache.geode.cache.query.internal.parse.ASTInto)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTInto");
 		astFactory.makeASTRoot(currentAST, tmp63_AST);
 		match(LITERAL_into);
 		iteratorDef();

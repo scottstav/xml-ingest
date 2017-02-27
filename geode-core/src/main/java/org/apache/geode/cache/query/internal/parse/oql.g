@@ -526,7 +526,7 @@ iteratorDef! :
     ;
 
 intoClause :
-        "into"^
+        "into"^<AST=org.apache.geode.cache.query.internal.parse.ASTInto>
         iteratorDef
     ;
 
