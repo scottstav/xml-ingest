@@ -59,11 +59,11 @@ public class CompiledGroupBySelect extends CompiledSelect {
   }
 
   public CompiledGroupBySelect(boolean distinct, boolean count,
-      CompiledValue whereClause, List iterators, List projAttrs,
+      CompiledValue whereClause, List iterators, CompiledValue into, List projAttrs,
       List<CompiledSortCriterion> orderByAttrs, CompiledValue limit,
       List<String> hints, List<CompiledValue> groupByClause,
       LinkedHashMap<Integer, CompiledAggregateFunction> aggMap) {
-    super(false, false, whereClause, iterators, projAttrs, null,null,
+    super(false, false, whereClause, iterators, into, projAttrs, null,null,
         hints, groupByClause);
     this.aggregateFunctions = new CompiledAggregateFunction[aggMap != null ? aggMap
         .size() : 0];

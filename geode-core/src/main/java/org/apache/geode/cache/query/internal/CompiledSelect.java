@@ -57,7 +57,8 @@ import org.apache.geode.pdx.internal.PdxString;
  * @version $Revision: 1.2 $
  */
 public class CompiledSelect extends AbstractCompiledValue {
-  
+
+  private final CompiledValue into;
   protected List<CompiledSortCriterion> orderByAttrs; //order by attributes: list of CompiledValue
   private CompiledValue whereClause; // can be null if there isn't one
   private List iterators; // fromClause: list of CompiledIteratorDefs
@@ -95,11 +96,12 @@ public class CompiledSelect extends AbstractCompiledValue {
   private final static String CLAUSE_EVALUATED = "Evaluated";
 
   public CompiledSelect(boolean distinct, boolean count, CompiledValue whereClause,
-                        List iterators, List projAttrs,List<CompiledSortCriterion> orderByAttrs, CompiledValue limit,
+                        List iterators, CompiledValue into, List projAttrs,List<CompiledSortCriterion> orderByAttrs, CompiledValue limit,
                         List<String> hints, List<CompiledValue> groupByClause) {
     this.orderByAttrs = orderByAttrs;
     this.whereClause = whereClause;
     this.iterators = iterators;
+    this.into = into;
     this.projAttrs = projAttrs;
     this.distinct = distinct;
     this.count = count;

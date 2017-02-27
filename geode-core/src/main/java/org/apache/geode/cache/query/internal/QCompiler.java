@@ -261,7 +261,7 @@ public class QCompiler implements OQLLexerTokenTypes {
       projAttrs = null;
     }
     CompiledSelect select = createSelect(distinct != null,
-        isCountOnly, where, iterators, projAttrs, orderByAttrs, limit,
+        isCountOnly, where, iterators, into, projAttrs, orderByAttrs, limit,
         hints, groupByClause, aggMap);
     push(select);
   }
@@ -283,17 +283,17 @@ public class QCompiler implements OQLLexerTokenTypes {
   }
   
   private CompiledSelect createSelect(boolean isDistinct, boolean isCountOnly, CompiledValue where,
-      List iterators, List projAttrs, List<CompiledSortCriterion> orderByAttrs, CompiledValue limit,
+      List iterators, CompiledValue into, List projAttrs, List<CompiledSortCriterion> orderByAttrs, CompiledValue limit,
       List<String> hints,List<CompiledValue> groupByClause, LinkedHashMap<Integer, 
       CompiledAggregateFunction> aggMap    ) {
     if(isCountOnly || (groupByClause == null  && aggMap == null) 
         || (aggMap == null  && orderByAttrs == null)) {
       return  new CompiledSelect(isDistinct,
-          isCountOnly, where, iterators, projAttrs, orderByAttrs, limit,
+          isCountOnly, where, iterators, into, projAttrs, orderByAttrs, limit,
           hints, groupByClause);
     }else {
       return new CompiledGroupBySelect(isDistinct,
-          isCountOnly, where, iterators, projAttrs, orderByAttrs, limit,
+          isCountOnly, where, iterators, into, projAttrs, orderByAttrs, limit,
           hints, groupByClause, aggMap);
     }
   }
