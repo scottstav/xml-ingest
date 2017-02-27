@@ -19,6 +19,8 @@ package org.apache.geode.cache.query.internal.parse;
 
 import antlr.Token;
 import org.apache.geode.cache.query.internal.QCompiler;
+import org.apache.geode.internal.logging.LogService;
+import org.apache.logging.log4j.Logger;
 
 public class ASTInto extends GemFireAST {
 
@@ -28,7 +30,13 @@ public class ASTInto extends GemFireAST {
 
     @Override
     public void compile(QCompiler qCompiler) {
-        throw new UnsupportedOperationException("Using new class successfully, compilation not implemented yet");
+        final Logger logger = LogService.getLogger();
+        logger.info("First child: " + getFirstChild().getText());
+        logger.info("# children: " + getNumberOfChildren());
+
+        this.childrenCompile(qCompiler);
+        // ASTIteratorDef ast = this.??
+        // throw new UnsupportedOperationException("Using new class successfully, compilation not implemented yet");
     }
 
 }
