@@ -402,14 +402,20 @@ public class CompiledSelect extends AbstractCompiledValue {
   
   public SelectResults evaluate(ExecutionContext context) throws FunctionDomainException, TypeMismatchException,
       NameResolutionException, QueryInvocationTargetException {
+
     context.newScope((Integer)context.cacheGet(scopeID));
     context.pushExecCache((Integer)context.cacheGet(scopeID));
     context.setDistinct(this.distinct);
     if(this.hasUnmappedOrderByCols && context.getBucketList() != null) {
       throw new QueryInvalidException(LocalizedStrings.DefaultQuery_ORDER_BY_ATTRIBS_NOT_PRESENT_IN_PROJ.toLocalizedString()); 
     }
+
     if (hints != null) {
       context.cachePut(QUERY_INDEX_HINTS, hints);
+    }
+
+    if (into != null) {
+      CompiledIteratorDef putregion = (CompiledIteratorDef) into.getChildren().get(0);
     }
 
     try {
