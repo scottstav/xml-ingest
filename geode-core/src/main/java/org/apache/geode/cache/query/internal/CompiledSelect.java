@@ -414,8 +414,9 @@ public class CompiledSelect extends AbstractCompiledValue {
       context.cachePut(QUERY_INDEX_HINTS, hints);
     }
 
+    CompiledRegion putRegion = null;
     if (into != null) {
-      CompiledIteratorDef putregion = (CompiledIteratorDef) into.getChildren().get(0);
+       putRegion = (CompiledRegion) into.getChildren().get(0);
     }
 
     try {
