@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.CacheClosedException;
 import org.apache.geode.cache.EntryDestroyedException;
@@ -48,6 +49,7 @@ import org.apache.geode.cache.query.types.CollectionType;
 import org.apache.geode.cache.query.types.ObjectType;
 import org.apache.geode.cache.query.types.StructType;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.pdx.PdxInstance;
 import org.apache.geode.pdx.internal.PdxString;
 
@@ -414,10 +416,21 @@ public class CompiledSelect extends AbstractCompiledValue {
       context.cachePut(QUERY_INDEX_HINTS, hints);
     }
 
-    CompiledRegion compiledPutRegion = null;
+    Region putRegion = null;
     if (into != null) {
-       compiledPutRegion = (CompiledRegion) into.getChildren().get(0);
-       Region putRegion = (Region) compiledPutRegion.evaluate(context);
+       CompiledRegion compiledPutRegion = (CompiledRegion) into.getChildren().get(0);
+       // works
+       String putRegionPath = compiledPutRegion.getRegionPath();
+       // should work
+       QRegion putQRegion = (QRegion) compiledPutRegion.evaluate(context);
+
+       try {
+         FieldUtils.readField(putRegion, "region", true);
+       } catch (IllegalAccessException e) {
+         LogService.getLogger().error("illegal access exception CompiledSelect::evaluate");
+       }
+       // exception: QRegion can't be cast to Region
+       // QRegion is read-only view on Region
        putRegion.put("Test: ", "Success");
     }
 
@@ -610,6 +623,10 @@ public class CompiledSelect extends AbstractCompiledValue {
           if (limitValue > -1) {
             ((Bag)sr).applyLimit(limitValue);
           }
+        }
+
+        if (putRegion != null) {
+
         }
 
         /*
