@@ -16,11 +16,7 @@
  */
 package org.apache.geode.cache.query.internal;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.geode.cache.Cache;
@@ -624,12 +620,18 @@ public class CompiledSelect extends AbstractCompiledValue {
           }
         }
 
+        // SELECT INTO evaluation is implemented here
         if (putRegion != null) {
-          int size = result.size();
           Iterator resultIterator = result.iterator();
-          for (int i = 0; i < size; ++i) {
-
-            putRegion.put((Integer) i, resultIterator.next());
+          Random generator = new Random();
+          long insertKey = generator.nextLong();
+          while (resultIterator.hasNext()) {
+            while (putRegion.containsKey(insertKey)) {
+              insertKey = generator.nextLong();
+            }
+            // only integer key may be inserted by select-into statement
+            putRegion.put(insertKey, resultIterator.next());
+            ++insertKey;
           }
         }
 
