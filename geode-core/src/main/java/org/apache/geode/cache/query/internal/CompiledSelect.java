@@ -421,16 +421,25 @@ public class CompiledSelect extends AbstractCompiledValue {
        CompiledRegion compiledPutRegion = (CompiledRegion) into.getChildren().get(0);
        // works
        String putRegionPath = compiledPutRegion.getRegionPath();
-       // should work
-       QRegion putQRegion = (QRegion) compiledPutRegion.evaluate(context);
-
-       try {
-         FieldUtils.readField(putRegion, "region", true);
-       } catch (IllegalAccessException e) {
-         LogService.getLogger().error("illegal access exception CompiledSelect::evaluate");
+       while (putRegion == null) {
+         putRegion = context.getCache().getRegion(putRegionPath);
+         try {
+           Thread.sleep(100);
+         } catch (InterruptedException e) {
+           e.printStackTrace();
+         }
        }
-       // exception: QRegion can't be cast to Region
+       // should work
+//       QRegion putQRegion = (QRegion) compiledPutRegion.evaluate(context);
        // QRegion is read-only view on Region
+
+//       try {
+//         FieldUtils.readField(putRegion, "region", true);
+//       } catch (IllegalAccessException e) {
+//         LogService.getLogger().error("illegal access exception CompiledSelect::evaluate");
+//       }
+       // otherwise exception: QRegion can't be cast to Region
+       LogService.getLogger().info("Putting into " + putRegion.getFullPath());
        putRegion.put("Test: ", "Success");
     }
 
