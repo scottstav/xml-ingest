@@ -56,7 +56,7 @@ import org.apache.geode.pdx.internal.PdxString;
  */
 public class CompiledSelect extends AbstractCompiledValue {
 
-  private final CompiledValue into;
+  protected CompiledValue into;
   protected List<CompiledSortCriterion> orderByAttrs; //order by attributes: list of CompiledValue
   private CompiledValue whereClause; // can be null if there isn't one
   private List iterators; // fromClause: list of CompiledIteratorDefs
@@ -412,22 +412,7 @@ public class CompiledSelect extends AbstractCompiledValue {
       context.cachePut(QUERY_INDEX_HINTS, hints);
     }
 
-    Region putRegion = null;
-    if (into != null) {
-       CompiledRegion compiledPutRegion = (CompiledRegion) into.getChildren().get(0);
-       String putRegionPath = compiledPutRegion.getRegionPath();
-       while (putRegion == null) {
-         putRegion = context.getCache().getRegion(putRegionPath);
-         try {
-           Thread.sleep(100);
-         } catch (InterruptedException e) {
-           e.printStackTrace();
-         }
-       }
 
-//       LogService.getLogger().info("Putting into " + putRegion.getFullPath());
-//       putRegion.put("Test: ", "Success");
-    }
 
     try {
       //set flag to keep objects serialized for "select *" queries
@@ -620,20 +605,7 @@ public class CompiledSelect extends AbstractCompiledValue {
           }
         }
 
-        // SELECT INTO evaluation is implemented here
-        if (putRegion != null) {
-          Iterator resultIterator = result.iterator();
-          Random generator = new Random();
-          long insertKey = generator.nextLong();
-          while (resultIterator.hasNext()) {
-            while (putRegion.containsKey(insertKey)) {
-              insertKey = generator.nextLong();
-            }
-            // only integer key may be inserted by select-into statement
-            putRegion.put(insertKey, resultIterator.next());
-            ++insertKey;
-          }
-        }
+        evaluateIntoClause(context, result);
 
         /*
          * We still have to get size of SelectResults in some cases like,
@@ -671,7 +643,41 @@ public class CompiledSelect extends AbstractCompiledValue {
       context.popExecCache();
     }
   }
-  
+
+  protected void evaluateIntoClause(ExecutionContext context, SelectResults result) {
+    Region putRegion = null;
+    if (into != null) {
+      CompiledRegion compiledPutRegion = (CompiledRegion) into.getChildren().get(0);
+      String putRegionPath = compiledPutRegion.getRegionPath();
+      while (putRegion == null) {
+        putRegion = context.getCache().getRegion(putRegionPath);
+        try {
+          Thread.sleep(100);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+
+//       LogService.getLogger().info("Putting into " + putRegion.getFullPath());
+//       putRegion.put("Test: ", "Success");
+    }
+
+    // SELECT INTO evaluation is implemented here
+    if (putRegion != null) {
+      Iterator resultIterator = result.iterator();
+      Random generator = new Random();
+      long insertKey = generator.nextLong();
+      while (resultIterator.hasNext()) {
+        while (putRegion.containsKey(insertKey)) {
+          insertKey = generator.nextLong();
+        }
+        // only integer key may be inserted by select-into statement
+        putRegion.put(insertKey, resultIterator.next());
+        ++insertKey;
+      }
+    }
+  }
+
   /**
    * The index is locked during query to prevent it from being
    * removed by another thread. So we have to release the lock only after

@@ -169,8 +169,13 @@ public class CompiledGroupBySelect extends CompiledSelect {
   public SelectResults evaluate(ExecutionContext context)
       throws FunctionDomainException, TypeMismatchException,
       NameResolutionException, QueryInvocationTargetException {
+    CompiledValue intoClause = into;
+    into = null;
     SelectResults sr = super.evaluate(context);
-    return this.applyAggregateAndGroupBy(sr, context);
+    SelectResults gbsr = this.applyAggregateAndGroupBy(sr, context);
+    into = intoClause;
+    evaluateIntoClause(context, gbsr);
+    return gbsr;
 
   }
 
