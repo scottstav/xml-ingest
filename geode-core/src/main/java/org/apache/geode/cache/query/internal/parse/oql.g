@@ -465,6 +465,28 @@ query :
         (
             selectExpr
         |   expr
+        |   statement
+        )
+    ;
+
+statement :
+        (
+            loadStatement
+        )
+
+    ;
+
+loadStatement:
+        (
+            "load"^
+            RegionPath
+            identifier
+        )
+    ;
+
+createTable:
+        (
+           selectExpr into
         )
     ;
 
