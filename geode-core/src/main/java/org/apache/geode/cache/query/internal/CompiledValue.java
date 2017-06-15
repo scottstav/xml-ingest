@@ -49,6 +49,7 @@ public interface CompiledValue {
   public final static int LIKE = -15;
   public final static int FIELD = -16;
   public final static int GROUP_BY_SELECT = -17;
+  public final static int LOAD = -18;
   public static  final int INDEX_RESULT_THRESHOLD_DEFAULT = 100;
   public static final String INDX_THRESHOLD_PROP_STR = DistributionConfig.GEMFIRE_PREFIX + "Query.INDEX_THRESHOLD_SIZE";
   public static final String INDEX_INFO = "index_info";

@@ -478,8 +478,8 @@ statement :
 
 loadStatement:
         (
-            "load"^
-            RegionPath
+            "load"^<AST=org.apache.geode.cache.query.internal.parse.ASTLoad>
+            RegionPath <AST=org.apache.geode.cache.query.internal.parse.ASTRegionPath>
             identifier
         )
     ;

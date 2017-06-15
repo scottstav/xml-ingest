@@ -146,7 +146,7 @@ public class QCompiler implements OQLLexerTokenTypes {
   	  CompiledSortCriterion csc = (CompiledSortCriterion)this.stack.pop();
   	  list.add(0, csc);
   	}
-  	push(list) ;
+  	push(list);
   }
   
   public void compileGroupByClause(int numOfChildren) {
@@ -171,8 +171,9 @@ public class QCompiler implements OQLLexerTokenTypes {
   	push(csc);
     
   }
-  
-  public void compileLimit(String limitNum) {  
+
+
+  public void compileLimit(String limitNum) {
     push(Integer.valueOf(limitNum));
   }
   
@@ -499,7 +500,11 @@ public class QCompiler implements OQLLexerTokenTypes {
     push(cv);
   }
   
-  
+  public void load() {
+    CompiledValue tableName = (CompiledValue)pop();
+    CompiledValue csv       = (CompiledValue)pop();
+
+  }
   
   public void compare (int opKind) {
     CompiledValue v2 = (CompiledValue)pop ();
