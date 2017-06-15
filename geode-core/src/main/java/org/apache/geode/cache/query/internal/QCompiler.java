@@ -503,7 +503,7 @@ public class QCompiler implements OQLLexerTokenTypes {
   public void load() {
     CompiledValue tableName = (CompiledValue)pop();
     CompiledValue csv       = (CompiledValue)pop();
-
+    System.out.println("THIS HAS HAPPENED");
   }
   
   public void compare (int opKind) {
