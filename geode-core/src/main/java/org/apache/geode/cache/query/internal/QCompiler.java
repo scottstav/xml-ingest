@@ -85,6 +85,9 @@ public class QCompiler implements OQLLexerTokenTypes {
       parser.setASTNodeClass ("org.apache.geode.cache.query.internal.parse.ASTUnsupported");
       parser.queryProgram ();
       GemFireAST n = (GemFireAST)parser.getAST ();
+      final Logger logger = LogService.getLogger();
+      logger.info("----YabaDaba Doo ");
+
       n.compile(this);
     } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception. 
       throw new QueryInvalidException(LocalizedStrings.QCompiler_SYNTAX_ERROR_IN_QUERY_0.toLocalizedString(ex.getMessage()), ex);
@@ -504,6 +507,7 @@ public class QCompiler implements OQLLexerTokenTypes {
     CompiledValue tableName = (CompiledValue)pop();
     CompiledValue csv       = (CompiledValue)pop();
     System.out.println("THIS HAS HAPPENED");
+
   }
   
   public void compare (int opKind) {

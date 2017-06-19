@@ -484,11 +484,6 @@ loadStatement:
         )
     ;
 
-createTable:
-        (
-           selectExpr into
-        )
-    ;
 
 selectExpr :
 		( hintCommand )?
