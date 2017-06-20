@@ -213,18 +213,76 @@ public OQLParser(ParserSharedInputState state) {
 		AST query_AST = null;
 		
 		{
-		if ((LA(1)==TOK_LT||LA(1)==LITERAL_select)) {
+		switch ( LA(1)) {
+		case TOK_LT:
+		case LITERAL_select:
+		{
 			selectExpr();
 			astFactory.addASTChild(currentAST, returnAST);
+			break;
 		}
-		else if ((_tokenSet_4.member(LA(1)))) {
+		case TOK_LPAREN:
+		case TOK_PLUS:
+		case TOK_MINUS:
+		case TOK_DOLLAR:
+		case QuotedIdentifier:
+		case Identifier:
+		case RegionPath:
+		case NUM_INT:
+		case StringLiteral:
+		case LITERAL_distinct:
+		case LITERAL_for:
+		case LITERAL_exists:
+		case LITERAL_abs:
+		case LITERAL_not:
+		case LITERAL_listtoset:
+		case LITERAL_element:
+		case LITERAL_flatten:
+		case LITERAL_nvl:
+		case LITERAL_to_date:
+		case LITERAL_first:
+		case LITERAL_last:
+		case LITERAL_unique:
+		case LITERAL_sum:
+		case LITERAL_avg:
+		case LITERAL_min:
+		case LITERAL_max:
+		case LITERAL_count:
+		case LITERAL_is_undefined:
+		case LITERAL_is_defined:
+		case LITERAL_struct:
+		case LITERAL_array:
+		case LITERAL_set:
+		case LITERAL_bag:
+		case LITERAL_list:
+		case LITERAL_char:
+		case LITERAL_date:
+		case LITERAL_time:
+		case LITERAL_timestamp:
+		case LITERAL_nil:
+		case LITERAL_null:
+		case LITERAL_undefined:
+		case LITERAL_true:
+		case LITERAL_false:
+		case NUM_LONG:
+		case NUM_FLOAT:
+		case NUM_DOUBLE:
+		{
 			expr();
 			astFactory.addASTChild(currentAST, returnAST);
+			break;
 		}
-		else {
+		case LITERAL_load:
+		{
+			statement();
+			astFactory.addASTChild(currentAST, returnAST);
+			break;
+		}
+		default:
+		{
 			throw new NoViableAltException(LT(1), getFilename());
 		}
-		
+		}
 		}
 		query_AST = (AST)currentAST.root;
 		returnAST = query_AST;
@@ -278,10 +336,10 @@ public OQLParser(ParserSharedInputState state) {
 		AST id2_AST = null;
 		AST t2_AST = null;
 		
-		boolean synPredMatched154 = false;
+		boolean synPredMatched158 = false;
 		if (((LA(1)==QuotedIdentifier||LA(1)==Identifier) && (LA(2)==LITERAL_in))) {
-			int _m154 = mark();
-			synPredMatched154 = true;
+			int _m158 = mark();
+			synPredMatched158 = true;
 			inputState.guessing++;
 			try {
 				{
@@ -290,12 +348,12 @@ public OQLParser(ParserSharedInputState state) {
 				}
 			}
 			catch (RecognitionException pe) {
-				synPredMatched154 = false;
+				synPredMatched158 = false;
 			}
-			rewind(_m154);
+			rewind(_m158);
 			inputState.guessing--;
 		}
-		if ( synPredMatched154 ) {
+		if ( synPredMatched158 ) {
 			identifier();
 			id1_AST = (AST)returnAST;
 			match(LITERAL_in);
@@ -307,7 +365,7 @@ public OQLParser(ParserSharedInputState state) {
 				type();
 				t1_AST = (AST)returnAST;
 			}
-			else if ((_tokenSet_5.member(LA(1)))) {
+			else if ((_tokenSet_4.member(LA(1)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -323,7 +381,7 @@ public OQLParser(ParserSharedInputState state) {
 				currentAST.advanceChildToEnd();
 			}
 		}
-		else if ((_tokenSet_4.member(LA(1))) && (_tokenSet_6.member(LA(2)))) {
+		else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_6.member(LA(2)))) {
 			expr();
 			ex2_AST = (AST)returnAST;
 			{
@@ -355,7 +413,7 @@ public OQLParser(ParserSharedInputState state) {
 				type();
 				t2_AST = (AST)returnAST;
 			}
-			else if ((_tokenSet_5.member(LA(1)))) {
+			else if ((_tokenSet_4.member(LA(1)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -398,11 +456,11 @@ public OQLParser(ParserSharedInputState state) {
 		AST projectionAttributes_AST = null;
 		
 		{
-		if ((_tokenSet_4.member(LA(1)))) {
+		if ((_tokenSet_5.member(LA(1)))) {
 			projection();
 			astFactory.addASTChild(currentAST, returnAST);
 			{
-			_loop166:
+			_loop170:
 			do {
 				if ((LA(1)==TOK_COMMA)) {
 					match(TOK_COMMA);
@@ -410,7 +468,7 @@ public OQLParser(ParserSharedInputState state) {
 					astFactory.addASTChild(currentAST, returnAST);
 				}
 				else {
-					break _loop166;
+					break _loop170;
 				}
 				
 			} while (true);
@@ -1204,6 +1262,42 @@ public OQLParser(ParserSharedInputState state) {
 		returnAST = expr_AST;
 	}
 	
+	public final void statement() throws RecognitionException, TokenStreamException {
+		
+		returnAST = null;
+		ASTPair currentAST = new ASTPair();
+		AST statement_AST = null;
+		
+		{
+		loadStatement();
+		astFactory.addASTChild(currentAST, returnAST);
+		}
+		statement_AST = (AST)currentAST.root;
+		returnAST = statement_AST;
+	}
+	
+	public final void loadStatement() throws RecognitionException, TokenStreamException {
+		
+		returnAST = null;
+		ASTPair currentAST = new ASTPair();
+		AST loadStatement_AST = null;
+		
+		{
+		org.apache.geode.cache.query.internal.parse.ASTLoad tmp57_AST = null;
+		tmp57_AST = (org.apache.geode.cache.query.internal.parse.ASTLoad)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLoad");
+		astFactory.makeASTRoot(currentAST, tmp57_AST);
+		match(LITERAL_load);
+		org.apache.geode.cache.query.internal.parse.ASTRegionPath tmp58_AST = null;
+		tmp58_AST = (org.apache.geode.cache.query.internal.parse.ASTRegionPath)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTRegionPath");
+		astFactory.addASTChild(currentAST, tmp58_AST);
+		match(RegionPath);
+		identifier();
+		astFactory.addASTChild(currentAST, returnAST);
+		}
+		loadStatement_AST = (AST)currentAST.root;
+		returnAST = loadStatement_AST;
+	}
+	
 	public final void hintCommand() throws RecognitionException, TokenStreamException {
 		
 		returnAST = null;
@@ -1211,14 +1305,14 @@ public OQLParser(ParserSharedInputState state) {
 		AST hintCommand_AST = null;
 		
 		match(TOK_LT);
-		org.apache.geode.cache.query.internal.parse.ASTHint tmp58_AST = null;
-		tmp58_AST = (org.apache.geode.cache.query.internal.parse.ASTHint)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTHint");
-		astFactory.makeASTRoot(currentAST, tmp58_AST);
+		org.apache.geode.cache.query.internal.parse.ASTHint tmp60_AST = null;
+		tmp60_AST = (org.apache.geode.cache.query.internal.parse.ASTHint)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTHint");
+		astFactory.makeASTRoot(currentAST, tmp60_AST);
 		match(LITERAL_hint);
 		hintIdentifier();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop175:
+		_loop179:
 		do {
 			if ((LA(1)==TOK_COMMA)) {
 				match(TOK_COMMA);
@@ -1226,7 +1320,7 @@ public OQLParser(ParserSharedInputState state) {
 				astFactory.addASTChild(currentAST, returnAST);
 			}
 			else {
-				break _loop175;
+				break _loop179;
 			}
 			
 		} while (true);
@@ -1242,14 +1336,14 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST fromClause_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTCombination tmp61_AST = null;
-		tmp61_AST = (org.apache.geode.cache.query.internal.parse.ASTCombination)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCombination");
-		astFactory.makeASTRoot(currentAST, tmp61_AST);
+		org.apache.geode.cache.query.internal.parse.ASTCombination tmp63_AST = null;
+		tmp63_AST = (org.apache.geode.cache.query.internal.parse.ASTCombination)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCombination");
+		astFactory.makeASTRoot(currentAST, tmp63_AST);
 		match(LITERAL_from);
 		iteratorDef();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop151:
+		_loop155:
 		do {
 			if ((LA(1)==TOK_COMMA)) {
 				match(TOK_COMMA);
@@ -1257,7 +1351,7 @@ public OQLParser(ParserSharedInputState state) {
 				astFactory.addASTChild(currentAST, returnAST);
 			}
 			else {
-				break _loop151;
+				break _loop155;
 			}
 			
 		} while (true);
@@ -1272,9 +1366,9 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST intoClause_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTInto tmp63_AST = null;
-		tmp63_AST = (org.apache.geode.cache.query.internal.parse.ASTInto)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTInto");
-		astFactory.makeASTRoot(currentAST, tmp63_AST);
+		org.apache.geode.cache.query.internal.parse.ASTInto tmp65_AST = null;
+		tmp65_AST = (org.apache.geode.cache.query.internal.parse.ASTInto)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTInto");
+		astFactory.makeASTRoot(currentAST, tmp65_AST);
 		match(LITERAL_into);
 		iteratorDef();
 		astFactory.addASTChild(currentAST, returnAST);
@@ -1301,9 +1395,9 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST groupClause_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTGroupBy tmp65_AST = null;
-		tmp65_AST = (org.apache.geode.cache.query.internal.parse.ASTGroupBy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTGroupBy");
-		astFactory.makeASTRoot(currentAST, tmp65_AST);
+		org.apache.geode.cache.query.internal.parse.ASTGroupBy tmp67_AST = null;
+		tmp67_AST = (org.apache.geode.cache.query.internal.parse.ASTGroupBy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTGroupBy");
+		astFactory.makeASTRoot(currentAST, tmp67_AST);
 		match(LITERAL_group);
 		match(LITERAL_by);
 		groupByList();
@@ -1331,15 +1425,15 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST orderClause_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTOrderBy tmp68_AST = null;
-		tmp68_AST = (org.apache.geode.cache.query.internal.parse.ASTOrderBy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTOrderBy");
-		astFactory.makeASTRoot(currentAST, tmp68_AST);
+		org.apache.geode.cache.query.internal.parse.ASTOrderBy tmp70_AST = null;
+		tmp70_AST = (org.apache.geode.cache.query.internal.parse.ASTOrderBy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTOrderBy");
+		astFactory.makeASTRoot(currentAST, tmp70_AST);
 		match(LITERAL_order);
 		match(LITERAL_by);
 		sortCriterion();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop179:
+		_loop183:
 		do {
 			if ((LA(1)==TOK_COMMA)) {
 				match(TOK_COMMA);
@@ -1347,7 +1441,7 @@ public OQLParser(ParserSharedInputState state) {
 				astFactory.addASTChild(currentAST, returnAST);
 			}
 			else {
-				break _loop179;
+				break _loop183;
 			}
 			
 		} while (true);
@@ -1367,15 +1461,15 @@ public OQLParser(ParserSharedInputState state) {
 		match(LITERAL_limit);
 		{
 		if ((LA(1)==TOK_DOLLAR)) {
-			AST tmp72_AST = null;
-			tmp72_AST = astFactory.create(LT(1));
+			AST tmp74_AST = null;
+			tmp74_AST = astFactory.create(LT(1));
 			match(TOK_DOLLAR);
-			AST tmp73_AST = null;
-			tmp73_AST = astFactory.create(LT(1));
+			AST tmp75_AST = null;
+			tmp75_AST = astFactory.create(LT(1));
 			match(NUM_INT);
 			if ( inputState.guessing==0 ) {
 				limitClause_AST = (AST)currentAST.root;
-				limitClause_AST = (AST)astFactory.make( (new ASTArray(2)).add((AST)astFactory.create(LIMIT,"limitParam","org.apache.geode.cache.query.internal.parse.ASTParameter")).add(tmp73_AST));
+				limitClause_AST = (AST)astFactory.make( (new ASTArray(2)).add((AST)astFactory.create(LIMIT,"limitParam","org.apache.geode.cache.query.internal.parse.ASTParameter")).add(tmp75_AST));
 				currentAST.root = limitClause_AST;
 				currentAST.child = limitClause_AST!=null &&limitClause_AST.getFirstChild()!=null ?
 					limitClause_AST.getFirstChild() : limitClause_AST;
@@ -1428,7 +1522,7 @@ public OQLParser(ParserSharedInputState state) {
 					node = tok1_AST;
 				}
 			}
-			else if ((_tokenSet_4.member(LA(1))) && (_tokenSet_15.member(LA(2)))) {
+			else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_15.member(LA(2)))) {
 				expr();
 				tok2_AST = (AST)returnAST;
 				if ( inputState.guessing==0 ) {
@@ -1449,7 +1543,7 @@ public OQLParser(ParserSharedInputState state) {
 				currentAST.advanceChildToEnd();
 			}
 		}
-		else if ((_tokenSet_4.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
+		else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
 			{
 			if (((LA(1) >= LITERAL_sum && LA(1) <= LITERAL_count)) && (LA(2)==TOK_LPAREN)) {
 				aggregateExpr();
@@ -1458,7 +1552,7 @@ public OQLParser(ParserSharedInputState state) {
 					node = tok3_AST;
 				}
 			}
-			else if ((_tokenSet_4.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
+			else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
 				expr();
 				tok4_AST = (AST)returnAST;
 				if ( inputState.guessing==0 ) {
@@ -1530,17 +1624,17 @@ public OQLParser(ParserSharedInputState state) {
 			}
 			
 			}
-			AST tmp78_AST = null;
-			tmp78_AST = astFactory.create(LT(1));
+			AST tmp80_AST = null;
+			tmp80_AST = astFactory.create(LT(1));
 			match(TOK_LPAREN);
 			{
-			if ((LA(1)==LITERAL_distinct) && (_tokenSet_4.member(LA(2)))) {
+			if ((LA(1)==LITERAL_distinct) && (_tokenSet_5.member(LA(2)))) {
 				match(LITERAL_distinct);
 				if ( inputState.guessing==0 ) {
 					distinctOnly = true;
 				}
 			}
-			else if ((_tokenSet_4.member(LA(1))) && (_tokenSet_17.member(LA(2)))) {
+			else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_17.member(LA(2)))) {
 			}
 			else {
 				throw new NoViableAltException(LT(1), getFilename());
@@ -1549,8 +1643,8 @@ public OQLParser(ParserSharedInputState state) {
 			}
 			expr();
 			tokExpr1_AST = (AST)returnAST;
-			AST tmp80_AST = null;
-			tmp80_AST = astFactory.create(LT(1));
+			AST tmp82_AST = null;
+			tmp82_AST = astFactory.create(LT(1));
 			match(TOK_RPAREN);
 			if ( inputState.guessing==0 ) {
 				aggregateExpr_AST = (AST)currentAST.root;
@@ -1586,13 +1680,13 @@ public OQLParser(ParserSharedInputState state) {
 			}
 			
 			}
-			AST tmp83_AST = null;
-			tmp83_AST = astFactory.create(LT(1));
+			AST tmp85_AST = null;
+			tmp85_AST = astFactory.create(LT(1));
 			match(TOK_LPAREN);
 			expr();
 			tokExpr2_AST = (AST)returnAST;
-			AST tmp84_AST = null;
-			tmp84_AST = astFactory.create(LT(1));
+			AST tmp86_AST = null;
+			tmp86_AST = astFactory.create(LT(1));
 			match(TOK_RPAREN);
 			if ( inputState.guessing==0 ) {
 				aggregateExpr_AST = (AST)currentAST.root;
@@ -1608,27 +1702,27 @@ public OQLParser(ParserSharedInputState state) {
 		}
 		case LITERAL_count:
 		{
-			org.apache.geode.cache.query.internal.parse.ASTAggregateFunc tmp85_AST = null;
-			tmp85_AST = (org.apache.geode.cache.query.internal.parse.ASTAggregateFunc)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTAggregateFunc");
-			astFactory.makeASTRoot(currentAST, tmp85_AST);
+			org.apache.geode.cache.query.internal.parse.ASTAggregateFunc tmp87_AST = null;
+			tmp87_AST = (org.apache.geode.cache.query.internal.parse.ASTAggregateFunc)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTAggregateFunc");
+			astFactory.makeASTRoot(currentAST, tmp87_AST);
 			match(LITERAL_count);
 			match(TOK_LPAREN);
 			{
 			if ((LA(1)==TOK_STAR)) {
-				org.apache.geode.cache.query.internal.parse.ASTDummy tmp87_AST = null;
-				tmp87_AST = (org.apache.geode.cache.query.internal.parse.ASTDummy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTDummy");
-				astFactory.addASTChild(currentAST, tmp87_AST);
+				org.apache.geode.cache.query.internal.parse.ASTDummy tmp89_AST = null;
+				tmp89_AST = (org.apache.geode.cache.query.internal.parse.ASTDummy)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTDummy");
+				astFactory.addASTChild(currentAST, tmp89_AST);
 				match(TOK_STAR);
 			}
-			else if ((_tokenSet_4.member(LA(1)))) {
+			else if ((_tokenSet_5.member(LA(1)))) {
 				{
-				if ((LA(1)==LITERAL_distinct) && (_tokenSet_4.member(LA(2)))) {
+				if ((LA(1)==LITERAL_distinct) && (_tokenSet_5.member(LA(2)))) {
 					match(LITERAL_distinct);
 					if ( inputState.guessing==0 ) {
 						distinctOnly = true;
 					}
 				}
-				else if ((_tokenSet_4.member(LA(1))) && (_tokenSet_17.member(LA(2)))) {
+				else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_17.member(LA(2)))) {
 				}
 				else {
 					throw new NoViableAltException(LT(1), getFilename());
@@ -1672,7 +1766,7 @@ public OQLParser(ParserSharedInputState state) {
 		expr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop270:
+		_loop274:
 		do {
 			if ((LA(1)==TOK_COMMA)) {
 				match(TOK_COMMA);
@@ -1680,7 +1774,7 @@ public OQLParser(ParserSharedInputState state) {
 				astFactory.addASTChild(currentAST, returnAST);
 			}
 			else {
-				break _loop270;
+				break _loop274;
 			}
 			
 		} while (true);
@@ -1777,10 +1871,10 @@ public OQLParser(ParserSharedInputState state) {
 		Token  lp = null;
 		org.apache.geode.cache.query.internal.parse.ASTTypeCast lp_AST = null;
 		
-		boolean synPredMatched185 = false;
+		boolean synPredMatched189 = false;
 		if (((LA(1)==TOK_LPAREN) && (_tokenSet_18.member(LA(2))))) {
-			int _m185 = mark();
-			synPredMatched185 = true;
+			int _m189 = mark();
+			synPredMatched189 = true;
 			inputState.guessing++;
 			try {
 				{
@@ -1791,12 +1885,12 @@ public OQLParser(ParserSharedInputState state) {
 				}
 			}
 			catch (RecognitionException pe) {
-				synPredMatched185 = false;
+				synPredMatched189 = false;
 			}
-			rewind(_m185);
+			rewind(_m189);
 			inputState.guessing--;
 		}
-		if ( synPredMatched185 ) {
+		if ( synPredMatched189 ) {
 			lp = LT(1);
 			lp_AST = (org.apache.geode.cache.query.internal.parse.ASTTypeCast)astFactory.create(lp,"org.apache.geode.cache.query.internal.parse.ASTTypeCast");
 			astFactory.makeASTRoot(currentAST, lp_AST);
@@ -1811,7 +1905,7 @@ public OQLParser(ParserSharedInputState state) {
 			astFactory.addASTChild(currentAST, returnAST);
 			castExpr_AST = (AST)currentAST.root;
 		}
-		else if ((_tokenSet_4.member(LA(1))) && (_tokenSet_19.member(LA(2)))) {
+		else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_19.member(LA(2)))) {
 			orExpr();
 			astFactory.addASTChild(currentAST, returnAST);
 			castExpr_AST = (AST)currentAST.root;
@@ -1833,7 +1927,7 @@ public OQLParser(ParserSharedInputState state) {
 		orelseExpr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop188:
+		_loop192:
 		do {
 			if ((LA(1)==LITERAL_or)) {
 				match(LITERAL_or);
@@ -1844,7 +1938,7 @@ public OQLParser(ParserSharedInputState state) {
 				}
 			}
 			else {
-				break _loop188;
+				break _loop192;
 			}
 			
 		} while (true);
@@ -1872,7 +1966,7 @@ public OQLParser(ParserSharedInputState state) {
 		andExpr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop191:
+		_loop195:
 		do {
 			if ((LA(1)==LITERAL_orelse)) {
 				match(LITERAL_orelse);
@@ -1883,7 +1977,7 @@ public OQLParser(ParserSharedInputState state) {
 				}
 			}
 			else {
-				break _loop191;
+				break _loop195;
 			}
 			
 		} while (true);
@@ -1910,7 +2004,7 @@ public OQLParser(ParserSharedInputState state) {
 		quantifierExpr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop194:
+		_loop198:
 		do {
 			if ((LA(1)==LITERAL_and)) {
 				match(LITERAL_and);
@@ -1921,7 +2015,7 @@ public OQLParser(ParserSharedInputState state) {
 				}
 			}
 			else {
-				break _loop194;
+				break _loop198;
 			}
 			
 		} while (true);
@@ -1946,9 +2040,9 @@ public OQLParser(ParserSharedInputState state) {
 		AST quantifierExpr_AST = null;
 		
 		if ((LA(1)==LITERAL_for)) {
-			AST tmp97_AST = null;
-			tmp97_AST = astFactory.create(LT(1));
-			astFactory.makeASTRoot(currentAST, tmp97_AST);
+			AST tmp99_AST = null;
+			tmp99_AST = astFactory.create(LT(1));
+			astFactory.makeASTRoot(currentAST, tmp99_AST);
 			match(LITERAL_for);
 			match(LITERAL_all);
 			inClause();
@@ -1959,10 +2053,10 @@ public OQLParser(ParserSharedInputState state) {
 			quantifierExpr_AST = (AST)currentAST.root;
 		}
 		else {
-			boolean synPredMatched197 = false;
+			boolean synPredMatched201 = false;
 			if (((LA(1)==LITERAL_exists) && (LA(2)==QuotedIdentifier||LA(2)==Identifier))) {
-				int _m197 = mark();
-				synPredMatched197 = true;
+				int _m201 = mark();
+				synPredMatched201 = true;
 				inputState.guessing++;
 				try {
 					{
@@ -1972,15 +2066,15 @@ public OQLParser(ParserSharedInputState state) {
 					}
 				}
 				catch (RecognitionException pe) {
-					synPredMatched197 = false;
+					synPredMatched201 = false;
 				}
-				rewind(_m197);
+				rewind(_m201);
 				inputState.guessing--;
 			}
-			if ( synPredMatched197 ) {
-				AST tmp100_AST = null;
-				tmp100_AST = astFactory.create(LT(1));
-				astFactory.makeASTRoot(currentAST, tmp100_AST);
+			if ( synPredMatched201 ) {
+				AST tmp102_AST = null;
+				tmp102_AST = astFactory.create(LT(1));
+				astFactory.makeASTRoot(currentAST, tmp102_AST);
 				match(LITERAL_exists);
 				inClause();
 				astFactory.addASTChild(currentAST, returnAST);
@@ -2026,7 +2120,7 @@ public OQLParser(ParserSharedInputState state) {
 		equalityExpr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop201:
+		_loop205:
 		do {
 			if ((LA(1)==LITERAL_andthen)) {
 				match(LITERAL_andthen);
@@ -2037,7 +2131,7 @@ public OQLParser(ParserSharedInputState state) {
 				}
 			}
 			else {
-				break _loop201;
+				break _loop205;
 			}
 			
 		} while (true);
@@ -2065,21 +2159,21 @@ public OQLParser(ParserSharedInputState state) {
 		{
 		if ((LA(1)==TOK_EQ||LA(1)==TOK_NE)) {
 			{
-			int _cnt207=0;
-			_loop207:
+			int _cnt211=0;
+			_loop211:
 			do {
 				if ((LA(1)==TOK_EQ||LA(1)==TOK_NE)) {
 					{
 					if ((LA(1)==TOK_EQ)) {
-						org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp104_AST = null;
-						tmp104_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
-						astFactory.makeASTRoot(currentAST, tmp104_AST);
+						org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp106_AST = null;
+						tmp106_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
+						astFactory.makeASTRoot(currentAST, tmp106_AST);
 						match(TOK_EQ);
 					}
 					else if ((LA(1)==TOK_NE)) {
-						org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp105_AST = null;
-						tmp105_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
-						astFactory.makeASTRoot(currentAST, tmp105_AST);
+						org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp107_AST = null;
+						tmp107_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
+						astFactory.makeASTRoot(currentAST, tmp107_AST);
 						match(TOK_NE);
 					}
 					else {
@@ -2091,25 +2185,25 @@ public OQLParser(ParserSharedInputState state) {
 					switch ( LA(1)) {
 					case LITERAL_all:
 					{
-						AST tmp106_AST = null;
-						tmp106_AST = astFactory.create(LT(1));
-						astFactory.makeASTRoot(currentAST, tmp106_AST);
+						AST tmp108_AST = null;
+						tmp108_AST = astFactory.create(LT(1));
+						astFactory.makeASTRoot(currentAST, tmp108_AST);
 						match(LITERAL_all);
 						break;
 					}
 					case LITERAL_any:
 					{
-						AST tmp107_AST = null;
-						tmp107_AST = astFactory.create(LT(1));
-						astFactory.makeASTRoot(currentAST, tmp107_AST);
+						AST tmp109_AST = null;
+						tmp109_AST = astFactory.create(LT(1));
+						astFactory.makeASTRoot(currentAST, tmp109_AST);
 						match(LITERAL_any);
 						break;
 					}
 					case LITERAL_some:
 					{
-						AST tmp108_AST = null;
-						tmp108_AST = astFactory.create(LT(1));
-						astFactory.makeASTRoot(currentAST, tmp108_AST);
+						AST tmp110_AST = null;
+						tmp110_AST = astFactory.create(LT(1));
+						astFactory.makeASTRoot(currentAST, tmp110_AST);
 						match(LITERAL_some);
 						break;
 					}
@@ -2171,27 +2265,27 @@ public OQLParser(ParserSharedInputState state) {
 					astFactory.addASTChild(currentAST, returnAST);
 				}
 				else {
-					if ( _cnt207>=1 ) { break _loop207; } else {throw new NoViableAltException(LT(1), getFilename());}
+					if ( _cnt211>=1 ) { break _loop211; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt207++;
+				_cnt211++;
 			} while (true);
 			}
 		}
 		else if ((_tokenSet_22.member(LA(1)))) {
 			{
-			_loop209:
+			_loop213:
 			do {
 				if ((LA(1)==LITERAL_like)) {
-					org.apache.geode.cache.query.internal.parse.ASTLike tmp109_AST = null;
-					tmp109_AST = (org.apache.geode.cache.query.internal.parse.ASTLike)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLike");
-					astFactory.makeASTRoot(currentAST, tmp109_AST);
+					org.apache.geode.cache.query.internal.parse.ASTLike tmp111_AST = null;
+					tmp111_AST = (org.apache.geode.cache.query.internal.parse.ASTLike)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLike");
+					astFactory.makeASTRoot(currentAST, tmp111_AST);
 					match(LITERAL_like);
 					relationalExpr();
 					astFactory.addASTChild(currentAST, returnAST);
 				}
 				else {
-					break _loop209;
+					break _loop213;
 				}
 				
 			} while (true);
@@ -2215,40 +2309,40 @@ public OQLParser(ParserSharedInputState state) {
 		additiveExpr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop215:
+		_loop219:
 		do {
 			if ((_tokenSet_23.member(LA(1)))) {
 				{
 				switch ( LA(1)) {
 				case TOK_LT:
 				{
-					org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp110_AST = null;
-					tmp110_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
-					astFactory.makeASTRoot(currentAST, tmp110_AST);
+					org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp112_AST = null;
+					tmp112_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
+					astFactory.makeASTRoot(currentAST, tmp112_AST);
 					match(TOK_LT);
 					break;
 				}
 				case TOK_GT:
 				{
-					org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp111_AST = null;
-					tmp111_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
-					astFactory.makeASTRoot(currentAST, tmp111_AST);
+					org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp113_AST = null;
+					tmp113_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
+					astFactory.makeASTRoot(currentAST, tmp113_AST);
 					match(TOK_GT);
 					break;
 				}
 				case TOK_LE:
 				{
-					org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp112_AST = null;
-					tmp112_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
-					astFactory.makeASTRoot(currentAST, tmp112_AST);
+					org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp114_AST = null;
+					tmp114_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
+					astFactory.makeASTRoot(currentAST, tmp114_AST);
 					match(TOK_LE);
 					break;
 				}
 				case TOK_GE:
 				{
-					org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp113_AST = null;
-					tmp113_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
-					astFactory.makeASTRoot(currentAST, tmp113_AST);
+					org.apache.geode.cache.query.internal.parse.ASTCompareOp tmp115_AST = null;
+					tmp115_AST = (org.apache.geode.cache.query.internal.parse.ASTCompareOp)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTCompareOp");
+					astFactory.makeASTRoot(currentAST, tmp115_AST);
 					match(TOK_GE);
 					break;
 				}
@@ -2268,25 +2362,25 @@ public OQLParser(ParserSharedInputState state) {
 					switch ( LA(1)) {
 					case LITERAL_all:
 					{
-						AST tmp114_AST = null;
-						tmp114_AST = astFactory.create(LT(1));
-						astFactory.makeASTRoot(currentAST, tmp114_AST);
+						AST tmp116_AST = null;
+						tmp116_AST = astFactory.create(LT(1));
+						astFactory.makeASTRoot(currentAST, tmp116_AST);
 						match(LITERAL_all);
 						break;
 					}
 					case LITERAL_any:
 					{
-						AST tmp115_AST = null;
-						tmp115_AST = astFactory.create(LT(1));
-						astFactory.makeASTRoot(currentAST, tmp115_AST);
+						AST tmp117_AST = null;
+						tmp117_AST = astFactory.create(LT(1));
+						astFactory.makeASTRoot(currentAST, tmp117_AST);
 						match(LITERAL_any);
 						break;
 					}
 					case LITERAL_some:
 					{
-						AST tmp116_AST = null;
-						tmp116_AST = astFactory.create(LT(1));
-						astFactory.makeASTRoot(currentAST, tmp116_AST);
+						AST tmp118_AST = null;
+						tmp118_AST = astFactory.create(LT(1));
+						astFactory.makeASTRoot(currentAST, tmp118_AST);
 						match(LITERAL_some);
 						break;
 					}
@@ -2306,7 +2400,7 @@ public OQLParser(ParserSharedInputState state) {
 				}
 			}
 			else {
-				break _loop215;
+				break _loop219;
 			}
 			
 		} while (true);
@@ -2324,48 +2418,48 @@ public OQLParser(ParserSharedInputState state) {
 		multiplicativeExpr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop219:
+		_loop223:
 		do {
 			if ((_tokenSet_24.member(LA(1)))) {
 				{
 				switch ( LA(1)) {
 				case TOK_PLUS:
 				{
-					AST tmp117_AST = null;
-					tmp117_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp117_AST);
+					AST tmp119_AST = null;
+					tmp119_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp119_AST);
 					match(TOK_PLUS);
 					break;
 				}
 				case TOK_MINUS:
 				{
-					AST tmp118_AST = null;
-					tmp118_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp118_AST);
+					AST tmp120_AST = null;
+					tmp120_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp120_AST);
 					match(TOK_MINUS);
 					break;
 				}
 				case TOK_CONCAT:
 				{
-					AST tmp119_AST = null;
-					tmp119_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp119_AST);
+					AST tmp121_AST = null;
+					tmp121_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp121_AST);
 					match(TOK_CONCAT);
 					break;
 				}
 				case LITERAL_union:
 				{
-					AST tmp120_AST = null;
-					tmp120_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp120_AST);
+					AST tmp122_AST = null;
+					tmp122_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp122_AST);
 					match(LITERAL_union);
 					break;
 				}
 				case LITERAL_except:
 				{
-					AST tmp121_AST = null;
-					tmp121_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp121_AST);
+					AST tmp123_AST = null;
+					tmp123_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp123_AST);
 					match(LITERAL_except);
 					break;
 				}
@@ -2379,7 +2473,7 @@ public OQLParser(ParserSharedInputState state) {
 				astFactory.addASTChild(currentAST, returnAST);
 			}
 			else {
-				break _loop219;
+				break _loop223;
 			}
 			
 		} while (true);
@@ -2397,40 +2491,40 @@ public OQLParser(ParserSharedInputState state) {
 		inExpr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop223:
+		_loop227:
 		do {
 			if ((_tokenSet_25.member(LA(1)))) {
 				{
 				switch ( LA(1)) {
 				case TOK_STAR:
 				{
-					AST tmp122_AST = null;
-					tmp122_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp122_AST);
+					AST tmp124_AST = null;
+					tmp124_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp124_AST);
 					match(TOK_STAR);
 					break;
 				}
 				case TOK_SLASH:
 				{
-					AST tmp123_AST = null;
-					tmp123_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp123_AST);
+					AST tmp125_AST = null;
+					tmp125_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp125_AST);
 					match(TOK_SLASH);
 					break;
 				}
 				case LITERAL_mod:
 				{
-					AST tmp124_AST = null;
-					tmp124_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp124_AST);
+					AST tmp126_AST = null;
+					tmp126_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp126_AST);
 					match(LITERAL_mod);
 					break;
 				}
 				case LITERAL_intersect:
 				{
-					AST tmp125_AST = null;
-					tmp125_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp125_AST);
+					AST tmp127_AST = null;
+					tmp127_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp127_AST);
 					match(LITERAL_intersect);
 					break;
 				}
@@ -2444,7 +2538,7 @@ public OQLParser(ParserSharedInputState state) {
 				astFactory.addASTChild(currentAST, returnAST);
 			}
 			else {
-				break _loop223;
+				break _loop227;
 			}
 			
 		} while (true);
@@ -2463,9 +2557,9 @@ public OQLParser(ParserSharedInputState state) {
 		astFactory.addASTChild(currentAST, returnAST);
 		{
 		if ((LA(1)==LITERAL_in)) {
-			org.apache.geode.cache.query.internal.parse.ASTIn tmp126_AST = null;
-			tmp126_AST = (org.apache.geode.cache.query.internal.parse.ASTIn)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTIn");
-			astFactory.makeASTRoot(currentAST, tmp126_AST);
+			org.apache.geode.cache.query.internal.parse.ASTIn tmp128_AST = null;
+			tmp128_AST = (org.apache.geode.cache.query.internal.parse.ASTIn)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTIn");
+			astFactory.makeASTRoot(currentAST, tmp128_AST);
 			match(LITERAL_in);
 			unaryExpr();
 			astFactory.addASTChild(currentAST, returnAST);
@@ -2488,7 +2582,7 @@ public OQLParser(ParserSharedInputState state) {
 		AST unaryExpr_AST = null;
 		
 		{
-		_loop229:
+		_loop233:
 		do {
 			if ((_tokenSet_27.member(LA(1)))) {
 				{
@@ -2500,25 +2594,25 @@ public OQLParser(ParserSharedInputState state) {
 				}
 				case TOK_MINUS:
 				{
-					org.apache.geode.cache.query.internal.parse.ASTUnary tmp128_AST = null;
-					tmp128_AST = (org.apache.geode.cache.query.internal.parse.ASTUnary)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTUnary");
-					astFactory.makeASTRoot(currentAST, tmp128_AST);
+					org.apache.geode.cache.query.internal.parse.ASTUnary tmp130_AST = null;
+					tmp130_AST = (org.apache.geode.cache.query.internal.parse.ASTUnary)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTUnary");
+					astFactory.makeASTRoot(currentAST, tmp130_AST);
 					match(TOK_MINUS);
 					break;
 				}
 				case LITERAL_abs:
 				{
-					AST tmp129_AST = null;
-					tmp129_AST = astFactory.create(LT(1));
-					astFactory.makeASTRoot(currentAST, tmp129_AST);
+					AST tmp131_AST = null;
+					tmp131_AST = astFactory.create(LT(1));
+					astFactory.makeASTRoot(currentAST, tmp131_AST);
 					match(LITERAL_abs);
 					break;
 				}
 				case LITERAL_not:
 				{
-					org.apache.geode.cache.query.internal.parse.ASTUnary tmp130_AST = null;
-					tmp130_AST = (org.apache.geode.cache.query.internal.parse.ASTUnary)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTUnary");
-					astFactory.makeASTRoot(currentAST, tmp130_AST);
+					org.apache.geode.cache.query.internal.parse.ASTUnary tmp132_AST = null;
+					tmp132_AST = (org.apache.geode.cache.query.internal.parse.ASTUnary)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTUnary");
+					astFactory.makeASTRoot(currentAST, tmp132_AST);
 					match(LITERAL_not);
 					break;
 				}
@@ -2530,7 +2624,7 @@ public OQLParser(ParserSharedInputState state) {
 				}
 			}
 			else {
-				break _loop229;
+				break _loop233;
 			}
 			
 		} while (true);
@@ -2551,7 +2645,7 @@ public OQLParser(ParserSharedInputState state) {
 		primaryExpr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop234:
+		_loop238:
 		do {
 			if ((LA(1)==TOK_LBRACK)) {
 				match(TOK_LBRACK);
@@ -2594,7 +2688,7 @@ public OQLParser(ParserSharedInputState state) {
 				}
 			}
 			else {
-				break _loop234;
+				break _loop238;
 			}
 			
 		} while (true);
@@ -2709,17 +2803,17 @@ public OQLParser(ParserSharedInputState state) {
 		}
 		case RegionPath:
 		{
-			org.apache.geode.cache.query.internal.parse.ASTRegionPath tmp137_AST = null;
-			tmp137_AST = (org.apache.geode.cache.query.internal.parse.ASTRegionPath)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTRegionPath");
-			astFactory.addASTChild(currentAST, tmp137_AST);
+			org.apache.geode.cache.query.internal.parse.ASTRegionPath tmp139_AST = null;
+			tmp139_AST = (org.apache.geode.cache.query.internal.parse.ASTRegionPath)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTRegionPath");
+			astFactory.addASTChild(currentAST, tmp139_AST);
 			match(RegionPath);
 			break;
 		}
 		default:
-			boolean synPredMatched248 = false;
+			boolean synPredMatched252 = false;
 			if (((LA(1)==QuotedIdentifier||LA(1)==Identifier) && (LA(2)==TOK_LPAREN))) {
-				int _m248 = mark();
-				synPredMatched248 = true;
+				int _m252 = mark();
+				synPredMatched252 = true;
 				inputState.guessing++;
 				try {
 					{
@@ -2730,12 +2824,12 @@ public OQLParser(ParserSharedInputState state) {
 					}
 				}
 				catch (RecognitionException pe) {
-					synPredMatched248 = false;
+					synPredMatched252 = false;
 				}
-				rewind(_m248);
+				rewind(_m252);
 				inputState.guessing--;
 			}
-			if ( synPredMatched248 ) {
+			if ( synPredMatched252 ) {
 				objectConstruction();
 				astFactory.addASTChild(currentAST, returnAST);
 			}
@@ -2763,13 +2857,13 @@ public OQLParser(ParserSharedInputState state) {
 		AST index_AST = null;
 		
 		{
-		if ((_tokenSet_4.member(LA(1)))) {
+		if ((_tokenSet_5.member(LA(1)))) {
 			expr();
 			astFactory.addASTChild(currentAST, returnAST);
 			{
 			if ((LA(1)==TOK_COMMA||LA(1)==TOK_RBRACK)) {
 				{
-				_loop240:
+				_loop244:
 				do {
 					if ((LA(1)==TOK_COMMA)) {
 						match(TOK_COMMA);
@@ -2777,16 +2871,16 @@ public OQLParser(ParserSharedInputState state) {
 						astFactory.addASTChild(currentAST, returnAST);
 					}
 					else {
-						break _loop240;
+						break _loop244;
 					}
 					
 				} while (true);
 				}
 			}
 			else if ((LA(1)==TOK_COLON)) {
-				AST tmp139_AST = null;
-				tmp139_AST = astFactory.create(LT(1));
-				astFactory.makeASTRoot(currentAST, tmp139_AST);
+				AST tmp141_AST = null;
+				tmp141_AST = astFactory.create(LT(1));
+				astFactory.makeASTRoot(currentAST, tmp141_AST);
 				match(TOK_COLON);
 				expr();
 				astFactory.addASTChild(currentAST, returnAST);
@@ -2798,9 +2892,9 @@ public OQLParser(ParserSharedInputState state) {
 			}
 		}
 		else if ((LA(1)==TOK_STAR)) {
-			AST tmp140_AST = null;
-			tmp140_AST = astFactory.create(LT(1));
-			astFactory.addASTChild(currentAST, tmp140_AST);
+			AST tmp142_AST = null;
+			tmp142_AST = astFactory.create(LT(1));
+			astFactory.addASTChild(currentAST, tmp142_AST);
 			match(TOK_STAR);
 		}
 		else {
@@ -2861,11 +2955,11 @@ public OQLParser(ParserSharedInputState state) {
 		astFactory.makeASTRoot(currentAST, t_AST);
 		match(TOK_LPAREN);
 		{
-		if ((_tokenSet_4.member(LA(1)))) {
+		if ((_tokenSet_5.member(LA(1)))) {
 			expr();
 			astFactory.addASTChild(currentAST, returnAST);
 			{
-			_loop244:
+			_loop248:
 			do {
 				if ((LA(1)==TOK_COMMA)) {
 					match(TOK_COMMA);
@@ -2873,7 +2967,7 @@ public OQLParser(ParserSharedInputState state) {
 					astFactory.addASTChild(currentAST, returnAST);
 				}
 				else {
-					break _loop244;
+					break _loop248;
 				}
 				
 			} while (true);
@@ -2908,33 +3002,33 @@ public OQLParser(ParserSharedInputState state) {
 			switch ( LA(1)) {
 			case LITERAL_listtoset:
 			{
-				AST tmp143_AST = null;
-				tmp143_AST = astFactory.create(LT(1));
-				astFactory.makeASTRoot(currentAST, tmp143_AST);
+				AST tmp145_AST = null;
+				tmp145_AST = astFactory.create(LT(1));
+				astFactory.makeASTRoot(currentAST, tmp145_AST);
 				match(LITERAL_listtoset);
 				break;
 			}
 			case LITERAL_element:
 			{
-				org.apache.geode.cache.query.internal.parse.ASTConversionExpr tmp144_AST = null;
-				tmp144_AST = (org.apache.geode.cache.query.internal.parse.ASTConversionExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTConversionExpr");
-				astFactory.makeASTRoot(currentAST, tmp144_AST);
+				org.apache.geode.cache.query.internal.parse.ASTConversionExpr tmp146_AST = null;
+				tmp146_AST = (org.apache.geode.cache.query.internal.parse.ASTConversionExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTConversionExpr");
+				astFactory.makeASTRoot(currentAST, tmp146_AST);
 				match(LITERAL_element);
 				break;
 			}
 			case LITERAL_distinct:
 			{
-				AST tmp145_AST = null;
-				tmp145_AST = astFactory.create(LT(1));
-				astFactory.makeASTRoot(currentAST, tmp145_AST);
+				AST tmp147_AST = null;
+				tmp147_AST = astFactory.create(LT(1));
+				astFactory.makeASTRoot(currentAST, tmp147_AST);
 				match(LITERAL_distinct);
 				break;
 			}
 			case LITERAL_flatten:
 			{
-				AST tmp146_AST = null;
-				tmp146_AST = astFactory.create(LT(1));
-				astFactory.makeASTRoot(currentAST, tmp146_AST);
+				AST tmp148_AST = null;
+				tmp148_AST = astFactory.create(LT(1));
+				astFactory.makeASTRoot(currentAST, tmp148_AST);
 				match(LITERAL_flatten);
 				break;
 			}
@@ -2954,9 +3048,9 @@ public OQLParser(ParserSharedInputState state) {
 		{
 			{
 			{
-			org.apache.geode.cache.query.internal.parse.ASTConversionExpr tmp149_AST = null;
-			tmp149_AST = (org.apache.geode.cache.query.internal.parse.ASTConversionExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTConversionExpr");
-			astFactory.makeASTRoot(currentAST, tmp149_AST);
+			org.apache.geode.cache.query.internal.parse.ASTConversionExpr tmp151_AST = null;
+			tmp151_AST = (org.apache.geode.cache.query.internal.parse.ASTConversionExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTConversionExpr");
+			astFactory.makeASTRoot(currentAST, tmp151_AST);
 			match(LITERAL_nvl);
 			}
 			match(TOK_LPAREN);
@@ -2973,9 +3067,9 @@ public OQLParser(ParserSharedInputState state) {
 		{
 			{
 			{
-			org.apache.geode.cache.query.internal.parse.ASTConversionExpr tmp153_AST = null;
-			tmp153_AST = (org.apache.geode.cache.query.internal.parse.ASTConversionExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTConversionExpr");
-			astFactory.makeASTRoot(currentAST, tmp153_AST);
+			org.apache.geode.cache.query.internal.parse.ASTConversionExpr tmp155_AST = null;
+			tmp155_AST = (org.apache.geode.cache.query.internal.parse.ASTConversionExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTConversionExpr");
+			astFactory.makeASTRoot(currentAST, tmp155_AST);
 			match(LITERAL_to_date);
 			}
 			match(TOK_LPAREN);
@@ -3008,33 +3102,33 @@ public OQLParser(ParserSharedInputState state) {
 		switch ( LA(1)) {
 		case LITERAL_first:
 		{
-			AST tmp157_AST = null;
-			tmp157_AST = astFactory.create(LT(1));
-			astFactory.makeASTRoot(currentAST, tmp157_AST);
+			AST tmp159_AST = null;
+			tmp159_AST = astFactory.create(LT(1));
+			astFactory.makeASTRoot(currentAST, tmp159_AST);
 			match(LITERAL_first);
 			break;
 		}
 		case LITERAL_last:
 		{
-			AST tmp158_AST = null;
-			tmp158_AST = astFactory.create(LT(1));
-			astFactory.makeASTRoot(currentAST, tmp158_AST);
+			AST tmp160_AST = null;
+			tmp160_AST = astFactory.create(LT(1));
+			astFactory.makeASTRoot(currentAST, tmp160_AST);
 			match(LITERAL_last);
 			break;
 		}
 		case LITERAL_unique:
 		{
-			AST tmp159_AST = null;
-			tmp159_AST = astFactory.create(LT(1));
-			astFactory.makeASTRoot(currentAST, tmp159_AST);
+			AST tmp161_AST = null;
+			tmp161_AST = astFactory.create(LT(1));
+			astFactory.makeASTRoot(currentAST, tmp161_AST);
 			match(LITERAL_unique);
 			break;
 		}
 		case LITERAL_exists:
 		{
-			AST tmp160_AST = null;
-			tmp160_AST = astFactory.create(LT(1));
-			astFactory.makeASTRoot(currentAST, tmp160_AST);
+			AST tmp162_AST = null;
+			tmp162_AST = astFactory.create(LT(1));
+			astFactory.makeASTRoot(currentAST, tmp162_AST);
 			match(LITERAL_exists);
 			break;
 		}
@@ -3060,15 +3154,15 @@ public OQLParser(ParserSharedInputState state) {
 		
 		{
 		if ((LA(1)==LITERAL_is_undefined)) {
-			org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr tmp163_AST = null;
-			tmp163_AST = (org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr");
-			astFactory.makeASTRoot(currentAST, tmp163_AST);
+			org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr tmp165_AST = null;
+			tmp165_AST = (org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr");
+			astFactory.makeASTRoot(currentAST, tmp165_AST);
 			match(LITERAL_is_undefined);
 		}
 		else if ((LA(1)==LITERAL_is_defined)) {
-			org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr tmp164_AST = null;
-			tmp164_AST = (org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr");
-			astFactory.makeASTRoot(currentAST, tmp164_AST);
+			org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr tmp166_AST = null;
+			tmp166_AST = (org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTUndefinedExpr");
+			astFactory.makeASTRoot(currentAST, tmp166_AST);
 			match(LITERAL_is_defined);
 		}
 		else {
@@ -3114,9 +3208,9 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST structConstruction_AST = null;
 		
-		AST tmp168_AST = null;
-		tmp168_AST = astFactory.create(LT(1));
-		astFactory.makeASTRoot(currentAST, tmp168_AST);
+		AST tmp170_AST = null;
+		tmp170_AST = astFactory.create(LT(1));
+		astFactory.makeASTRoot(currentAST, tmp170_AST);
 		match(LITERAL_struct);
 		match(TOK_LPAREN);
 		fieldList();
@@ -3138,25 +3232,25 @@ public OQLParser(ParserSharedInputState state) {
 			switch ( LA(1)) {
 			case LITERAL_array:
 			{
-				AST tmp171_AST = null;
-				tmp171_AST = astFactory.create(LT(1));
-				astFactory.makeASTRoot(currentAST, tmp171_AST);
+				AST tmp173_AST = null;
+				tmp173_AST = astFactory.create(LT(1));
+				astFactory.makeASTRoot(currentAST, tmp173_AST);
 				match(LITERAL_array);
 				break;
 			}
 			case LITERAL_set:
 			{
-				org.apache.geode.cache.query.internal.parse.ASTConstruction tmp172_AST = null;
-				tmp172_AST = (org.apache.geode.cache.query.internal.parse.ASTConstruction)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTConstruction");
-				astFactory.makeASTRoot(currentAST, tmp172_AST);
+				org.apache.geode.cache.query.internal.parse.ASTConstruction tmp174_AST = null;
+				tmp174_AST = (org.apache.geode.cache.query.internal.parse.ASTConstruction)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTConstruction");
+				astFactory.makeASTRoot(currentAST, tmp174_AST);
 				match(LITERAL_set);
 				break;
 			}
 			case LITERAL_bag:
 			{
-				AST tmp173_AST = null;
-				tmp173_AST = astFactory.create(LT(1));
-				astFactory.makeASTRoot(currentAST, tmp173_AST);
+				AST tmp175_AST = null;
+				tmp175_AST = astFactory.create(LT(1));
+				astFactory.makeASTRoot(currentAST, tmp175_AST);
 				match(LITERAL_bag);
 				break;
 			}
@@ -3170,41 +3264,41 @@ public OQLParser(ParserSharedInputState state) {
 			astFactory.addASTChild(currentAST, returnAST);
 		}
 		else if ((LA(1)==LITERAL_list)) {
-			AST tmp174_AST = null;
-			tmp174_AST = astFactory.create(LT(1));
-			astFactory.makeASTRoot(currentAST, tmp174_AST);
+			AST tmp176_AST = null;
+			tmp176_AST = astFactory.create(LT(1));
+			astFactory.makeASTRoot(currentAST, tmp176_AST);
 			match(LITERAL_list);
-			AST tmp175_AST = null;
-			tmp175_AST = astFactory.create(LT(1));
-			astFactory.addASTChild(currentAST, tmp175_AST);
+			AST tmp177_AST = null;
+			tmp177_AST = astFactory.create(LT(1));
+			astFactory.addASTChild(currentAST, tmp177_AST);
 			match(TOK_LPAREN);
 			{
-			if ((_tokenSet_4.member(LA(1)))) {
+			if ((_tokenSet_5.member(LA(1)))) {
 				expr();
 				astFactory.addASTChild(currentAST, returnAST);
 				{
 				if ((LA(1)==TOK_DOTDOT)) {
-					AST tmp176_AST = null;
-					tmp176_AST = astFactory.create(LT(1));
-					astFactory.addASTChild(currentAST, tmp176_AST);
+					AST tmp178_AST = null;
+					tmp178_AST = astFactory.create(LT(1));
+					astFactory.addASTChild(currentAST, tmp178_AST);
 					match(TOK_DOTDOT);
 					expr();
 					astFactory.addASTChild(currentAST, returnAST);
 				}
 				else if ((LA(1)==TOK_RPAREN||LA(1)==TOK_COMMA)) {
 					{
-					_loop280:
+					_loop284:
 					do {
 						if ((LA(1)==TOK_COMMA)) {
-							AST tmp177_AST = null;
-							tmp177_AST = astFactory.create(LT(1));
-							astFactory.addASTChild(currentAST, tmp177_AST);
+							AST tmp179_AST = null;
+							tmp179_AST = astFactory.create(LT(1));
+							astFactory.addASTChild(currentAST, tmp179_AST);
 							match(TOK_COMMA);
 							expr();
 							astFactory.addASTChild(currentAST, returnAST);
 						}
 						else {
-							break _loop280;
+							break _loop284;
 						}
 						
 					} while (true);
@@ -3223,9 +3317,9 @@ public OQLParser(ParserSharedInputState state) {
 			}
 			
 			}
-			AST tmp178_AST = null;
-			tmp178_AST = astFactory.create(LT(1));
-			astFactory.addASTChild(currentAST, tmp178_AST);
+			AST tmp180_AST = null;
+			tmp180_AST = astFactory.create(LT(1));
+			astFactory.addASTChild(currentAST, tmp180_AST);
 			match(TOK_RPAREN);
 		}
 		else {
@@ -3320,9 +3414,9 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST stringLiteral_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp179_AST = null;
-		tmp179_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-		astFactory.addASTChild(currentAST, tmp179_AST);
+		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp181_AST = null;
+		tmp181_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+		astFactory.addASTChild(currentAST, tmp181_AST);
 		match(StringLiteral);
 		stringLiteral_AST = (AST)currentAST.root;
 		returnAST = stringLiteral_AST;
@@ -3340,7 +3434,7 @@ public OQLParser(ParserSharedInputState state) {
 		expr();
 		astFactory.addASTChild(currentAST, returnAST);
 		{
-		_loop273:
+		_loop277:
 		do {
 			if ((LA(1)==TOK_COMMA)) {
 				match(TOK_COMMA);
@@ -3351,7 +3445,7 @@ public OQLParser(ParserSharedInputState state) {
 				astFactory.addASTChild(currentAST, returnAST);
 			}
 			else {
-				break _loop273;
+				break _loop277;
 			}
 			
 		} while (true);
@@ -3377,27 +3471,27 @@ public OQLParser(ParserSharedInputState state) {
 		switch ( LA(1)) {
 		case LITERAL_nil:
 		{
-			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp183_AST = null;
-			tmp183_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-			astFactory.addASTChild(currentAST, tmp183_AST);
+			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp185_AST = null;
+			tmp185_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+			astFactory.addASTChild(currentAST, tmp185_AST);
 			match(LITERAL_nil);
 			objectLiteral_AST = (AST)currentAST.root;
 			break;
 		}
 		case LITERAL_null:
 		{
-			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp184_AST = null;
-			tmp184_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-			astFactory.addASTChild(currentAST, tmp184_AST);
+			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp186_AST = null;
+			tmp186_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+			astFactory.addASTChild(currentAST, tmp186_AST);
 			match(LITERAL_null);
 			objectLiteral_AST = (AST)currentAST.root;
 			break;
 		}
 		case LITERAL_undefined:
 		{
-			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp185_AST = null;
-			tmp185_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-			astFactory.addASTChild(currentAST, tmp185_AST);
+			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp187_AST = null;
+			tmp187_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+			astFactory.addASTChild(currentAST, tmp187_AST);
 			match(LITERAL_undefined);
 			objectLiteral_AST = (AST)currentAST.root;
 			break;
@@ -3418,15 +3512,15 @@ public OQLParser(ParserSharedInputState state) {
 		
 		{
 		if ((LA(1)==LITERAL_true)) {
-			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp186_AST = null;
-			tmp186_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-			astFactory.addASTChild(currentAST, tmp186_AST);
+			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp188_AST = null;
+			tmp188_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+			astFactory.addASTChild(currentAST, tmp188_AST);
 			match(LITERAL_true);
 		}
 		else if ((LA(1)==LITERAL_false)) {
-			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp187_AST = null;
-			tmp187_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-			astFactory.addASTChild(currentAST, tmp187_AST);
+			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp189_AST = null;
+			tmp189_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+			astFactory.addASTChild(currentAST, tmp189_AST);
 			match(LITERAL_false);
 		}
 		else {
@@ -3448,33 +3542,33 @@ public OQLParser(ParserSharedInputState state) {
 		switch ( LA(1)) {
 		case NUM_INT:
 		{
-			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp188_AST = null;
-			tmp188_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-			astFactory.addASTChild(currentAST, tmp188_AST);
+			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp190_AST = null;
+			tmp190_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+			astFactory.addASTChild(currentAST, tmp190_AST);
 			match(NUM_INT);
 			break;
 		}
 		case NUM_LONG:
 		{
-			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp189_AST = null;
-			tmp189_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-			astFactory.addASTChild(currentAST, tmp189_AST);
+			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp191_AST = null;
+			tmp191_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+			astFactory.addASTChild(currentAST, tmp191_AST);
 			match(NUM_LONG);
 			break;
 		}
 		case NUM_FLOAT:
 		{
-			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp190_AST = null;
-			tmp190_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-			astFactory.addASTChild(currentAST, tmp190_AST);
+			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp192_AST = null;
+			tmp192_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+			astFactory.addASTChild(currentAST, tmp192_AST);
 			match(NUM_FLOAT);
 			break;
 		}
 		case NUM_DOUBLE:
 		{
-			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp191_AST = null;
-			tmp191_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-			astFactory.addASTChild(currentAST, tmp191_AST);
+			org.apache.geode.cache.query.internal.parse.ASTLiteral tmp193_AST = null;
+			tmp193_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+			astFactory.addASTChild(currentAST, tmp193_AST);
 			match(NUM_DOUBLE);
 			break;
 		}
@@ -3494,13 +3588,13 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST charLiteral_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp192_AST = null;
-		tmp192_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-		astFactory.makeASTRoot(currentAST, tmp192_AST);
+		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp194_AST = null;
+		tmp194_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+		astFactory.makeASTRoot(currentAST, tmp194_AST);
 		match(LITERAL_char);
-		AST tmp193_AST = null;
-		tmp193_AST = astFactory.create(LT(1));
-		astFactory.addASTChild(currentAST, tmp193_AST);
+		AST tmp195_AST = null;
+		tmp195_AST = astFactory.create(LT(1));
+		astFactory.addASTChild(currentAST, tmp195_AST);
 		match(StringLiteral);
 		charLiteral_AST = (AST)currentAST.root;
 		returnAST = charLiteral_AST;
@@ -3512,13 +3606,13 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST dateLiteral_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp194_AST = null;
-		tmp194_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-		astFactory.makeASTRoot(currentAST, tmp194_AST);
+		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp196_AST = null;
+		tmp196_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+		astFactory.makeASTRoot(currentAST, tmp196_AST);
 		match(LITERAL_date);
-		AST tmp195_AST = null;
-		tmp195_AST = astFactory.create(LT(1));
-		astFactory.addASTChild(currentAST, tmp195_AST);
+		AST tmp197_AST = null;
+		tmp197_AST = astFactory.create(LT(1));
+		astFactory.addASTChild(currentAST, tmp197_AST);
 		match(StringLiteral);
 		dateLiteral_AST = (AST)currentAST.root;
 		returnAST = dateLiteral_AST;
@@ -3530,13 +3624,13 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST timeLiteral_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp196_AST = null;
-		tmp196_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-		astFactory.makeASTRoot(currentAST, tmp196_AST);
+		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp198_AST = null;
+		tmp198_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+		astFactory.makeASTRoot(currentAST, tmp198_AST);
 		match(LITERAL_time);
-		AST tmp197_AST = null;
-		tmp197_AST = astFactory.create(LT(1));
-		astFactory.addASTChild(currentAST, tmp197_AST);
+		AST tmp199_AST = null;
+		tmp199_AST = astFactory.create(LT(1));
+		astFactory.addASTChild(currentAST, tmp199_AST);
 		match(StringLiteral);
 		timeLiteral_AST = (AST)currentAST.root;
 		returnAST = timeLiteral_AST;
@@ -3548,13 +3642,13 @@ public OQLParser(ParserSharedInputState state) {
 		ASTPair currentAST = new ASTPair();
 		AST timestampLiteral_AST = null;
 		
-		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp198_AST = null;
-		tmp198_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
-		astFactory.makeASTRoot(currentAST, tmp198_AST);
+		org.apache.geode.cache.query.internal.parse.ASTLiteral tmp200_AST = null;
+		tmp200_AST = (org.apache.geode.cache.query.internal.parse.ASTLiteral)astFactory.create(LT(1),"org.apache.geode.cache.query.internal.parse.ASTLiteral");
+		astFactory.makeASTRoot(currentAST, tmp200_AST);
 		match(LITERAL_timestamp);
-		AST tmp199_AST = null;
-		tmp199_AST = astFactory.create(LT(1));
-		astFactory.addASTChild(currentAST, tmp199_AST);
+		AST tmp201_AST = null;
+		tmp201_AST = astFactory.create(LT(1));
+		astFactory.addASTChild(currentAST, tmp201_AST);
 		match(StringLiteral);
 		timestampLiteral_AST = (AST)currentAST.root;
 		returnAST = timestampLiteral_AST;
@@ -3636,6 +3730,7 @@ public OQLParser(ParserSharedInputState state) {
 		"\"define\"",
 		"\"query\"",
 		"\"undefine\"",
+		"\"load\"",
 		"\"select\"",
 		"\"distinct\"",
 		"\"all\"",
@@ -3720,12 +3815,12 @@ public OQLParser(ParserSharedInputState state) {
 	};
 	
 	private static final long[] mk_tokenSet_0() {
-		long[] data = { 2327943626784L, 2305842461068496592L, 8358660L, 0L, 0L, 0L};
+		long[] data = { 2327943626784L, 4611684922136993488L, 16717320L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_0 = new BitSet(mk_tokenSet_0());
 	private static final long[] mk_tokenSet_1() {
-		long[] data = { 2327970839714L, -12947792640L, 8388607L, 0L, 0L, 0L};
+		long[] data = { 2327970839714L, -25895584512L, 16777215L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_1 = new BitSet(mk_tokenSet_1());
@@ -3735,102 +3830,102 @@ public OQLParser(ParserSharedInputState state) {
 	}
 	public static final BitSet _tokenSet_2 = new BitSet(mk_tokenSet_2());
 	private static final long[] mk_tokenSet_3() {
-		long[] data = { 2327943626784L, 2305842461068495872L, 8358660L, 0L, 0L, 0L};
+		long[] data = { 2327943626784L, 4611684922136992768L, 16717320L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_3 = new BitSet(mk_tokenSet_3());
 	private static final long[] mk_tokenSet_4() {
-		long[] data = { 2327939432480L, 2305842461068494848L, 8358660L, 0L, 0L, 0L};
+		long[] data = { 210L, 18743296L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_4 = new BitSet(mk_tokenSet_4());
 	private static final long[] mk_tokenSet_5() {
-		long[] data = { 210L, 9371648L, 0L, 0L};
+		long[] data = { 2327939432480L, 4611684922136989696L, 16717320L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_5 = new BitSet(mk_tokenSet_5());
 	private static final long[] mk_tokenSet_6() {
-		long[] data = { 2327970839794L, -12942582752L, 8388607L, 0L, 0L, 0L};
+		long[] data = { 2327970839794L, -25885164512L, 16777215L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_6 = new BitSet(mk_tokenSet_6());
 	private static final long[] mk_tokenSet_7() {
-		long[] data = { 210L, 9404416L, 0L, 0L};
+		long[] data = { 210L, 18808832L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_7 = new BitSet(mk_tokenSet_7());
 	private static final long[] mk_tokenSet_8() {
-		long[] data = { 25778192594L, 9371648L, 0L, 0L};
+		long[] data = { 25778192594L, 18743296L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_8 = new BitSet(mk_tokenSet_8());
 	private static final long[] mk_tokenSet_9() {
-		long[] data = { 2327939563552L, 2305842461068494848L, 8358660L, 0L, 0L, 0L};
+		long[] data = { 2327939563552L, 4611684922136989696L, 16717320L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_9 = new BitSet(mk_tokenSet_9());
 	private static final long[] mk_tokenSet_10() {
-		long[] data = { 2327970840160L, -12951978976L, 8388607L, 0L, 0L, 0L};
+		long[] data = { 2327970840160L, -25903956960L, 16777215L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_10 = new BitSet(mk_tokenSet_10());
 	private static final long[] mk_tokenSet_11() {
-		long[] data = { 146L, 9306112L, 0L, 0L};
+		long[] data = { 146L, 18612224L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_11 = new BitSet(mk_tokenSet_11());
 	private static final long[] mk_tokenSet_12() {
-		long[] data = { 146L, 9175040L, 0L, 0L};
+		long[] data = { 146L, 18350080L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_12 = new BitSet(mk_tokenSet_12());
 	private static final long[] mk_tokenSet_13() {
-		long[] data = { 146L, 8650752L, 0L, 0L};
+		long[] data = { 146L, 17301504L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_13 = new BitSet(mk_tokenSet_13());
 	private static final long[] mk_tokenSet_14() {
-		long[] data = { 146L, 262144L, 0L, 0L};
+		long[] data = { 146L, 524288L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_14 = new BitSet(mk_tokenSet_14());
 	private static final long[] mk_tokenSet_15() {
-		long[] data = { 2327970839650L, -12951979008L, 8388607L, 0L, 0L, 0L};
+		long[] data = { 2327970839650L, -25903956992L, 16777215L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_15 = new BitSet(mk_tokenSet_15());
 	private static final long[] mk_tokenSet_16() {
-		long[] data = { 2327970839650L, -12951978976L, 8388607L, 0L, 0L, 0L};
+		long[] data = { 2327970839650L, -25903956960L, 16777215L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_16 = new BitSet(mk_tokenSet_16());
 	private static final long[] mk_tokenSet_17() {
-		long[] data = { 2327970839600L, -12951987200L, 8388607L, 0L, 0L, 0L};
+		long[] data = { 2327970839600L, -25903973376L, 16777215L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_17 = new BitSet(mk_tokenSet_17());
 	private static final long[] mk_tokenSet_18() {
-		long[] data = { 25769803776L, -144115188075855872L, 32767L, 0L, 0L, 0L};
+		long[] data = { 25769803776L, -288230376151711744L, 65535L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_18 = new BitSet(mk_tokenSet_18());
 	private static final long[] mk_tokenSet_19() {
-		long[] data = { 2328004394994L, 2305842996323548192L, 8358660L, 0L, 0L, 0L};
+		long[] data = { 2328004394994L, 4611685992647097376L, 16717320L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_19 = new BitSet(mk_tokenSet_19());
 	private static final long[] mk_tokenSet_20() {
-		long[] data = { 2327939432480L, 2305842460531623936L, 8358660L, 0L, 0L, 0L};
+		long[] data = { 2327939432480L, 4611684921063247872L, 16717320L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_20 = new BitSet(mk_tokenSet_20());
 	private static final long[] mk_tokenSet_21() {
-		long[] data = { 2328004394994L, 2305842996323544096L, 8358660L, 0L, 0L, 0L};
+		long[] data = { 2328004394994L, 4611685992647089184L, 16717320L, 0L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_21 = new BitSet(mk_tokenSet_21());
 	private static final long[] mk_tokenSet_22() {
-		long[] data = { 25803359186L, 19858956320L, 0L, 0L};
+		long[] data = { 25803359186L, 39717912608L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_22 = new BitSet(mk_tokenSet_22());
@@ -3840,27 +3935,27 @@ public OQLParser(ParserSharedInputState state) {
 	}
 	public static final BitSet _tokenSet_23 = new BitSet(mk_tokenSet_23());
 	private static final long[] mk_tokenSet_24() {
-		long[] data = { 53248L, 103079215104L, 0L, 0L};
+		long[] data = { 53248L, 206158430208L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_24 = new BitSet(mk_tokenSet_24());
 	private static final long[] mk_tokenSet_25() {
-		long[] data = { 196608L, 412316860416L, 0L, 0L};
+		long[] data = { 196608L, 824633720832L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_25 = new BitSet(mk_tokenSet_25());
 	private static final long[] mk_tokenSet_26() {
-		long[] data = { 25818035154L, 535255031840L, 0L, 0L};
+		long[] data = { 25818035154L, 1070510063648L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_26 = new BitSet(mk_tokenSet_26());
 	private static final long[] mk_tokenSet_27() {
-		long[] data = { 49152L, 1649267441664L, 0L, 0L};
+		long[] data = { 49152L, 3298534883328L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_27 = new BitSet(mk_tokenSet_27());
 	private static final long[] mk_tokenSet_28() {
-		long[] data = { 25834815442L, 535255048224L, 0L, 0L};
+		long[] data = { 25834815442L, 1070510096416L, 0L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_28 = new BitSet(mk_tokenSet_28());
