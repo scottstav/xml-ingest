@@ -78,8 +78,9 @@ public class QCompiler implements OQLLexerTokenTypes {
    */
   public CompiledValue compileQuery(String oqlSource) {
     final Logger logger = LogService.getLogger();
+    logger.info("----cmpQuery *** START-----");
     try {
-      logger.info("----cmpQuery START-----");
+
 
       OQLLexer lexer = new OQLLexer (new StringReader (oqlSource));
       OQLParser parser = new OQLParser (lexer);
