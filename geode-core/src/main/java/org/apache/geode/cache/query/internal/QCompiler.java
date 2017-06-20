@@ -78,17 +78,25 @@ public class QCompiler implements OQLLexerTokenTypes {
    */
   public CompiledValue compileQuery(String oqlSource) {  
     try {
+      final Logger logger = LogService.getLogger();
+      logger.info("----cmpQuery START-----");
+
       OQLLexer lexer = new OQLLexer (new StringReader (oqlSource));
       OQLParser parser = new OQLParser (lexer);
+      logger.info("----cmpQuery STEP 1----");
       // by default use Unsupported AST class, overridden for supported
       // operators in the grammer proper
       parser.setASTNodeClass ("org.apache.geode.cache.query.internal.parse.ASTUnsupported");
+      logger.info("----cmpQuery STEP 2----");
       parser.queryProgram ();
+      logger.info("----cmpQuery STEP 3----");
       GemFireAST n = (GemFireAST)parser.getAST ();
-      final Logger logger = LogService.getLogger();
-      logger.info("----YabaDaba Doo ");
+
+      logger.info("----cmpQuery STEP 4----");
 
       n.compile(this);
+      logger.info("----cmpQuery END-----");
+
     } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception. 
       throw new QueryInvalidException(LocalizedStrings.QCompiler_SYNTAX_ERROR_IN_QUERY_0.toLocalizedString(ex.getMessage()), ex);
     }
@@ -118,6 +126,9 @@ public class QCompiler implements OQLLexerTokenTypes {
   /** Returns List<CompiledIteratorDef> or null if projectionAttrs is '*' */
   public List compileProjectionAttributes(String projectionAttributes) {
     try {
+      final Logger logger = LogService.getLogger();
+      logger.info("----FROM QUERY  START-----");
+
       OQLLexer lexer = new OQLLexer (new StringReader (projectionAttributes));
       OQLParser parser = new OQLParser (lexer);
       // by default use Unsupported AST class, overridden for supported
@@ -130,6 +141,7 @@ public class QCompiler implements OQLLexerTokenTypes {
         return null;
       }
       n.compile(this);
+      logger.info("----FROM QUERY END-----");
     } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception. 
       throw new QueryInvalidException(LocalizedStrings.QCompiler_SYNTAX_ERROR_IN_QUERY_0.toLocalizedString(ex.getMessage()), ex);
     }
@@ -504,9 +516,12 @@ public class QCompiler implements OQLLexerTokenTypes {
   }
   
   public void load() {
+    final Logger logger = LogService.getLogger();
     CompiledValue tableName = (CompiledValue)pop();
     CompiledValue csv       = (CompiledValue)pop();
-    System.out.println("THIS HAS HAPPENED");
+
+    logger.info("----LOAD QUERY  HAS OCCURRED-----");
+
 
   }
   
