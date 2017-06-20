@@ -85,6 +85,8 @@ public class DefaultQueryService implements QueryService {
    * @see org.apache.geode.cache.query.Query
    */
   public Query newQuery(String queryString) {
+    final Logger logger = LogService.getLogger();
+    logger.info("----NEW QUERY ||| START-----");
     if (QueryMonitor.isLowMemory()) {
       String reason = LocalizedStrings.QueryMonitor_LOW_MEMORY_CANCELED_QUERY.toLocalizedString(QueryMonitor.getMemoryUsedDuringLowMemory());
       throw new QueryExecutionLowMemoryException(reason);
@@ -94,7 +96,9 @@ public class DefaultQueryService implements QueryService {
     if (queryString.length() == 0)
         throw new QueryInvalidException(LocalizedStrings.DefaultQueryService_THE_QUERY_STRING_MUST_NOT_BE_EMPTY.toLocalizedString());
     ServerProxy serverProxy = pool == null ? null : new ServerProxy(pool);
+
     DefaultQuery query = new DefaultQuery(queryString, this.cache, serverProxy != null);
+    logger.info("----NEW QUERY ||| END-----");
     query.setServerProxy(serverProxy);
     return query;
   }
