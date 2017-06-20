@@ -22,6 +22,7 @@ import org.apache.geode.cache.query.Query;
 import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.SelectResults;
 import org.apache.geode.internal.cache.GemFireCacheImpl;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.modules.session.catalina.internal.DeltaSessionStatistics;
 import org.apache.geode.modules.util.ContextMapper;
 import org.apache.geode.modules.util.RegionConfiguration;
@@ -38,6 +39,7 @@ import org.apache.catalina.session.StandardSession;
 import org.apache.catalina.util.CustomObjectInputStream;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -649,6 +651,8 @@ abstract public class DeltaSessionManager extends ManagerBase implements Lifecyc
   protected void doUnload() throws IOException {
     QueryService querySvc = sessionCache.getCache().getQueryService();
     Context context = getTheContext();
+    final Logger logger = LogService.getLogger();
+    logger.info("----DOUNLOAD QUERY ||| START-----");
     if (context == null) {
       return;
     }
@@ -719,6 +723,7 @@ abstract public class DeltaSessionManager extends ManagerBase implements Lifecyc
           }
         }
       }
+      logger.info("----DOUNLOAD QUERY ||| END-----");
     }
 
     ArrayList<DeltaSessionInterface> list = new ArrayList<DeltaSessionInterface>();
