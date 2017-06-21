@@ -23,11 +23,14 @@ import org.apache.geode.internal.cache.GemFireCacheImpl;
 import org.apache.geode.internal.cache.tier.Command;
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.*;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.security.AuthorizeRequest;
 import org.apache.geode.cache.operations.QueryOperationContext;
 import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.internal.DefaultQuery;
 import org.apache.geode.cache.query.QueryInvalidException;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.util.Set;
 
@@ -45,7 +48,8 @@ public class Query651 extends BaseCommandQuery {
   @Override
   public void cmdExecute(Message msg, ServerConnection servConn, long start)
       throws IOException, InterruptedException {
-
+    final Logger logger = LogService.getLogger();
+    logger.info("----QUERY 651 ||| START-----");
     // Based on MessageType.DESTROY
     // Added by gregp 10/18/05
     servConn.setAsTrue(REQUIRES_RESPONSE);

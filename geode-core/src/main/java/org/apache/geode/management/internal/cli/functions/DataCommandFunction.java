@@ -227,6 +227,8 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
 
     Cache cache = CacheFactory.getAnyInstance();
     AtomicInteger nestedObjectCount = new AtomicInteger(0);
+    final Logger logger = LogService.getLogger();
+    logger.info("----SELECT DATACOMMANDFUNCTION QUERY ||| START-----");
     if (queryString != null && !queryString.isEmpty()) {
       QueryService qs = cache.getQueryService();
 
