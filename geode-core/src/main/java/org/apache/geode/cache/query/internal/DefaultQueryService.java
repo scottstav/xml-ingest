@@ -104,8 +104,11 @@ public class DefaultQueryService implements QueryService {
   }
   
   public Query newQuery(String queryString,ProxyCache proxyCache){
+    final Logger logger = LogService.getLogger();
+    logger.info("----MParam Query||| START-----");
     Query query = newQuery(queryString);
     ((DefaultQuery) query).setProxyCache(proxyCache);
+    logger.info("----MParam Query||| END-----");
     return query;
   }
 

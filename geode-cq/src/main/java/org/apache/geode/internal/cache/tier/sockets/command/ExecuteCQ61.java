@@ -73,7 +73,8 @@ public class ExecuteCQ61 extends BaseCQCommand {
 
     servConn.setAsTrue(REQUIRES_RESPONSE);
     servConn.setAsTrue(REQUIRES_CHUNKED_RESPONSE);
-    
+    final Logger logger = LogService.getLogger();
+    logger.info("----CQ61 START-----");
     // Retrieve the data from the message parts
     String cqName = msg.getPart(0).getString();
     String cqQueryString = msg.getPart(1).getString();
@@ -116,14 +117,19 @@ public class ExecuteCQ61 extends BaseCQCommand {
       // Authorization check
       AuthorizeRequest authzRequest = servConn.getAuthzRequest();
       if (authzRequest != null) {
+
+        logger.info("----CQ61 STEP 1-----");
         query = qService.newQuery(cqQueryString);
+        logger.info("----CQ61 STEP 2 -----");
         cqRegionNames = ((DefaultQuery)query).getRegionsInQuery(null);
         executeCQContext = authzRequest.executeCQAuthorize(cqName,
             cqQueryString, cqRegionNames);
         String newCqQueryString = executeCQContext.getQuery();
         
         if (!cqQueryString.equals(newCqQueryString)) {
+          logger.info("----CQ61 STEP 3 -----");
           query = qService.newQuery(newCqQueryString);
+          logger.info("----CQ61 STEP 4 -----");
           cqQueryString = newCqQueryString;
           cqRegionNames = executeCQContext.getRegionNames();
           if (cqRegionNames == null) {
@@ -172,7 +178,9 @@ public class ExecuteCQ61 extends BaseCQCommand {
       // Execute the query and send the result-set to client.
       try {
         if (query == null) {
+          logger.info("----CQ61 STEP 5 -----");
           query = qService.newQuery(cqQueryString);
+          logger.info("----CQ61 STEP 6 -----");
           cqRegionNames = ((DefaultQuery)query).getRegionsInQuery(null);
         }
         ((DefaultQuery)query).setIsCqQuery(true);
@@ -211,7 +219,7 @@ public class ExecuteCQ61 extends BaseCQCommand {
       stats.incProcessCreateCqTime(start2 - oldstart);
     }
     servConn.setAsTrue(RESPONDED);
-
+    logger.info("----CQ61 ENDS-----");
   }
 
 }

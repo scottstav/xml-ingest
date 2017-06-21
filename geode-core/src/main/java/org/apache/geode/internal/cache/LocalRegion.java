@@ -156,7 +156,7 @@ import org.apache.geode.internal.HeapDataOutputStream;
 import org.apache.geode.internal.InternalStatisticsDisabledException;
 import org.apache.geode.internal.NanoTimer;
 import org.apache.geode.internal.Version;
-import org.apache.geode.internal.admin.ClientHealthMonitoringRegion;
+//import org.apache.geode.internal.admin.ClientHealthMonitoringRegion;
 import org.apache.geode.internal.cache.AbstractRegionMap.ARMLockTestHook;
 import org.apache.geode.internal.cache.CacheDistributionAdvisor.CacheProfile;
 import org.apache.geode.internal.cache.DiskInitFile.DiskRegionFlag;
@@ -516,14 +516,14 @@ public class LocalRegion extends AbstractRegion
    * ThreadLocal used to set the current region being initialized.
    * 
    * Currently used by the OpLog layer to initialize the
-   * {@link KeyWithRegionContext} if required.
+   * {@link /KeyWithRegionContext} if required.
    */
   private final static ThreadLocal<LocalRegion> initializingRegion =
     new ThreadLocal<LocalRegion>();
 
   /**
    * Set to true if the region contains keys implementing
-   * {@link KeyWithRegionContext} that require setting up of region specific
+   * {@link /KeyWithRegionContext} that require setting up of region specific
    * context after deserialization or recovery from disk.
    */
   private boolean keyRequiresRegionContext;
@@ -11259,6 +11259,10 @@ public class LocalRegion extends AbstractRegion
   public SelectResults query(String p_predicate) throws FunctionDomainException,
       TypeMismatchException, NameResolutionException,
       QueryInvocationTargetException {
+
+    final Logger logger = LogService.getLogger();
+    logger.info("----QUERY ||| START-----");
+
     String predicate = p_predicate;
     if (predicate == null) {
       throw new IllegalArgumentException(
@@ -11301,7 +11305,9 @@ public class LocalRegion extends AbstractRegion
     else {
       QueryService qs = getGemFireCache().getLocalQueryService();
       String queryStr = "select * from " + getFullPath() + " this where " + predicate;
+      logger.info("----QUERY ||| STEP1-----");
       DefaultQuery query = (DefaultQuery)qs.newQuery(queryStr);
+      logger.info("----QUERY ||| STEP2-----");
       results = (SelectResults)query.execute(new Object[0]);
     }
     return results;
