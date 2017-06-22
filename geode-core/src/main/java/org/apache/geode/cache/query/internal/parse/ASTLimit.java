@@ -36,7 +36,7 @@ public class ASTLimit extends GemFireAST {
 
   public void compile(QCompiler compiler) {
     final Logger logger = LogService.getLogger();
-    logger.info("THIS HAS OCCURRED");
+    logger.info("THIS HAS  OCCURRED");
     super.compile(compiler);
     compiler.compileLimit(this.getText());
   }
