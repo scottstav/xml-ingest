@@ -87,7 +87,7 @@ import org.apache.geode.pdx.PdxInstance;
  * @since GemFire 7.0
  */
 public class DataCommandFunction extends FunctionAdapter implements  InternalEntity {
-  private static final Logger logger = LogService.getLogger();
+  private static final Logger logger = LogService.getLogger();//-------------------
   
   private static final long serialVersionUID = 1L;
   private boolean optimizeForWrite = false;
@@ -133,6 +133,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
 
   @Override
   public void execute(FunctionContext functionContext) {
+    logger.info("----EXECUTE START ||| Step 1-----");
     try {
       Cache cache = CacheFactory.getAnyInstance();
       DataCommandRequest request =(DataCommandRequest) functionContext.getArguments();
@@ -149,10 +150,13 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
       else if(request.isRemove())
         result = remove(request);
       else if(request.isSelect())
+        logger.info("----EXECUTE START ||| Step 2-----");
         result = select(request);
+        logger.info("----EXECUTE START ||| Step 3-----");
       if (logger.isDebugEnabled()) {
         logger.debug("Result is {}", result);
       }
+      logger.info("----EXECUTE ||| Step 4-----");
       functionContext.getResultSender().lastResult(result);
     } catch (CacheClosedException e) {
       e.printStackTrace();
@@ -228,13 +232,14 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
     Cache cache = CacheFactory.getAnyInstance();
     AtomicInteger nestedObjectCount = new AtomicInteger(0);
     final Logger logger = LogService.getLogger();
-    logger.info("----SELECT DATACOMMANDFUNCTION QUERY ||| START-----");
+    logger.info("----SELECT  QUERY ||| START-----");
     if (queryString != null && !queryString.isEmpty()) {
       QueryService qs = cache.getQueryService();
-
+      logger.info("----SELECT QUERY  ||| Step 1-----");
       // TODO : Find out if is this optimised use. Can you have something equivalent of parsed queries with names
       // where name can be retrieved to avoid parsing every-time
       Query query = qs.newQuery(queryString);
+      logger.info("----SELECT QUERY  ||| Step 2-----");
       DefaultQuery tracedQuery = (DefaultQuery)query;
       WrappedIndexTrackingQueryObserver queryObserver=null;
       String queryVerboseMsg = null;
@@ -585,7 +590,10 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
     }
     
   }
-  
+
+  //public DataCommandResult load(String regionName )
+
+
   @SuppressWarnings({ "rawtypes" })
   public DataCommandResult put(String key, String value, boolean putIfAbsent, String keyClass, String valueClass,
       String regionName) { 
