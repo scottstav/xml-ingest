@@ -36,7 +36,7 @@ public class ASTInto extends GemFireAST {
 
         this.childrenCompile(qCompiler);
         // ASTIteratorDef ast = this.??
-        // throw new UnsupportedOperationException("Using new class successfully, compilation not implemented yet");
+        throw new UnsupportedOperationException("Using new class successfully, compilation not implemented yet");
     }
 
 }

@@ -197,6 +197,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
 
 
   public DataCommandResult put(DataCommandRequest request) {
+    logger.info("----PUT OCCURRED-----");
     String key = request.getKey();
     String value = request.getValue();
     boolean putIfAbsent = request.isPutIfAbsent();
@@ -232,7 +233,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
     Cache cache = CacheFactory.getAnyInstance();
     AtomicInteger nestedObjectCount = new AtomicInteger(0);
     final Logger logger = LogService.getLogger();
-    logger.info("----SELECT  QUERY ||| START-----");
+    logger.info("----SELECT  QUERY *** START-----");
     if (queryString != null && !queryString.isEmpty()) {
       QueryService qs = cache.getQueryService();
       logger.info("----SELECT QUERY  ||| Step 1-----");
@@ -591,7 +592,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
     
   }
 
-  //public DataCommandResult load(String regionName )
+  //public DataCommandResult load(String regionName )*******************************************************
 
 
   @SuppressWarnings({ "rawtypes" })

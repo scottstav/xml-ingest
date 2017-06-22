@@ -39,8 +39,8 @@ public class ASTLoad extends GemFireAST {
       super.compile(compiler);
 
       final Logger logger = LogService.getLogger();
-      logger.info("First child: " + getFirstChild().getText());
-      logger.info("# children: " + getNumberOfChildren());
+      logger.info("First child: ");
+      logger.info("# children: ");
       //throw new UnsupportedOperationException("Using new class successfully, compilation not implemented yet");
       //let's make this compiler load!
       compiler.load();
