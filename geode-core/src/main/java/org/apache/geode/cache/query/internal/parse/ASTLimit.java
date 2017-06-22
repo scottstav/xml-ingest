@@ -18,6 +18,8 @@ package org.apache.geode.cache.query.internal.parse;
 
 import antlr.*;
 import org.apache.geode.cache.query.internal.QCompiler;
+import org.apache.geode.internal.logging.LogService;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -33,6 +35,8 @@ public class ASTLimit extends GemFireAST {
   }
 
   public void compile(QCompiler compiler) {
+    final Logger logger = LogService.getLogger();
+    logger.info("THIS HAS OCCURRED");
     super.compile(compiler);
     compiler.compileLimit(this.getText());
   }
