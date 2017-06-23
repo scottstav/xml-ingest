@@ -1655,6 +1655,8 @@ public class DistributedSystemBridge {
 
 
   public String queryData(String query, String members, int limit)  throws Exception{
+    final Logger logger = LogService.getLogger();
+    logger.info("QUERY DATA METHOD CALLED : UNDER DISTRIBUTED SYSTEM BRIDGE.JAVA" +  query + members + limit );
     Object result=  QueryDataFunction.queryData(query, members, limit, false, queryResultSetLimit, queryCollectionsDepth);
     return (String)result;
 
