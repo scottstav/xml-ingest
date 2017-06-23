@@ -537,8 +537,11 @@ public class QCompiler implements OQLLexerTokenTypes {
     final Logger logger = LogService.getLogger();
 
     logger.info("----EXECUTE START ||| Step 1-----");
-    //CompiledValue tableName = (CompiledValue)pop();
-    //CompiledValue csv       = (CompiledValue)pop();
+    Object thing = pop();
+    Object der   = pop();
+    Object real  = pop();
+    logger.info("Number: " + thing + "Der: " + der + " real : " + real);
+    push(thing);
 
 
 
