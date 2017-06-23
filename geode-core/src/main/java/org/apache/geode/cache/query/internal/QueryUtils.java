@@ -719,7 +719,7 @@ public class QueryUtils {
     final Logger logger = LogService.getLogger();
 
     if (context.cacheGet(CompiledValue.ORDERBY_ATTRIB) == null) {
-      logger.info("WITHIN IF CASE OF GET LIMIT VALUE");
+      logger.info("WITHIN IF CASE OF GET LIMIT VALUE IN QUERY UTILS");
       limit = ((Integer) context.cacheGet(CompiledValue.RESULT_LIMIT)) != null?((Integer) context.cacheGet(CompiledValue.RESULT_LIMIT)).intValue(): -1;
     }
 
