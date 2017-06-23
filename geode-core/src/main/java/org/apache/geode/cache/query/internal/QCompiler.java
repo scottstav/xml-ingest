@@ -227,7 +227,7 @@ public class QCompiler implements OQLLexerTokenTypes {
   
   public void select(Map<Integer, Object> queryComponents) {
 
-    logger.info("----LOAD IS NOW HAPPENING-----");
+    logger.info("----SELECT IS NOW HAPPENING-----");
 
 
     CompiledValue limit = null;
@@ -535,10 +535,12 @@ public class QCompiler implements OQLLexerTokenTypes {
   
   public void load() {
     final Logger logger = LogService.getLogger();
-    CompiledValue tableName = (CompiledValue)pop();
-    CompiledValue csv       = (CompiledValue)pop();
 
-    logger.info("----LOAD QUERY  HAS OCCURRED-----");
+    logger.info("----EXECUTE START ||| Step 1-----");
+    //CompiledValue tableName = (CompiledValue)pop();
+    //CompiledValue csv       = (CompiledValue)pop();
+
+
 
 
   }
