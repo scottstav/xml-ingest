@@ -536,12 +536,12 @@ public class QCompiler implements OQLLexerTokenTypes {
   public void load() {
     final Logger logger = LogService.getLogger();
 
-    logger.info("----EXECUTE START ||| Step 1-----");
+    logger.error("----EXECUTE START ||| Step 1-----");
     Object thing = pop();
     Object der   = pop();
     Object real  = pop();
-    logger.info("Number: " + thing + "Der: " + der + " real : " + real);
-    push(thing);
+    logger.error("Number: " + thing + "Der: " + der + " real : " + real);
+    //push(thing);
 
 
 
