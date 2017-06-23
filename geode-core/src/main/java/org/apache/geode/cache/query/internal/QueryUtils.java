@@ -718,7 +718,12 @@ public class QueryUtils {
     int limit = -1;
     if (context.cacheGet(CompiledValue.ORDERBY_ATTRIB) == null) {
       limit = ((Integer) context.cacheGet(CompiledValue.RESULT_LIMIT)) != null?((Integer) context.cacheGet(CompiledValue.RESULT_LIMIT)).intValue(): -1;
-    }   
+    }
+
+    final Logger logger = LogService.getLogger();
+    logger.info("----getLimitValue *** START-----" + limit);
+
+
     return limit;
   }
   
