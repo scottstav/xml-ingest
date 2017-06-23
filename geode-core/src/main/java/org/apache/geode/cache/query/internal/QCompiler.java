@@ -226,7 +226,10 @@ public class QCompiler implements OQLLexerTokenTypes {
   }
   
   public void select(Map<Integer, Object> queryComponents) {
-    
+
+    logger.info("----LOAD IS NOW HAPPENING-----");
+
+
     CompiledValue limit = null;
     Object limitObject = queryComponents.remove(OQLLexerTokenTypes.LIMIT);
     if (limitObject instanceof Integer) {
