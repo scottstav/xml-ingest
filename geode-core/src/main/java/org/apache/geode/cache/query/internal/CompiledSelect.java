@@ -48,6 +48,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.pdx.PdxInstance;
 import org.apache.geode.pdx.internal.PdxString;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class Description
@@ -430,7 +431,11 @@ public class CompiledSelect extends AbstractCompiledValue {
         //Though in our case it may not be an issue as the compute depedency phase must have
         //already set the index id
       }
+      final Logger logger = LogService.getLogger();
+
+
       Integer limitValue = evaluateLimitValue(context, this.limit);
+      logger.info("----LOGGER VALUE WITHIN COMPILED SELECT: " + limitValue);
       SelectResults result = null;
       boolean evalAsFilters = false;
       if (this.whereClause == null) {

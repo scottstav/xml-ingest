@@ -716,11 +716,14 @@ public class QueryUtils {
   //however a lot of the code in this class is fragile/unreadable/hard to maintain
   private static int getLimitValue(ExecutionContext context) {
     int limit = -1;
+    final Logger logger = LogService.getLogger();
+
     if (context.cacheGet(CompiledValue.ORDERBY_ATTRIB) == null) {
+      logger.info("WITHIN IF CASE OF GET LIMIT VALUE");
       limit = ((Integer) context.cacheGet(CompiledValue.RESULT_LIMIT)) != null?((Integer) context.cacheGet(CompiledValue.RESULT_LIMIT)).intValue(): -1;
     }
 
-    final Logger logger = LogService.getLogger();
+
     logger.info("----getLimitValue *** START-----" + limit);
 
 
