@@ -55,7 +55,7 @@ public class GemFireAST extends CommonAST {
     final Logger logger = LogService.getLogger();
 
     GemFireAST child = (GemFireAST)getFirstChild();
-    logger.info("----GEMFIREAST.JAVA children compile start with:"  + child.getText());
+    logger.info("----GEMFIREAST.JAVA ch ildren compile start with:"  + child.getText());
     while (child != null) {
       child.compile(compiler);
       child = (GemFireAST)child.getNextSibling();

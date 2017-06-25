@@ -197,7 +197,7 @@ public class QCompiler implements OQLLexerTokenTypes {
 
   public void compileLimit(String limitNum)
   {
-    logger.info("----COMPILE LIMIT STARTS----" + limitNum);
+    logger.info("----COMPILE LIMIT STARTS--- -" + limitNum);
     push(Integer.valueOf(limitNum));
     logger.info("----COMPILE LIMIT ENDS-----");
   }
