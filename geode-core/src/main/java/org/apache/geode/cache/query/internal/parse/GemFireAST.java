@@ -21,6 +21,8 @@ import antlr.*;
 //import antlr.collections.*;
 //import org.apache.geode.cache.query.*;
 import org.apache.geode.cache.query.internal.QCompiler;
+import org.apache.geode.internal.logging.LogService;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -50,10 +52,14 @@ public class GemFireAST extends CommonAST {
   }
   
   public void childrenCompile(QCompiler compiler) {
+    final Logger logger = LogService.getLogger();
+
     GemFireAST child = (GemFireAST)getFirstChild();
+    logger.info("----GEMFIREAST.JAVA children compile start with:"  + child.getText());
     while (child != null) {
       child.compile(compiler);
       child = (GemFireAST)child.getNextSibling();
+      logger.info("----GEMFIREAST.JAVA child:" + child.getText());
     }
   }
   
