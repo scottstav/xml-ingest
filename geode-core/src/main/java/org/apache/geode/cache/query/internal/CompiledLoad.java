@@ -54,7 +54,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Created by dylan on 6/25/17.
  */
-public class CompiledLoad {
+public class CompiledLoad extends AbstractCompiledValue{
     private CompiledID filePath;
     private CompiledRegion region;
     final Logger logger = LogService.getLogger();
@@ -71,5 +71,10 @@ public class CompiledLoad {
         logger.info("----WITHIN THE EVALUATE OF LOAD!!!!----");
         return duh;
     }
+
+    public int getType() {
+        return LITERAL_load;
+    }
+
 
 }
