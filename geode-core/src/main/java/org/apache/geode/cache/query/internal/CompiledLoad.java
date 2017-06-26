@@ -77,4 +77,7 @@ public class CompiledLoad extends AbstractCompiledValue{
     }
 
 
+    public void getRegionsInQuery(Set regionNames, Object[] parameters){
+        regionNames.add(this.region);
+    }
 }

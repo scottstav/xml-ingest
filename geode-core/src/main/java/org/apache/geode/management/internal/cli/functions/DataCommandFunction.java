@@ -924,7 +924,8 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
     public DataCommandResult _select(String query) {
       Cache cache = CacheFactory.getAnyInstance();
       DataCommandResult dataResult = null;
-
+      final Logger logger = LogService.getLogger();
+      logger.error("Inside DataCommandResult" + query);
       if (query == null || query.isEmpty()) {
         dataResult = DataCommandResult.createSelectInfoResult(null, null, -1, null,
             CliStrings.QUERY__MSG__QUERY_EMPTY, false);
@@ -935,7 +936,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
       Object array[] = DataCommands.replaceGfshEnvVar(query, CommandExecutionContext.getShellEnv());
       query = (String) array[1];
       query = addLimit(query);
-      
+      logger.error("*********** Query as: " + query);
       @SuppressWarnings("deprecation")
       QCompiler compiler = new QCompiler();
       Set<String> regionsInQuery = null;
