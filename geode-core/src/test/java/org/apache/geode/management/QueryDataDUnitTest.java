@@ -16,6 +16,8 @@
  */
 package org.apache.geode.management;
 
+import org.apache.geode.internal.logging.LogService;
+import org.apache.logging.log4j.Logger;
 import org.junit.experimental.categories.Category;
 import org.junit.Test;
 
@@ -564,8 +566,10 @@ public class QueryDataDUnitTest extends ManagementTestBase {
             String message = bean.queryData("Select * from TestPartitionedRegion1", null, 2); 
             
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("message", ManagementStrings.QUERY__MSG__INVALID_QUERY.toLocalizedString("Region mentioned in query probably missing /"));
+            jsonObject.put("message", ManagementStrings.QUERY__MSG__INVALID_QUERY.toLocalizedString("Region mentioned in 4444 query probably missing /" ));
             String expectedMessage = jsonObject.toString();
+            final Logger logger = LogService.getLogger();
+            logger.error("----Message 1: " + expectedMessage + "Message 2 :" + message);
             assertEquals(expectedMessage,message);
             
           } catch (Exception e) {
