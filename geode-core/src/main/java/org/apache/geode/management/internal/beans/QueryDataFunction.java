@@ -358,7 +358,7 @@ public class QueryDataFunction extends FunctionAdapter implements InternalEntity
 
         }
       } else {
-        return new JsonisedErroMessage(ManagementStrings.QUERY__MSG__INVALID_QUERY.toLocalizedString("Region mentioned in query probably missing /")).toString();
+        return new JsonisedErroMessage(ManagementStrings.QUERY__MSG__INVALID_QUERY.toLocalizedString("Region mentioned in query probably missing / sooo..." + regionsInQuery.size())).toString();
       }
 
       // Validate

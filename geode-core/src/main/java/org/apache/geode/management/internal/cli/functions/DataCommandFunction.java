@@ -970,7 +970,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
           }
         } else {
           return (dataResult = DataCommandResult.createSelectInfoResult(null, null, -1, null,
-              CliStrings.format(CliStrings.QUERY__MSG__INVALID_QUERY, "Region mentioned in query probably missing /"),
+              CliStrings.format(CliStrings.QUERY__MSG__INVALID_QUERY, "Region mentioned in query probably missing / and yeah" + regionsInQuery.size()),
               false));
         }
       } catch (QueryInvalidException qe) {        
