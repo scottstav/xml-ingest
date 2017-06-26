@@ -127,7 +127,7 @@ public interface CompiledValue {
   /**
    * Populates the Set passed with  the name of the Region which, if any ,  will be the bottommost
    * object (CompiledRegion). The default implemenation is provided  in the AbstractCompiledValue
-   * & overridden in the CompiledSelect as it can contain multiple iterators 
+   * & overridden in the CompiledSelect as it can contain multiple iterators. Also overridden in CompiledLoad
    */
   public void getRegionsInQuery(Set regionNames, Object[] parameters);
   
