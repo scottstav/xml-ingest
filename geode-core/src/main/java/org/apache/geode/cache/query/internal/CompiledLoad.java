@@ -86,7 +86,7 @@ public class CompiledLoad extends AbstractCompiledValue{
         String ele = new String();
 
         try{
-            Scanner csv = new Scanner(new File(this.filePath.getId() + "mp3.csv"));
+            Scanner csv = new Scanner(new File(this.filePath.getId() + "/mp3.csv"));
             while(csv.hasNext()){
                 ele = csv.nextLine();
                 logger.info("WE HAVE: " + ele);
