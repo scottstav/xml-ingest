@@ -540,20 +540,17 @@ public class QCompiler implements OQLLexerTokenTypes {
     logger.info("----Execute start");
 
     Object thing = pop();
-    Object der   = pop();
-    //Object real  = pop();
-    //Object bast  = pop();
+    CompiledID filePath   = (CompiledID)pop();
+    CompiledRegion region  = (CompiledRegion)pop();
+    CompiledLoad element = new CompiledLoad(filePath, region);  //  createLoad(filePath, region);
 
     //logger.error("Number: " + thing + "Der: " + der + " real : ");
-    logger.info("****Number: " + thing + "Der: " + der + " real : ");
+    logger.info("****Number: " + thing + "Der: " + filePath.getId() + " real : " + region.getRegionPath());
 
-    //push(thing);
-
-
-
+    push(element);
 
   }
-  
+
   public void compare (int opKind) {
     CompiledValue v2 = (CompiledValue)pop ();
     CompiledValue v1 = (CompiledValue)pop ();

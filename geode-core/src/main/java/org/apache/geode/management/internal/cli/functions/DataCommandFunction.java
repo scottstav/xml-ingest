@@ -298,6 +298,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
             }
           }
         } else {
+          logger.info("-In Else of Data Command Fnct for Select---");
           if(logger.isDebugEnabled())
             logger.debug("BeanResults : Bean Results class is {}", results.getClass());
           String str = toJson(results);
