@@ -77,7 +77,7 @@ public class CompiledLoad extends AbstractCompiledValue{
     public Object evaluate(ExecutionContext context) throws FunctionDomainException, TypeMismatchException,
             NameResolutionException, QueryInvocationTargetException {
         Object duh = null;
-        logger.info("----WITHIN THE EVALUATE OF LOAD!!!!----");
+        logger.info("----WITHIN THE EVALUATE OF LOAD!!!!--i --");
 
         // Vector stream = new Vector(20);
         String [] mp3Info = new String[8];

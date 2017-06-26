@@ -298,6 +298,8 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
             }
           }
         } else {
+          //****************************
+          //ADD else if of INSTANCEOF COMPILEDLOAD
           logger.info("-In Else of Data Command Fnct for Select---");
           if(logger.isDebugEnabled())
             logger.debug("BeanResults : Bean Results class is {}", results.getClass());
@@ -951,6 +953,8 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
         }
 
         regionsInQuery = Collections.unmodifiableSet(regions);
+        //This is where I had issues -- Dylan -6/26/2017
+        //Load statement is being handled here
         if (regionsInQuery.size() > 0) {
           Set<DistributedMember> members = DataCommands.getQueryRegionsAssociatedMembers(regionsInQuery, cache, false);
           if (members != null && members.size() > 0) {
