@@ -536,7 +536,7 @@ public class QCompiler implements OQLLexerTokenTypes {
   public void load() {
     final Logger logger = LogService.getLogger();
 
-    //logger.error("----EXECUTE START ||| Step 1-----");
+    //logger.error("----EXECUTE START ||| Sti ep 1-----");
     logger.info("----Execute start");
 
     Object thing = pop();
