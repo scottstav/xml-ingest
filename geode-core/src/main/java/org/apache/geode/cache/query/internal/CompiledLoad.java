@@ -62,12 +62,12 @@ import java.util.Scanner;
  * Created by dylan on 6/25/17.
  */
 public class CompiledLoad extends AbstractCompiledValue{
-    private CompiledID filePath;
+    private CompiledLiteral filePath;
     private CompiledRegion region;
     final Logger logger = LogService.getLogger();
     private Vector item = null;
 
-    public CompiledLoad(CompiledID filePath, CompiledRegion region){
+    public CompiledLoad(CompiledLiteral filePath, CompiledRegion region){
         this.filePath = filePath;
         this.region = region;
 
@@ -84,10 +84,10 @@ public class CompiledLoad extends AbstractCompiledValue{
         LinkedList <String []> list = new LinkedList<String []> ();
         //Attach a '/' if dirName is missing one
         String ele = new String() ;
-        logger.info("----We get : " + this.filePath.getId() + "mp3.csv" + System.getProperty("user.dir") + "/../" + this.filePath.getId() + "mp3.csv");
+        logger.info("----We get : " + this.filePath.toString() + "mp3.csv" + System.getProperty("user.dir") + "/../" + this.filePath.toString() + "mp3.csv");
         try{
             //Obtain the csv file from wherever directory it's located in.
-            Scanner csv = new Scanner(new File(System.getProperty("user.dir") + "/../" + this.filePath.getId() + "/mp3.csv"));
+            Scanner csv = new Scanner(new File(System.getProperty("user.dir") + "/../" + this.filePath.toString() + "/mp3.csv"));
             while(csv.hasNext()){
                 ele = csv.nextLine();
                 logger.info("WE HAVE: " + ele);
