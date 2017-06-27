@@ -545,7 +545,7 @@ public class QCompiler implements OQLLexerTokenTypes {
     CompiledLoad element = new CompiledLoad(filePath, region);  //  createLoad(filePath, region);
 
     //logger.error("Number: " + thing + "Der: " + der + " real : ");
-    logger.info("****Number: " + thing + "Der: " + filePath.toString() + " real : " + region.getRegionPath());
+    logger.info("****Number: " + thing + "Der: " + filePath.getSavedPdxString().toString() + " real : " + region.getRegionPath());
 
     push(element);
 
