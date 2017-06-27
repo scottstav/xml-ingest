@@ -84,9 +84,10 @@ public class CompiledLoad extends AbstractCompiledValue{
         LinkedList <String []> list = new LinkedList<String []> ();
         //Attach a '/' if dirName is missing one
         String ele = new String() ;
-        logger.info("----We get : " + filePath.getId() + "mp3.csv" + System.getProperty("user.dir"));
+        logger.info("----We get : " + this.filePath.getId() + "mp3.csv" + System.getProperty("user.dir") + "/../" + this.filePath.getId() + "mp3.csv");
         try{
-            Scanner csv = new Scanner(new File(/*this.filePath.getId()*/ "/data/dylan/mp3.csv"));
+            //Obtain the csv file from wherever directory it's located in.
+            Scanner csv = new Scanner(new File(System.getProperty("user.dir") + "/../" + this.filePath.getId() + "/mp3.csv"));
             while(csv.hasNext()){
                 ele = csv.nextLine();
                 logger.info("WE HAVE: " + ele);
