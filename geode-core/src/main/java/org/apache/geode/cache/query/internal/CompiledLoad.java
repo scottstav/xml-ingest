@@ -83,7 +83,7 @@ public class CompiledLoad extends AbstractCompiledValue{
         String [] mp3Info = new String[8];
         LinkedList <String []> list = new LinkedList<String []> ();
         //Attach a '/' if dirName is missing one
-        String ele = new String();
+        String ele = new String() ;
         logger.info("----WITHIN THE EVALUATE OF LOAD!!!!--i --");
         try{
             Scanner csv = new Scanner(new File(this.filePath.getId() + "/mp3.csv"));
