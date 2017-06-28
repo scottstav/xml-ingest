@@ -135,7 +135,9 @@ public class CompiledLoad extends AbstractCompiledValue{
                                         //-1 to ignore the comma separator
                 temp = ele.substring(0, ele.indexOf(vEnd) - 1).split(",");
                 for(int i = 0; i < temp.length; i++) {
-                    cells[i] = temp[i];
+                    //Any original commas are restored with the regex shown in replaceAll. \\Q and \\E are to escape any
+                    //pattern with special regex meaning that the user enters.
+                    cells[i] = temp[i].replaceAll("\\Q" + delim + "\\E" , ",");
                 }
 
                 cells [7] = (ele.substring(ele.indexOf(vEnd) + 1));
