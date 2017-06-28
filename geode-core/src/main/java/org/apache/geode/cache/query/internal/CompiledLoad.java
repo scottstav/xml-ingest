@@ -64,15 +64,20 @@ import org.apache.geode.cache.query.internal.Mp3Obj;
  */
 public class CompiledLoad extends AbstractCompiledValue{
     private CompiledLiteral filePath;
+    private CompiledLiteral delim;
+    private CompiledLiteral vLim;
     private CompiledRegion region;
     //private CompiledID key;
+
     final Logger logger = LogService.getLogger();
     private Vector item = null;
     //private Mp3Obj thing = null;
 
-    public CompiledLoad(CompiledLiteral filePath, CompiledRegion region){
+    public CompiledLoad(CompiledLiteral filePath, CompiledLiteral delim, CompiledLiteral vLim, CompiledRegion region){
         this.filePath = filePath;
         this.region = region;
+        this.delim = delim;
+        this.vLim = vLim;
         //this.key = key;
 
     }
@@ -83,6 +88,8 @@ public class CompiledLoad extends AbstractCompiledValue{
         logger.info("----WITHIN THE EVALUATE OF LOAD!!!!--i --");
         LinkedList <String []> list = new LinkedList<String []> ();
 
+        //This will extract the string within filePath....apparently PdxString is the middleman for that.
+        String region = this.filePath.getSavedPdxString().toString();
 
         try{
             //For scaling up:
@@ -91,8 +98,8 @@ public class CompiledLoad extends AbstractCompiledValue{
             //File mp3 = new File("cello.mp3");
             //If it's current directory, it can just be ./
 
-             //This will extract the string within filePath....apparently PdxString is the middleman for that.
-            list = readCSV(this.filePath.getSavedPdxString().toString());
+
+            list = readCSV(delim.getSavedPdxString().toString(), vLim.getSavedPdxString().toString(), region, context.getCache().getRegion(region));
 
             while(!list.isEmpty()){
                 String [] thing = list.pop();
@@ -111,7 +118,7 @@ public class CompiledLoad extends AbstractCompiledValue{
     }
 
 
-    public LinkedList <String []> readCSV(/*String delim, String vEnd,*/ String readSrc) {
+    public LinkedList <String []> readCSV(String delim, String vEnd,  String readSrc, Region putRegion) {
         // Vector stream = new Vector(20);
         String[] mp3Info = new String[8];
         LinkedList<String[]> list = new LinkedList<String[]>();
