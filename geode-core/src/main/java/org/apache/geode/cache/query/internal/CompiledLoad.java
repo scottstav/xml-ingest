@@ -57,6 +57,7 @@ import java.util.LinkedList;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import org.apache.geode.cache.query.internal.Mp3Obj;
 ////
 /**
  * Created by dylan on 6/25/17.
@@ -64,13 +65,15 @@ import java.util.Scanner;
 public class CompiledLoad extends AbstractCompiledValue{
     private CompiledLiteral filePath;
     private CompiledRegion region;
+    //private CompiledID key;
     final Logger logger = LogService.getLogger();
     private Vector item = null;
+    //private Mp3Obj thing = null;
 
     public CompiledLoad(CompiledLiteral filePath, CompiledRegion region){
         this.filePath = filePath;
         this.region = region;
-
+        //this.key = key;
 
     }
         //Set up a collection interface called LoadResults later
@@ -78,21 +81,51 @@ public class CompiledLoad extends AbstractCompiledValue{
             NameResolutionException, QueryInvocationTargetException {
         Object duh = null;
         logger.info("----WITHIN THE EVALUATE OF LOAD!!!!--i --");
-
-        // Vector stream = new Vector(20);
-        String [] mp3Info = new String[8];
         LinkedList <String []> list = new LinkedList<String []> ();
-        //Attach a '/' if dirName is missing one
-        String ele = new String() ;
-        logger.info("----i We get : " + System.getProperty("user.dir") + "/../" + this.filePath.getSavedPdxString().toString());
+
+
         try{
+            //For scaling up:
+            //LinkedList <mp3Obj> list = new LinkedList<mp3Obj>();
+            //LinkedList <mp3Obj> taken = new LinkedList<String []>();
+            //File mp3 = new File("cello.mp3");
+            //If it's current directory, it can just be ./
+
+             //This will extract the string within filePath....apparently PdxString is the middleman for that.
+            list = readCSV(this.filePath.getSavedPdxString().toString());
+
+            while(!list.isEmpty()){
+                String [] thing = list.pop();
+                for(int i = 0; i < thing.length; i++){
+                    logger.info(thing[i]);
+                }
+            }
+        }//end of try
+        catch (Exception e) {
+            logger.error("Issue occured in evaluate " + e.getMessage());
+            e.printStackTrace();
+        }
+
+
+        return duh;
+    }
+
+
+    public LinkedList <String []> readCSV(/*String delim, String vEnd,*/ String readSrc) {
+        // Vector stream = new Vector(20);
+        String[] mp3Info = new String[8];
+        LinkedList<String[]> list = new LinkedList<String[]>();
+        //Attach a '/' if dirName is missing one
+        String ele = new String();
+        logger.info("----i We get : " + System.getProperty("user.dir") + "/../" + readSrc);
+        try {
             //Obtain the csv file from wherever directory it's located in.
-            Scanner csv = new Scanner(new File(System.getProperty("user.dir") + "/../" + this.filePath.getSavedPdxString().toString()));
-            while(csv.hasNext()){
+            Scanner csv = new Scanner(new File(System.getProperty("user.dir") + "/../" + readSrc));
+            while (csv.hasNext()) {
                 ele = csv.nextLine();
-                logger.info("WE HAVE: " + ele);
-                //System.out.println(ele + " ------ spot: " + vEnd + " -----"  + ele.substring( 0 ,ele.indexOf(vEnd)));
-                //list.add(ele.split(","));
+                logger.info("WE HAVE: " + ele + "------");
+                //logger.info(ele + " ------ spot: " + vEnd + " -----"  + ele.substring( 0 ,ele.indexOf(vEnd)));
+                list.add(ele.split(","));
                 //list.add(ele.substring(0, ele.indexOf(vEnd)).split(","));
                 //WIth the array of stuff stored, go through each index and replace all delim's with a comma.
                 //Instead of a direct add, have the ele.substring..... be stored within an array.
@@ -100,17 +133,16 @@ public class CompiledLoad extends AbstractCompiledValue{
                 // stored within a mp3Obj then add that to the list!
             }
         }
-        catch(Exception e){
-            logger.error("Error1: " + e.getMessage());
+        catch (Exception e) {
+            logger.error("Issue with readCSV:" + e.getMessage());
         }//cat   ch
 
-
-
-
-
-
-        return duh;
+        return list;
     }
+
+
+
+
 
     //Simple getType method. Used by other things no doubt to check if it's a load query.
     public int getType() {
