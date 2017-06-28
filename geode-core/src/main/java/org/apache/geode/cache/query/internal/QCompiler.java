@@ -542,7 +542,7 @@ public class QCompiler implements OQLLexerTokenTypes {
     Object thing = pop();
     CompiledLiteral vLim = (CompiledLiteral)pop();
     CompiledLiteral  delim = (CompiledLiteral)pop();
-    CompiledLiteral filePath   = (CompiledLiteral)pop();
+    CompiledLiteral filePath  = (CompiledLiteral)pop();
     CompiledRegion region  = (CompiledRegion)pop();
     CompiledLoad element = new CompiledLoad(filePath, delim, vLim, region);  //  createLoad(filePath, region);
 

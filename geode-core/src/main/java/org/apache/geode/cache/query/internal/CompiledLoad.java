@@ -79,7 +79,6 @@ public class CompiledLoad extends AbstractCompiledValue{
         this.delim = delim;
         this.vLim = vLim;
         //this.key = key;
-
     }
         //Set up a collection interface called LoadResults later
     public Object evaluate(ExecutionContext context) throws FunctionDomainException, TypeMismatchException,
@@ -119,20 +118,27 @@ public class CompiledLoad extends AbstractCompiledValue{
 
 
     public LinkedList <String []> readCSV(String delim, String vEnd,  String readSrc, Region putRegion) {
-        // Vector stream = new Vector(20);
         String[] mp3Info = new String[8];
         LinkedList<String[]> list = new LinkedList<String[]>();
-        //Attach a '/' if dirName is missing one
         String ele = new String();
         logger.info("----i We get : " + System.getProperty("user.dir") + "/../" + readSrc);
         try {
             //Obtain the csv file from wherever directory it's located in.
             Scanner csv = new Scanner(new File(System.getProperty("user.dir") + "/../" + readSrc));
+
+            //Acquire the header, as it's formatted differently than subsequent lines.
+            ele = csv.nextLine();
+            list.add(ele.split(","));
             while (csv.hasNext()) {
+                String [] cells = new String[8];
                 ele = csv.nextLine();
                 logger.info("WE HAVE: " + ele + "------");
                 //logger.info(ele + " ------ spot: " + vEnd + " -----"  + ele.substring( 0 ,ele.indexOf(vEnd)));
-                list.add(ele.split(","));
+                                        //-1 to ignore the comma separator
+                cells = ele.substring(0, ele.indexOf(vEnd) - 1).split(",");
+                cells [7] = (ele.substring(ele.indexOf(vEnd) + 1));
+
+                list.add(cells);
                 //list.add(ele.substring(0, ele.indexOf(vEnd)).split(","));
                 //WIth the array of stuff stored, go through each index and replace all delim's with a comma.
                 //Instead of a direct add, have the ele.substring..... be stored within an array.
@@ -147,7 +153,10 @@ public class CompiledLoad extends AbstractCompiledValue{
         return list;
     }
 
+    public void loadRegion (LinkedList<String [] > list){
 
+
+    }
 
 
 
