@@ -116,7 +116,6 @@ public class CompiledLoad extends AbstractCompiledValue{
         return duh;
     }
 
-
     public LinkedList <String []> readCSV(String delim, String vEnd,  String readSrc, Region putRegion) {
         String[] mp3Info = new String[8];
         LinkedList<String[]> list = new LinkedList<String[]>();
@@ -125,17 +124,20 @@ public class CompiledLoad extends AbstractCompiledValue{
         try {
             //Obtain the csv file from wherever directory it's located in.
             Scanner csv = new Scanner(new File(System.getProperty("user.dir") + "/../" + readSrc));
-
             //Acquire the header, as it's formatted differently than subsequent lines.
             ele = csv.nextLine();
             list.add(ele.split(","));
             while (csv.hasNext()) {
                 String [] cells = new String[8];
+                String [] temp = null;
                 ele = csv.nextLine();
-                logger.info("WE HAVE: " + ele + "------");
-                //logger.info(ele + " ------ spot: " + vEnd + " -----"  + ele.substring( 0 ,ele.indexOf(vEnd)));
+
                                         //-1 to ignore the comma separator
-                cells = ele.substring(0, ele.indexOf(vEnd) - 1).split(",");
+                temp = ele.substring(0, ele.indexOf(vEnd) - 1).split(",");
+                for(int i = 0; i < temp.length; i++) {
+                    cells[i] = temp[i];
+                }
+
                 cells [7] = (ele.substring(ele.indexOf(vEnd) + 1));
 
                 list.add(cells);
