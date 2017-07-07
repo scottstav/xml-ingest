@@ -41,6 +41,8 @@ import org.apache.geode.cache.query.internal.utils.PDXUtils;
 import org.apache.geode.cache.query.types.ObjectType;
 import org.apache.geode.cache.query.types.StructType;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.internal.logging.LogService;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -53,6 +55,7 @@ public class CompiledGroupBySelect extends CompiledSelect {
   private final boolean isDistinct;
   private final List<CompiledSortCriterion> originalOrderByClause;
   private final CompiledValue limit;
+  final Logger logger = LogService.getLogger();
   @Override
   public int getType() {
     return GROUP_BY_SELECT;
@@ -470,6 +473,7 @@ public class CompiledGroupBySelect extends CompiledSelect {
       // if the projection is aggregate expression skip validating
       if (!this.aggregateColsPos.get(index)) {
         if (!checkProjectionInGroupBy(projElem, context)) {
+          logger.info("------------THIS HAS OCCURED: " + projElem.toString() + " ----");
           throw new QueryInvalidException(
               LocalizedStrings.DefaultQuery_PROJ_COL_ABSENT_IN_GROUP_BY
                   .toLocalizedString());

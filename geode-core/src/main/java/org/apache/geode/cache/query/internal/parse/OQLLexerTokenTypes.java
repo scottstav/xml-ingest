@@ -154,4 +154,5 @@ public interface OQLLexerTokenTypes {
 	int NUM_LONG = 148;
 	int NUM_FLOAT = 149;
 	int NUM_DOUBLE = 150;
+	int LITERAL_load = 151;
 }

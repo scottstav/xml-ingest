@@ -1,3 +1,4 @@
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,48 +17,32 @@
  */
 
 package org.apache.geode.cache.query.internal.parse;
-
 import antlr.*;
-//import antlr.collections.*;
-//import org.apache.geode.cache.query.*;
 import org.apache.geode.cache.query.internal.QCompiler;
-import org.apache.logging.log4j.Logger;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.logging.log4j.Logger;
 
 /**
- *
+ *  Created by dylan on 6/9/17.
  */
-public class GemFireAST extends CommonAST {
-  private static final long serialVersionUID = 779964802274305208L;
-  final Logger logger = LogService.getLogger();
-  public GemFireAST() {
-    super();
+public class ASTLoad extends GemFireAST {
+
+  public ASTLoad() {
   }
-  
-  public GemFireAST(Token tok) {
-    super(tok);
+
+        /** Creates a new instance of ASTSortCriterion */
+  public ASTLoad(Token t) {
+      super(t);
   }
-  
-  @Override
-  public String getText() {
-    String txt = super.getText();
-    if (txt == null) {
-      return "[no text]";
-    }
-    return txt;
+
+  public void compile(QCompiler compiler){
+      super.compile(compiler);
+
+      final Logger logger = LogService.getLogger();
+      logger.info("Compiling Load Command ");
+      //throw new UnsupportedOperationException("Using new class successfully, compilation not implemented yet");
+      //let's make this compiler load !
+      compiler.load();
   }
-  
-  public void compile(QCompiler compiler)  {
-    childrenCompile(compiler);
-  }
-  
-  public void childrenCompile(QCompiler compiler) {
-    GemFireAST child = (GemFireAST)getFirstChild();
-    while (child != null) {
-      logger.info("----GEMFIREAST.JAVA child: " + child.getText());
-      child.compile(compiler);
-      child = (GemFireAST)child.getNextSibling();
-    }
-  }
-  
+
 }

@@ -129,7 +129,9 @@ public class PerfQuery {
     System.out.println("WARMING UP...");
     queryString = "select distinct * from /portfolios where type = 'type1'";
     query = this.qs.newQuery(queryString);
+    System.out.println("WE REACH THIS");
     runQuery(getType1HandQuery(queryString), HAND_CODED);
+    System.out.println("HMMMMMM");
     runQuery(query, BRUTE_FORCE);
     runQuery(query, INDEXED);
     

@@ -499,8 +499,28 @@ public class QCompiler implements OQLLexerTokenTypes {
     push(cv);
   }
   
+
   
-  
+  public void load() {
+    final Logger logger = LogService.getLogger();
+
+    //logger.error("----EXECUTE START ||| Step 1- ----");
+    logger.info("----Execute start");
+
+    Object thing = pop();
+    CompiledLiteral cName = (CompiledLiteral)pop();
+    CompiledLiteral vLim = (CompiledLiteral)pop();
+    CompiledLiteral  delim = (CompiledLiteral)pop();
+    CompiledLiteral filePath  = (CompiledLiteral)pop();
+    CompiledRegion region  = (CompiledRegion)pop();
+    CompiledLoad element = new CompiledLoad(cName, filePath, delim, vLim, region);  //  createLoad(filePath, region);
+
+    logger.info("Number: " + thing + "vLim: "  + vLim.getSavedPdxString().toString() + " delim: " + delim.getSavedPdxString().toString() + " filePath: " + filePath.getSavedPdxString().toString() + " real : " + region.getRegionPath());
+
+    push(element);
+
+  }
+
   public void compare (int opKind) {
     CompiledValue v2 = (CompiledValue)pop ();
     CompiledValue v1 = (CompiledValue)pop ();

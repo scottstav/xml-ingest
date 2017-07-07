@@ -140,7 +140,9 @@ public class PartitionedRegionQueryEvaluator extends StreamingPartitionOperation
                                 int sequenceNum, boolean lastInSequence) {
     //check if sender is pre gfe_90. In that case the results coming from them are not sorted
     // we will have to sort it
+    final Logger logger = LogService.getLogger();
     boolean sortNeeded = false;
+    logger.info("INSIDE OF PROCESSDATA");
     List<CompiledSortCriterion> orderByAttribs = null;
     if(sender.getVersionObject().compareTo(Version.GFE_90) < 0 ) {
       CompiledSelect cs = this.query.getSimpleSelect();
@@ -521,10 +523,11 @@ public class PartitionedRegionQueryEvaluator extends StreamingPartitionOperation
 
   private SelectResults addResultsToResultSet() throws QueryException {
     int numElementsInResult = 0;
-    
+    final Logger logger = LogService.getLogger();
     boolean isDistinct = false;
     boolean isCount = false;
 
+    logger.info("INSIDE ADDRESULTSTORESULTSET");
     int limit = -1; // -1 indicates no limit wsa specified in the query
     // passed as null. Not sure if it can happen in real life situation.
     // So instead of modifying test , using a null check in constructor
