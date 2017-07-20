@@ -16,9 +16,15 @@
  */
 package org.apache.geode.pdx;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.DataInput;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -33,7 +39,7 @@ import org.apache.geode.pdx.internal.json.PdxToJSON;
 
 /**
  * <p>
- * JSONFormatter has a static method {@link JSONFormatter#fromJSON(String)} to convert a JSON
+ * JSONFormatter has a static method {@link JSONFormatter#fromJSON(Object)} to convert a JSON
  * document into a {@link PdxInstance} and a static method {@link JSONFormatter#toJSON(PdxInstance)}
  * to convert a {@link PdxInstance} into a JSON Document.
  * </p>
@@ -77,40 +83,44 @@ public class JSONFormatter {
    * @return the PdxInstance.
    * @throws JSONFormatterException if unable to parse the JSON document
    */
-  public static PdxInstance fromJSON(String jsonString) {
+  public static PdxInstance fromJSON(Object jsonObject) {
     JsonParser jp = null;
     try {
-      jp = new JsonFactory().createParser(jsonString);
-      enableJSONParserFeature(jp);
-      return new JSONFormatter().getPdxInstance(jp, states.NONE, null).getPdxInstance();
-    } catch (JsonParseException jpe) {
-      throw new JSONFormatterException("Could not parse JSON document " , jpe);
-    } catch (IOException e) {
-      throw new JSONFormatterException("Could not parse JSON document: " + jp.getCurrentLocation(), e);
-    } catch(Exception e) {
-      throw new JSONFormatterException("Could not parse JSON document: " + jp.getCurrentLocation(), e);
-    }  
-  }
-  
-  /**
-   * Converts a JSON document into a PdxInstance
-   * 
-   * @return the PdxInstance.
-   * @throws JSONFormatterException if unable to parse the JSON document
-   */
-  public static PdxInstance fromJSON(byte[] jsonByteArray) {
-    JsonParser jp = null;
-    try {
-      jp = new JsonFactory().createParser(jsonByteArray);
+      if (jsonObject instanceof String) {
+        String jsonString = (String) jsonObject;
+        jp = new JsonFactory().createParser(jsonString);
+      }  else if (jsonObject instanceof File) {
+        File jsonFile = (File) jsonObject;
+        jp = new JsonFactory().createParser(jsonFile);
+      } else if (jsonObject instanceof URL) {
+        URL jsonURL = (URL) jsonObject;
+        jp = new JsonFactory().createParser(jsonURL);
+      } else if (jsonObject instanceof InputStream) {
+        InputStream jsonInputStream = (InputStream) jsonObject;
+        jp = new JsonFactory().createParser(jsonInputStream);
+      } else if (jsonObject instanceof Reader) {
+        Reader jsonReader = (Reader) jsonObject;
+        jp = new JsonFactory().createParser(jsonReader);
+      } else if (jsonObject instanceof DataInput) {
+        DataInput jsonDataInput = (DataInput) jsonObject;
+        jp = new JsonFactory().createParser(jsonDataInput);
+      } else if (jsonObject instanceof byte[]) {
+        byte[] jsonByteArray = (byte[]) jsonObject;
+        jp = new JsonFactory().createParser(jsonByteArray);
+      } else if (jsonObject instanceof char[]) {
+        char[] jsonCharArray = (char[]) jsonObject;
+        jp = new JsonFactory().createParser(jsonCharArray);
+      } else throw new JSONFormatterException("Input JSON object is of class " + jsonObject.getClass().getSimpleName() +
+              " that is not supported by parser as an input");
       enableJSONParserFeature(jp);
       return new JSONFormatter().getPdxInstance(jp, states.NONE, null).getPdxInstance();
     }  catch (JsonParseException jpe) {
-      throw new JSONFormatterException("Could not parse JSON document " , jpe);
+      throw new JSONFormatterException("Could not parse JSON document due to JsonParseException " , jpe);
     } catch (IOException e) {
-      throw new JSONFormatterException("Could not parse JSON document: " + jp.getCurrentLocation(), e);
+      throw new JSONFormatterException("Could not parse JSON document due to IOException " + jp.getCurrentLocation(), e);
     } catch(Exception e) {
-      throw new JSONFormatterException("Could not parse JSON document: " + jp.getCurrentLocation(), e);
-    } 
+      throw new JSONFormatterException("Could not parse JSON document due to Exception " + jp.getCurrentLocation(), e);
+    }
   }
   
   private static void enableJSONParserFeature(JsonParser jp) {
