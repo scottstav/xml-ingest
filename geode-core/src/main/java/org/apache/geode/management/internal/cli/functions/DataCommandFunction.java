@@ -87,7 +87,7 @@ import org.apache.geode.pdx.PdxInstance;
  * @since GemFire 7.0
  */
 public class DataCommandFunction extends FunctionAdapter implements  InternalEntity {
-  private static final Logger logger = LogService.getLogger();
+  private static final Logger logger = LogService.getLogger();//-------------------
   
   private static final long serialVersionUID = 1L;
   private boolean optimizeForWrite = false;
@@ -133,6 +133,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
 
   @Override
   public void execute(FunctionContext functionContext) {
+    logger.info("----EXECUTE START ||| Step 1-----");
     try {
       Cache cache = CacheFactory.getAnyInstance();
       DataCommandRequest request =(DataCommandRequest) functionContext.getArguments();
@@ -149,10 +150,13 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
       else if(request.isRemove())
         result = remove(request);
       else if(request.isSelect())
+        logger.info("----EXECUTE START ||| Step 2-----");
         result = select(request);
+        logger.info("----EXECUTE START ||| Step 3-----");
       if (logger.isDebugEnabled()) {
         logger.debug("Result is {}", result);
       }
+      logger.info("----EXECUTE ||| Step 4-----");
       functionContext.getResultSender().lastResult(result);
     } catch (CacheClosedException e) {
       e.printStackTrace();
@@ -193,6 +197,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
 
 
   public DataCommandResult put(DataCommandRequest request) {
+    logger.info("----PUT OCCURRED-----");
     String key = request.getKey();
     String value = request.getValue();
     boolean putIfAbsent = request.isPutIfAbsent();
@@ -227,12 +232,15 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
 
     Cache cache = CacheFactory.getAnyInstance();
     AtomicInteger nestedObjectCount = new AtomicInteger(0);
+    final Logger logger = LogService.getLogger();
+    logger.info("----SELECT  QUERY *** START-----" + queryString);
     if (queryString != null && !queryString.isEmpty()) {
       QueryService qs = cache.getQueryService();
-
+      logger.info("----SELECT QUERY  ||| Step 1-----");
       // TODO : Find out if is this optimised use. Can you have something equivalent of parsed queries with names
       // where name can be retrieved to avoid parsing every-time
       Query query = qs.newQuery(queryString);
+      logger.info("----SELECT QUERY  ||| Step 2-----");
       DefaultQuery tracedQuery = (DefaultQuery)query;
       WrappedIndexTrackingQueryObserver queryObserver=null;
       String queryVerboseMsg = null;
@@ -290,6 +298,9 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
             }
           }
         } else {
+          //****************************
+          //ADD else if of INSTANCEOF COMPILEDLOAD
+          logger.info("-In Else of Data Command Fnct for Select---");
           if(logger.isDebugEnabled())
             logger.debug("BeanResults : Bean Results class is {}", results.getClass());
           String str = toJson(results);
@@ -583,7 +594,10 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
     }
     
   }
-  
+
+  //public DataCommandResult load(String regionName )*******************************************************
+
+
   @SuppressWarnings({ "rawtypes" })
   public DataCommandResult put(String key, String value, boolean putIfAbsent, String keyClass, String valueClass,
       String regionName) { 
@@ -912,7 +926,8 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
     public DataCommandResult _select(String query) {
       Cache cache = CacheFactory.getAnyInstance();
       DataCommandResult dataResult = null;
-
+      final Logger logger = LogService.getLogger();
+      logger.error("Inside DataCommandResult" + query);
       if (query == null || query.isEmpty()) {
         dataResult = DataCommandResult.createSelectInfoResult(null, null, -1, null,
             CliStrings.QUERY__MSG__QUERY_EMPTY, false);
@@ -923,7 +938,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
       Object array[] = DataCommands.replaceGfshEnvVar(query, CommandExecutionContext.getShellEnv());
       query = (String) array[1];
       query = addLimit(query);
-      
+      logger.error("*********** Query as: " + query);
       @SuppressWarnings("deprecation")
       QCompiler compiler = new QCompiler();
       Set<String> regionsInQuery = null;
@@ -938,6 +953,8 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
         }
 
         regionsInQuery = Collections.unmodifiableSet(regions);
+        //This is where I had issues -- Dylan -6/26/2017
+        //Load statement is being handled here
         if (regionsInQuery.size() > 0) {
           Set<DistributedMember> members = DataCommands.getQueryRegionsAssociatedMembers(regionsInQuery, cache, false);
           if (members != null && members.size() > 0) {
@@ -958,7 +975,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
           }
         } else {
           return (dataResult = DataCommandResult.createSelectInfoResult(null, null, -1, null,
-              CliStrings.format(CliStrings.QUERY__MSG__INVALID_QUERY, "Region mentioned in query probably missing /"),
+              CliStrings.format(CliStrings.QUERY__MSG__INVALID_QUERY, "Region mentioned in query probably missing / and yeah" + regionsInQuery.size()),
               false));
         }
       } catch (QueryInvalidException qe) {        

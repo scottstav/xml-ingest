@@ -76,17 +76,32 @@ public class QCompiler implements OQLLexerTokenTypes {
     
   /* compile the string into a Query (returns the root CompiledValue)
    */
-  public CompiledValue compileQuery(String oqlSource) {  
+  public CompiledValue compileQuery(String oqlSource) {
+    final Logger logger = LogService.getLogger();
+    logger.info("----cmpQuery *** START-----");
     try {
+
+
+
       OQLLexer lexer = new OQLLexer (new StringReader (oqlSource));
       OQLParser parser = new OQLParser (lexer);
+      logger.info("----cmpQuery STEP 1----");
       // by default use Unsupported AST class, overridden for supported
       // operators in the grammer proper
       parser.setASTNodeClass ("org.apache.geode.cache.query.internal.parse.ASTUnsupported");
+      logger.info("----cmpQuery STEP 2----");
       parser.queryProgram ();
+      logger.info("----cmpQuery STEP 3----");
       GemFireAST n = (GemFireAST)parser.getAST ();
+
+      logger.info("----cmpQuery STEP 4----");
+
       n.compile(this);
-    } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception. 
+      logger.info("----cmpQuery END-----");
+
+    } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception.
+      logger.info("----cmpQuery ERROR ZONE----");
+
       throw new QueryInvalidException(LocalizedStrings.QCompiler_SYNTAX_ERROR_IN_QUERY_0.toLocalizedString(ex.getMessage()), ex);
     }
     Assert.assertTrue (stackSize () == 1, "stack size = " + stackSize ());
@@ -95,6 +110,7 @@ public class QCompiler implements OQLLexerTokenTypes {
   
   /** Returns List<CompiledIteratorDef> */
   public List compileFromClause(String fromClause) {
+    final Logger logger = LogService.getLogger();
     try {
       OQLLexer lexer = new OQLLexer (new StringReader (fromClause));
       OQLParser parser = new OQLParser (lexer);
@@ -104,7 +120,8 @@ public class QCompiler implements OQLLexerTokenTypes {
       parser.loneFromClause ();
       GemFireAST n = (GemFireAST)parser.getAST ();
       n.compile(this);
-    } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception. 
+    } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception.
+      logger.info("CMPFROM ERROR OCCURED");
       throw new QueryInvalidException(LocalizedStrings.QCompiler_SYNTAX_ERROR_IN_QUERY_0.toLocalizedString(ex.getMessage()), ex);
     }
     Assert.assertTrue (stackSize () == 1, "stack size = " + stackSize ());
@@ -114,7 +131,10 @@ public class QCompiler implements OQLLexerTokenTypes {
   
   /** Returns List<CompiledIteratorDef> or null if projectionAttrs is '*' */
   public List compileProjectionAttributes(String projectionAttributes) {
+    final Logger logger = LogService.getLogger();
     try {
+      logger.info("----FROM QUERY  START-----");
+
       OQLLexer lexer = new OQLLexer (new StringReader (projectionAttributes));
       OQLParser parser = new OQLParser (lexer);
       // by default use Unsupported AST class, overridden for supported
@@ -127,7 +147,9 @@ public class QCompiler implements OQLLexerTokenTypes {
         return null;
       }
       n.compile(this);
-    } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception. 
+      logger.info("----FROM QUERY END-----");
+    } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception.
+      logger.info("PROJECTION ATTR ERROR ");
       throw new QueryInvalidException(LocalizedStrings.QCompiler_SYNTAX_ERROR_IN_QUERY_0.toLocalizedString(ex.getMessage()), ex);
     }
     Assert.assertTrue(stackSize () == 1,
@@ -146,7 +168,7 @@ public class QCompiler implements OQLLexerTokenTypes {
   	  CompiledSortCriterion csc = (CompiledSortCriterion)this.stack.pop();
   	  list.add(0, csc);
   	}
-  	push(list) ;
+  	push(list);
   }
   
   public void compileGroupByClause(int numOfChildren) {
@@ -171,15 +193,20 @@ public class QCompiler implements OQLLexerTokenTypes {
   	push(csc);
     
   }
-  
-  public void compileLimit(String limitNum) {  
+
+
+  public void compileLimit(String limitNum)
+  {
+    logger.info("----COMPILE LIMIT STARTS--- -" + limitNum);
     push(Integer.valueOf(limitNum));
+    logger.info("----COMPILE LIMIT ENDS-----");
   }
   
   /** Processes import statements only. This compiler instance remembers the imports
    *  and can be used to compile other strings with this context info
    */
   public void compileImports(String imports) {
+    final Logger logger = LogService.getLogger();
     try {
       OQLLexer lexer = new OQLLexer (new StringReader (imports));
       OQLParser parser = new OQLParser (lexer);
@@ -189,7 +216,8 @@ public class QCompiler implements OQLLexerTokenTypes {
       parser.loneImports();
       GemFireAST n = (GemFireAST)parser.getAST ();
       n.compile(this);
-    } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception. 
+    } catch (Exception ex){ // This is to make sure that we are wrapping any antlr exception with GemFire Exception.
+      logger.info("CMP IMPORTS ERROR!");
       throw new QueryInvalidException(LocalizedStrings.QCompiler_SYNTAX_ERROR_IN_QUERY_0.toLocalizedString(ex.getMessage()), ex);
     }
     Assert.assertTrue(stackSize() == 0,
@@ -198,7 +226,10 @@ public class QCompiler implements OQLLexerTokenTypes {
   }
   
   public void select(Map<Integer, Object> queryComponents) {
-    
+
+    logger.info("----SELECT IS NOW HAPPENING-----");
+
+
     CompiledValue limit = null;
     Object limitObject = queryComponents.remove(OQLLexerTokenTypes.LIMIT);
     if (limitObject instanceof Integer) {
@@ -419,6 +450,7 @@ public class QCompiler implements OQLLexerTokenTypes {
   
   public void indexOp()
   {
+    final Logger logger = LogService.getLogger();
     // find the List of index expressions and the receiver on the stack
     Object indexParams = pop();
     final CompiledValue rcvr = (CompiledValue)TypeUtils.checkCast(pop(),
@@ -453,7 +485,9 @@ public class QCompiler implements OQLLexerTokenTypes {
       }    
     }else {
       if(!this.isForIndexCompilation) {
+        logger.info("INDEX ERROR");
         throw new QueryInvalidException(
+
             LocalizedStrings.QCompiler_SYNTAX_ERROR_IN_QUERY_0.toLocalizedString("* use incorrect")); 
       }
       push(new CompiledIndexOperation(rcvr, indexExpr));
@@ -499,8 +533,25 @@ public class QCompiler implements OQLLexerTokenTypes {
     push(cv);
   }
   
-  
-  
+  public void load() {
+    final Logger logger = LogService.getLogger();
+
+    //logger.error("----EXECUTE START ||| Step 1-----");
+    logger.info("----Execute start");
+
+    Object thing = pop();
+    CompiledLiteral vLim = (CompiledLiteral)pop();
+    CompiledLiteral  delim = (CompiledLiteral)pop();
+    CompiledLiteral filePath  = (CompiledLiteral)pop();
+    CompiledRegion region  = (CompiledRegion)pop();
+    CompiledLoad element = new CompiledLoad(filePath, delim, vLim, region);  //  createLoad(filePath, region);
+
+    logger.info("Number: " + thing + "vLim: "  + vLim.getSavedPdxString().toString() + " delim: " + delim.getSavedPdxString().toString() + " filePath: " + filePath.getSavedPdxString().toString() + " real : " + region.getRegionPath());
+
+    push(element);
+
+  }
+
   public void compare (int opKind) {
     CompiledValue v2 = (CompiledValue)pop ();
     CompiledValue v1 = (CompiledValue)pop ();

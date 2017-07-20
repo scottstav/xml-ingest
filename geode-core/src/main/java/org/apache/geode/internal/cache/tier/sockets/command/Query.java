@@ -32,7 +32,9 @@ import org.apache.geode.internal.cache.tier.Command;
 import org.apache.geode.internal.cache.tier.sockets.BaseCommandQuery;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.security.AuthorizeRequest;
+import org.apache.logging.log4j.Logger;
 
 public class Query extends BaseCommandQuery {
 
@@ -48,6 +50,8 @@ public class Query extends BaseCommandQuery {
   @Override
   public void cmdExecute(Message msg, ServerConnection servConn, long start)
       throws IOException, InterruptedException {
+    final Logger logger = LogService.getLogger();
+    logger.info("----QUERY.JAVA QUERY ||| START-----");
 
     // Based on MessageType.DESTROY
     // Added by gregp 10/18/05

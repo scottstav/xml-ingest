@@ -49,6 +49,7 @@ public interface CompiledValue {
   public final static int LIKE = -15;
   public final static int FIELD = -16;
   public final static int GROUP_BY_SELECT = -17;
+  public final static int LOAD = -18;
   public static  final int INDEX_RESULT_THRESHOLD_DEFAULT = 100;
   public static final String INDX_THRESHOLD_PROP_STR = DistributionConfig.GEMFIRE_PREFIX + "Query.INDEX_THRESHOLD_SIZE";
   public static final String INDEX_INFO = "index_info";
@@ -126,7 +127,7 @@ public interface CompiledValue {
   /**
    * Populates the Set passed with  the name of the Region which, if any ,  will be the bottommost
    * object (CompiledRegion). The default implemenation is provided  in the AbstractCompiledValue
-   * & overridden in the CompiledSelect as it can contain multiple iterators 
+   * & overridden in the CompiledSelect as it can contain multiple iterators. Also overridden in CompiledLoad
    */
   public void getRegionsInQuery(Set regionNames, Object[] parameters);
   

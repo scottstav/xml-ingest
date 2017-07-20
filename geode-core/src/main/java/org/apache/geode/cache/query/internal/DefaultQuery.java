@@ -33,6 +33,8 @@ import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.internal.NanoTimer;
 import org.apache.geode.internal.cache.*;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.internal.logging.LogService;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -195,6 +197,9 @@ public class DefaultQuery implements Query {
     reservedKeywords.add("not");
     reservedKeywords.add("by");
     reservedKeywords.add("as");
+    reservedKeywords.add("load");
+    // reservedKeywords.add("into"); *************
+
   }
 
   /**
@@ -247,7 +252,12 @@ public class DefaultQuery implements Query {
   public DefaultQuery(String queryString, Cache cache, boolean isForRemote) {
     this.queryString = queryString;
     QCompiler compiler = new QCompiler();
+    final Logger logger = LogService.getLogger();
+    logger.info("----DFLT QUERY ||| START-----");
+
     this.compiledQuery = compiler.compileQuery(queryString);
+    logger.info("----DFLT QUERY ||| STEP1-----");
+
     CompiledSelect cs = this.getSimpleSelect();
     if(cs != null && !isForRemote && (cs.isGroupBy() || cs.isOrderBy())) {
       QueryExecutionContext ctx = new QueryExecutionContext(null, cache);

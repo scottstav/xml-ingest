@@ -3099,6 +3099,7 @@ public class PartitionedRegionDataStore implements HasCachePerfStats
       if (logger.isDebugEnabled()) {
         logger.debug("Executing Function: {} on Remote Node with context: ", function.getId(), prContext);
       }
+      logger.info("----PERHAPS THIS IS WHERE IT BEGINS-----");
       function.execute(prContext);
       stats.endFunctionExecution(start, function.hasResult());
     }

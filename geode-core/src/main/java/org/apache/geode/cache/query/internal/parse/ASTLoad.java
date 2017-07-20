@@ -1,3 +1,4 @@
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,27 +17,33 @@
  */
 
 package org.apache.geode.cache.query.internal.parse;
-
-import antlr.Token;
+import antlr.*;
 import org.apache.geode.cache.query.internal.QCompiler;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.logging.log4j.Logger;
 
-public class ASTInto extends GemFireAST {
+/**
+ * Created by dylan on 6/9/17.
+ */
+public class ASTLoad extends GemFireAST {
 
-    private static final long serialVersionUID = -4890146535296193473L;
+  public ASTLoad() {
+  }
 
-    public ASTInto(Token t) { super(t); }
+        /** Creates a new instance of ASTSortCriterion */
+  public ASTLoad(Token t) {
+      super(t);
+  }
 
-    @Override
-    public void compile(QCompiler qCompiler) {
-        final Logger logger = LogService.getLogger();
-        logger.info("First child: " + getFirstChild().getText());
-        logger.info("# children: " + getNumberOfChildren());
+  public void compile(QCompiler compiler){
+      super.compile(compiler);
 
-        this.childrenCompile(qCompiler);
-        // ASTIteratorDef ast = this.??
-        throw new UnsupportedOperationException("Using new class successfully, compilation not implemented yet");
-    }
+      final Logger logger = LogService.getLogger();
+      logger.info("First child: ");
+      logger.info("# children: ");
+      //throw new UnsupportedOperationException("Using new class successfully, compilation not implemented yet");
+      //let's make this compiler load!
+      compiler.load();
+  }
 
 }

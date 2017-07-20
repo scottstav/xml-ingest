@@ -14,31 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.geode.cache.query.internal.parse;
 
-import antlr.*;
-import org.apache.geode.cache.query.internal.QCompiler;
-import org.apache.geode.internal.logging.LogService;
-import org.apache.logging.log4j.Logger;
+
+package org.apache.geode.cache.query.internal;
+
+import java.util.Map;
+import org.apache.geode.vector.Vector;
+//import entagged.audioformats.*;
 
 /**
- *
+ * Created by dylan on 6/27/17.
  */
-public class ASTLimit extends GemFireAST {
+public class Mp3Obj {
+    String album = "";
+    String artist = "";
+    String comment = "";
+    String genre = "";
+    String title = "";
+    String track = "";
+    String year = "";
+    Vector data = null;
 
-  public ASTLimit() {
-  }
+    public Mp3Obj(Vector v, String [] metaData){
+        //data = new Vector(v.size);
+        data = v;
+        album = metaData[0];
+        artist = metaData[1];
+        comment = metaData[2];
+        genre = metaData[3];
+        title = metaData[4];
+        track = metaData[5];
+        year = metaData[6];
 
-  /** Creates a new instance of ASTSortCriterion */
-  public ASTLimit(Token t) {
-    super(t);
-  }
-
-  public void compile(QCompiler compiler) {
-    final Logger logger = LogService.getLogger();
-    logger.info("THIS HAS  OCCURRED");
-    super.compile(compiler);
-    compiler.compileLimit(this.getText());
-  }
-
+    }
 }

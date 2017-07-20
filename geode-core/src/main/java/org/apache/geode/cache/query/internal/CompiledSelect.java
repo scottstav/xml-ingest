@@ -48,6 +48,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.pdx.PdxInstance;
 import org.apache.geode.pdx.internal.PdxString;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class Description
@@ -78,8 +79,8 @@ public class CompiledSelect extends AbstractCompiledValue {
   private boolean hasUnmappedOrderByCols = false; 
 
   //used as a key in a context to identify the scope of this CompiledSelect 
-  private Object scopeID = new Object(); 
-  
+  private Object scopeID = new Object();
+  final Logger logger = LogService.getLogger();
   /*
    * Set in context for the where clause to signify that it has been evaluated at least one time
    * for any other CompiledValue that may use precalculated indexes
@@ -401,6 +402,7 @@ public class CompiledSelect extends AbstractCompiledValue {
   public SelectResults evaluate(ExecutionContext context) throws FunctionDomainException, TypeMismatchException,
       NameResolutionException, QueryInvocationTargetException {
 
+    logger.info("----LOGGER VALUE BEFORE EVALUATELIMIT VALUE COMPILED SELECT: " + this.limit);
     context.newScope((Integer)context.cacheGet(scopeID));
     context.pushExecCache((Integer)context.cacheGet(scopeID));
     context.setDistinct(this.distinct);
@@ -430,7 +432,11 @@ public class CompiledSelect extends AbstractCompiledValue {
         //Though in our case it may not be an issue as the compute depedency phase must have
         //already set the index id
       }
+
+
+      logger.info("----SP----: " + this.limit);
       Integer limitValue = evaluateLimitValue(context, this.limit);
+      logger.info("----LOGGER VALUE WITHIN COMPILED SELECT: " + limitValue);
       SelectResults result = null;
       boolean evalAsFilters = false;
       if (this.whereClause == null) {

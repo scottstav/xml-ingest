@@ -146,9 +146,12 @@ public class LocalDataSet implements Region, QueryExecutor {
   public SelectResults query(String queryPredicate)
       throws FunctionDomainException, TypeMismatchException,
       NameResolutionException, QueryInvocationTargetException {
+    final Logger logger = LogService.getLogger();
+    logger.info("----LOCAL DATA SET QUERY  ||| START-----");
     QueryService qs = getCache().getLocalQueryService();
     DefaultQuery query = (DefaultQuery)qs.newQuery("select * from "
         + getFullPath() + " this where " + queryPredicate);
+    logger.info("----LOCAL DATA SET QUERY  ||| END-----");
     Object[] params = null;
     return (SelectResults)this.executeQuery(query, params, getBucketSet());
   }

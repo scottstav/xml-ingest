@@ -465,8 +465,29 @@ query :
         (
             selectExpr
         |   expr
+        |   statement
         )
     ;
+
+statement :
+        (
+            loadStatement
+        )
+
+    ;
+
+loadStatement:
+        (
+            "load"^<AST=org.apache.geode.cache.query.internal.parse.ASTLoad>
+            RegionPath <AST=org.apache.geode.cache.query.internal.parse.ASTRegionPath>
+            stringLiteral  //The location of the file to read
+            stringLiteral  //The delimiter that was used to substitute any actual commas in the original data
+            stringLiteral  //The string separator between metadata and vector of data.
+            ( limitClause )?
+
+        )
+    ;
+
 
 selectExpr :
 		( hintCommand )?
