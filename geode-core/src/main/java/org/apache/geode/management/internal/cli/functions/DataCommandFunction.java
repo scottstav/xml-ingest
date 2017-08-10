@@ -133,7 +133,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
 
   @Override
   public void execute(FunctionContext functionContext) {
-    logger.info("----EXECUTE START ||| Step 1-----");
+    logger.info("INFO: Inside DataCommandFunction::execute");
     try {
       Cache cache = CacheFactory.getAnyInstance();
       DataCommandRequest request =(DataCommandRequest) functionContext.getArguments();
@@ -149,14 +149,16 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
         result = put(request);
       else if(request.isRemove())
         result = remove(request);
-      else if(request.isSelect())
-        logger.info("----EXECUTE START ||| Step 2-----");
+      else if(request.isSelect()) {
+        logger.info("INFO: Inside DataCommandFunction::execute and request.isSelect is true");
+        logger.info("INFO: running DataCommandFunction::select");
         result = select(request);
-        logger.info("----EXECUTE START ||| Step 3-----");
+        logger.info("INFO: running DataCommandFunction::select has completed");
+      }
       if (logger.isDebugEnabled()) {
         logger.debug("Result is {}", result);
       }
-      logger.info("----EXECUTE ||| Step 4-----");
+      logger.info("INFO: Inside DataCommandFunction::execute and got some result");
       functionContext.getResultSender().lastResult(result);
     } catch (CacheClosedException e) {
       e.printStackTrace();

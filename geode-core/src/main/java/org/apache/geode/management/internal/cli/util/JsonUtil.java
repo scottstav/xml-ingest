@@ -19,23 +19,17 @@ package org.apache.geode.management.internal.cli.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.apache.geode.internal.ClassPathLoader;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.management.internal.cli.json.GfJsonArray;
 import org.apache.geode.management.internal.cli.json.GfJsonException;
 import org.apache.geode.management.internal.cli.json.GfJsonObject;
 import org.apache.geode.management.internal.cli.result.CliJsonSerializable;
 import org.apache.geode.management.internal.cli.result.CliJsonSerializableFactory;
 import org.apache.geode.management.internal.cli.result.ResultDataException;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -151,9 +145,12 @@ public class JsonUtil {
    *           if the specified JSON string can not be converted in to an Object
    */
   public static <T> T jsonToObject(String jsonString, Class<T> klass) {
+    Logger logger = LogService.getLogger();
+    logger.info("INFO: inside JsonUtil::jsonToObject");
     T objectFromJson = null;
     try {      
       GfJsonObject jsonObject = new GfJsonObject(jsonString);
+      logger.info("INFO: created object from Json String: \n" + jsonObject.toIndentedString(2));
       objectFromJson = klass.newInstance();
       Method[] declaredMethods = klass.getDeclaredMethods();
       Map<String, Method> methodsMap = new HashMap<String, Method>();
@@ -166,29 +163,49 @@ public class JsonUtil {
       
       while (keys.hasNext()) {
         String key = keys.next();
-        Method method = methodsMap.get("set"+capitalize(key));
+        logger.info("INFO: key is " + key);
+        Method method = methodsMap.get("set" + capitalize(key));
         if (method != null) {
+          logger.info("INFO: found method " + method.getName());
           Class<?>[] parameterTypes = method.getParameterTypes();
+          logger.info("INFO: parameter types is " + Arrays.toString(parameterTypes));
           if (parameterTypes.length == 1) {
             Class<?> parameterType = parameterTypes[0];
-            
+
+            logger.info("INFO: first parameter type is " + parameterType.getSimpleName());
             Object value = jsonObject.get(key);
+            logger.info("INFO: value is " + value);
+            logger.info("INFO: value class is " + value.getClass().getSimpleName());
             if (isPrimitiveOrWrapper(parameterType)) {
+              logger.info("INFO: parameterType is PrimitiveOrWrapper");
               value = getPrimitiveOrWrapperValue(parameterType, value);
             }
             // Bug #51175
             else if (isArray(parameterType)){
+              logger.info("INFO: parameterType is Array");
               value = toArray(value,parameterType);
             }
             else if (isList(parameterType)) {
+              logger.info("INFO: parameterType is List");
               value = toList(value, parameterType);
             } else if (isMap(parameterType)) {
+              logger.info("INFO: parameterType is Map");
               value = toMap(value, parameterType);
             } else if (isSet(parameterType)) {
+              logger.info("INFO: parameterType is Set");
               value = toSet(value, parameterType);
             } else {
+              logger.info("INFO: parameterType is Object");
               value = jsonToObject(value.toString(), parameterType);
             }
+
+            String valueString = value == null ? "NULL" : value.toString();
+            if (value != null && isArray(value.getClass())) {
+              valueString = Arrays.toString((Object[]) value);
+            }
+
+            logger.info("INFO: value after conversion is " + valueString);
+            logger.info("INFO: value class after conversion is " + ( value == null ? "undefined" : value.getClass().getSimpleName()) );
             method.invoke(objectFromJson, new Object[] { value });
             noOfFields--;
           }

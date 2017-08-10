@@ -27,7 +27,8 @@ public class Vector implements Serializable {
 
     public Vector(int size){
         data = new double[size];
-        this.size=size;
+        Arrays.fill(data, 0.0);
+        this.size = size;
 
     }
 

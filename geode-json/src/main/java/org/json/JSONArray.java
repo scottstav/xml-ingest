@@ -82,6 +82,10 @@ import java.util.Map;
 public class JSONArray {
 
 
+    public ArrayList getMyArrayList() {
+        return myArrayList;
+    }
+
     /**
      * The arrayList where the JSONArray's properties are kept.
      */
