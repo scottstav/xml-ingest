@@ -1,4 +1,4 @@
-// $ANTLR 2.7.4: oql.g -> OQLLexerTokenTypes.txt$
+// $ANTLR 2.7.7 (2006-11-01): oqL.g -> OQLLexerTokenTypes.txt$
 OQLLexer    // output token vocab name
 TOK_RPAREN=4
 TOK_LPAREN=5

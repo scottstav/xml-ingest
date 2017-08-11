@@ -1,4 +1,4 @@
-// $ANTLR 2.7.4: "oql.g" -> "OQLLexer.java"$
+// $ANTLR 2.7.7 (2006-11-01): "oqL.g" -> "OQLLexer.java"$
 
 package org.apache.geode.cache.query.internal.parse;
 import java.util.*;
@@ -1609,7 +1609,7 @@ tryAgain:
 						synPredMatched61 = false;
 					}
 					rewind(_m61);
-					inputState.guessing--;
+inputState.guessing--;
 				}
 				if ( synPredMatched61 ) {
 					{
