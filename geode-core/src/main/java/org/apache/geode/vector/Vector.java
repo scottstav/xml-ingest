@@ -22,6 +22,14 @@ import java.util.Arrays;
 
 public class Vector implements Serializable {
 
+    public double[] getData() {
+        return data;
+    }
+
+    public void setData(double[] data) {
+        this.data = data;
+    }
+
     double [] data;
     int size;
 
