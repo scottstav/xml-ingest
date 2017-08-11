@@ -153,6 +153,7 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
       }
       else if(request.isRemove()) {
         result = remove(request);
+      }
       else if(request.isSelect()) {
         logger.info("INFO: Inside DataCommandFunction::execute and request.isSelect is true");
         logger.info("INFO: running DataCommandFunction::select");
