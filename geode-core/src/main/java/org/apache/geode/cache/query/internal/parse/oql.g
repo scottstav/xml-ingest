@@ -482,7 +482,9 @@ loadStatement:
             RegionPath <AST=org.apache.geode.cache.query.internal.parse.ASTRegionPath>
             stringLiteral  //The location of the file to read
             stringLiteral  //The delimiter that was used to substitute any actual commas in the original data
-            stringLiteral  //The string separator between metadata and vector of data.
+            stringLiteral  //The string separator between metadata and vector  exof data.
+            stringLiteral //The object type that is being constructed for the put command within java to use.
+                          //(Put command in gfsh isn't useful. Or at least, the online documentation for it is really godawful)
             ( limitClause )?
 
         )

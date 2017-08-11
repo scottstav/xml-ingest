@@ -141,13 +141,17 @@ public class DataCommandFunction extends FunctionAdapter implements  InternalEnt
         logger.debug("Executing function : \n{}\n on member {}", request, System.getProperty("memberName"));
       }
       DataCommandResult result = null;
-      if(request.isGet())
+      if(request.isGet()) {
         result = get(request);
-      else if(request.isLocateEntry())
+      }
+      else if(request.isLocateEntry()) {
         result = locateEntry(request);
-      else if(request.isPut())
-        result = put(request);
-      else if(request.isRemove())
+      }
+      else if(request.isPut()) {
+          logger.info("PUT COMMAND HAS BEGUN");
+          result = put(request);
+      }
+      else if(request.isRemove()) {
         result = remove(request);
       else if(request.isSelect()) {
         logger.info("INFO: Inside DataCommandFunction::execute and request.isSelect is true");

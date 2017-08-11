@@ -1754,6 +1754,7 @@ public class PartitionedRegion extends LocalRegion implements
   NameResolutionException, QueryInvocationTargetException,
   ForceReattemptException
   {
+    logger.info("------------------DO EXECUTE QUERY------------------------");
     if (logger.isDebugEnabled()) {
       logger.debug("Executing query :{}", query);
     }

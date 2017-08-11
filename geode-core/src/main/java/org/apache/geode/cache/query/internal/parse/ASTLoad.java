@@ -23,7 +23,7 @@ import org.apache.geode.internal.logging.LogService;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Created by dylan on 6/9/17.
+ *  Created by dylan on 6/9/17.
  */
 public class ASTLoad extends GemFireAST {
 
@@ -39,10 +39,9 @@ public class ASTLoad extends GemFireAST {
       super.compile(compiler);
 
       final Logger logger = LogService.getLogger();
-      logger.info("First child: ");
-      logger.info("# children: ");
+      logger.info("Compiling Load Command ");
       //throw new UnsupportedOperationException("Using new class successfully, compilation not implemented yet");
-      //let's make this compiler load!
+      //let's make this compiler load !
       compiler.load();
   }
 

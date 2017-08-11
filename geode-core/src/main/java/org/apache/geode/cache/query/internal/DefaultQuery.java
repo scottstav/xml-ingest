@@ -52,6 +52,8 @@ public class DefaultQuery implements Query {
 //  private Pool pool;
   private ServerProxy serverProxy;
 
+  final Logger logger = LogService.getLogger();
+
   protected AtomicLong numExecutions = new AtomicLong(0);
   protected AtomicLong totalExecutionTime = new AtomicLong(0);
   private QueryStatistics stats;
@@ -107,7 +109,9 @@ public class DefaultQuery implements Query {
       return new Boolean(Boolean.FALSE);
     }
   };
-  
+
+  //Used for the isGetSimpleSelect method!!!
+  private boolean isLoad = false;
   // indicates query executed remotely
   private boolean isRemoteQuery = false;
   
@@ -198,8 +202,7 @@ public class DefaultQuery implements Query {
     reservedKeywords.add("by");
     reservedKeywords.add("as");
     reservedKeywords.add("load");
-    // reservedKeywords.add("into"); *************
-
+    // reservedKeywords.add("into"); ************  *
   }
 
   /**
@@ -259,11 +262,16 @@ public class DefaultQuery implements Query {
     logger.info("----DFLT QUERY ||| STEP1-----");
 
     CompiledSelect cs = this.getSimpleSelect();
-    if(cs != null && !isForRemote && (cs.isGroupBy() || cs.isOrderBy())) {
+    //Had isLoad
+    if((cs != null ) && !isForRemote && (cs.isGroupBy() || cs.isOrderBy())) {
+      logger.info("DUHHHH");
       QueryExecutionContext ctx = new QueryExecutionContext(null, cache);
       try {
-        cs.computeDependencies(ctx);       
+        logger.info("WEEEEEEE");
+        cs.computeDependencies(ctx);
+        logger.info("RUH OHHHHH");
       }catch(QueryException qe) {
+        logger.info("AW BOO HOO HOO");
         throw new QueryInvalidException("",qe);
       }
     }
@@ -601,7 +609,7 @@ public class DefaultQuery implements Query {
 
     //QueryExecutor foundPR = null;
     //Region otherRgn = null;
-
+    logger.info("WITHIN CHECK QUERY ON PR");
     List <QueryExecutor>prs = new ArrayList<QueryExecutor>();
     for (Iterator itr = getRegionsInQuery(parameters).iterator(); itr.hasNext(); ) {
       String regionPath = (String)itr.next();
@@ -614,17 +622,23 @@ public class DefaultQuery implements Query {
         prs.add((QueryExecutor)rgn);
       }
     }
-    if (prs.size() == 1) {
+
+    logger.info("------POSSIBILITY 1 containing: " + this.isLoad);
+    if (prs.size() == 1 && !this.isLoad) {
+
+      logger.info("SUB 1 -----------------");
       return prs.get(0);
     } else if (prs.size() > 1) { //colocation checks; valid for more the one PRs
       // First query has to be executed in a Function.
+      logger.info("SUB 2------------------");
       if (!this.isQueryWithFunctionContext()) {
+        logger.info("SUB 3------------------");
         throw new UnsupportedOperationException(
             LocalizedStrings.DefaultQuery_A_QUERY_ON_A_PARTITIONED_REGION_0_MAY_NOT_REFERENCE_ANY_OTHER_REGION_1
             .toLocalizedString(new Object[] { prs.get(0).getName(),
                 prs.get(1).getName() }));
       }
-
+    logger.info("------POSSIBILITY 2");
       // If there are more than one  PRs they have to be co-located.
       QueryExecutor other = null;
       for (QueryExecutor eachPR : prs) {
@@ -650,12 +664,21 @@ public class DefaultQuery implements Query {
         }
         
       } // eachPR
-
+     logger.info("------POSSIBILITY 3");
+      CompiledSelect select =  getSimpleSelect();
       // this is a query on a PR, check to make sure it is only a SELECT
-      CompiledSelect select = getSimpleSelect();
-      if (select == null) {
+      //---------------MAKE SURE IT CHANGES TO OTHER THINGS!
+      logger.info("THE TYPE IS: " + this.isLoad);
+
+      if (select == null && this.isLoad == false) {
+        logger.info("WAAAA THIS OCCURRED");
         throw new UnsupportedOperationException(LocalizedStrings.DefaultQuery_QUERY_MUST_BE_A_SIMPLE_SELECT_WHEN_REFERENCING_A_PARTITIONED_REGION.toLocalizedString());
       }
+      else if(this.isLoad == true){
+        logger.info("RETURNING THE NULL AND SKIPPING THIS SEGMENT");
+        return null;
+      }
+
       // make sure the where clause references no regions
       Set regions = new HashSet();
       CompiledValue whereClause = select.getWhereClause();
@@ -779,14 +802,18 @@ public class DefaultQuery implements Query {
 
   /**
    * Returns the CompiledSelect if this query consists of only a SELECT
-   * expression (possibly with IMPORTS as well).
+   * expression (possibly with IMPORTS as well). Also considers a load expression!
    * Otherwise, returns null
-   */
+   */   //Was CompiledSelect
   public CompiledSelect getSimpleSelect() {
     if (this.compiledQuery instanceof CompiledSelect) {
       return (CompiledSelect)this.compiledQuery;
     }
-    return null;
+    else if (this.compiledQuery instanceof CompiledLoad){
+      logger.info("WE SHALL TRY TO HAVE THIS HAPPEN!!!!");
+      this.isLoad = true;
+    }
+      return null;
   }
 
   public CompiledSelect getSelect() {
@@ -988,6 +1015,7 @@ public class DefaultQuery implements Query {
           LocalizedStrings.DefaultQuery_FUNCTIONCONTEXT_CANNOT_BE_NULL
               .toLocalizedString());
     }
+    logger.info("Within EXECUTE METHOD OF DEFAULT QUERY. isQueryFunction being set to true");
     this.isQueryWithFunctionContext = true;
     
     if (parameters == null) {

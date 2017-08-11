@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.apache.geode.DataSerializer;
 import org.apache.geode.internal.ClassPathLoader;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.management.cli.Result;
 import org.apache.geode.management.internal.cli.GfshParser;
 import org.apache.geode.management.internal.cli.i18n.CliStrings;
@@ -40,6 +41,7 @@ import org.apache.geode.management.internal.cli.result.CompositeResultData.Secti
 import org.apache.geode.management.internal.cli.result.ResultBuilder;
 import org.apache.geode.management.internal.cli.result.TabularResultData;
 import org.apache.geode.management.internal.cli.util.JsonUtil;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 
@@ -632,7 +634,9 @@ public class DataCommandResult implements /*Data*/ Serializable{
     }    
   }
 
-  private void addJSONStringToTable(TabularResultData table, Object object) {    
+  private void addJSONStringToTable(TabularResultData table, Object object) {
+
+    final Logger logger = LogService.getLogger();
     if(object==null || "<NULL>".equals(object)){
       table.accumulate("Value", "<NULL>");
     }
@@ -642,13 +646,17 @@ public class DataCommandResult implements /*Data*/ Serializable{
         GfJsonObject jsonObject = null;
         if (String.class.equals(klass)) {
           // InputString in JSON Form but with round brackets          
-          String json = (String) object;
-          String newString = json.replaceAll("'", "\"");
+          String json = (String) object;           //Needs to work with possesive words
+          String newString = json.replaceAll("(\")'", "$1\\\\\"");
+          newString = newString.replaceAll("'(\")", "\\\\\"$1");
+          //String newString = json;
+          logger.info("The string from the table is: --" + newString + "--");
           if (newString.charAt(0) == '(') {
             int len = newString.length();
             StringBuilder sb = new StringBuilder();
             sb.append("{").append(newString.substring(1, len - 1)).append("}");
             newString = sb.toString();
+
           }         
           jsonObject = new GfJsonObject(newString);          
         } else {

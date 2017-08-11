@@ -26,6 +26,7 @@ import static org.junit.Assert.*;
 import org.apache.geode.cache.*;
 import org.apache.geode.cache.query.data.*;
 import org.apache.geode.cache.query.internal.*;
+import org.apache.geode.cache.query.internal.Portfolio;
 import org.apache.geode.test.junit.categories.IntegrationTest;
 
 import java.util.*;

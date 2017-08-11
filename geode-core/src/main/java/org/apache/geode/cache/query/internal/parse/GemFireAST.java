@@ -21,15 +21,15 @@ import antlr.*;
 //import antlr.collections.*;
 //import org.apache.geode.cache.query.*;
 import org.apache.geode.cache.query.internal.QCompiler;
-import org.apache.geode.internal.logging.LogService;
 import org.apache.logging.log4j.Logger;
+import org.apache.geode.internal.logging.LogService;
 
 /**
  *
  */
 public class GemFireAST extends CommonAST {
   private static final long serialVersionUID = 779964802274305208L;
-  
+  final Logger logger = LogService.getLogger();
   public GemFireAST() {
     super();
   }
@@ -56,7 +56,7 @@ public class GemFireAST extends CommonAST {
 
     GemFireAST child = (GemFireAST)getFirstChild();
     while (child != null) {
-      logger.info("----GEMFIREAST.JAVA child:" + child.getText());
+      logger.info("----GEMFIREAST.JAVA child: " + child.getText());
       child.compile(compiler);
       child = (GemFireAST)child.getNextSibling();
 
