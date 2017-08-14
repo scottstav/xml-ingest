@@ -115,9 +115,9 @@ public class Vector implements DataSerializable {
         return data[index];
     }
 
-//    @Override
-//    public String toString() {
-//        return Arrays.toString(data);
-//    }
+    @Override
+    public String toString() {
+        return Arrays.toString(data);
+    }
 }
 
