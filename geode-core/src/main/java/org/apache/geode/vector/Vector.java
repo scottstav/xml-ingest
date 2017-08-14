@@ -17,10 +17,30 @@
 
 package org.apache.geode.vector;
 
+import org.apache.geode.DataSerializable;
+import org.apache.geode.DataSerializer;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class Vector implements Serializable {
+public class Vector implements DataSerializable {
+
+    private static final long serialVersionUID = -3367046450984931779L;
+
+    @Override
+    public void toData(DataOutput out) throws IOException {
+        out.writeInt(size);
+        DataSerializer.writeDoubleArray(data, out);
+    }
+
+    @Override
+    public void fromData(DataInput in) throws IOException {
+        size = in.readInt();
+        data = DataSerializer.readDoubleArray(in);
+    }
 
     public double[] getData() {
         return data;
