@@ -637,6 +637,8 @@ public class DataCommandResult implements /*Data*/ Serializable{
   private void addJSONStringToTable(TabularResultData table, Object object) {
 
     final Logger logger = LogService.getLogger();
+    logger.info("INFO: DataCommandResult::addJSONStringToTable ");
+    logger.info("INFO: Object = " + object);
     if(object==null || "<NULL>".equals(object)){
       table.accumulate("Value", "<NULL>");
     }
