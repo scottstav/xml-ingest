@@ -143,13 +143,16 @@ public class CompiledLoad extends AbstractCompiledValue{
                 if(!vEnd.isEmpty()) {
                     //-1 to ignore the comma separator
                     temp = ele.substring(0, ele.indexOf(vEnd) - 1).split(",");
+                    logger.info("!! temp: " + temp);
                     for (int i = 0; i < temp.length; i++) {
                         //Any original commas are restored with the regex shown in replaceAll.\\Q and \\E are to escape any
                         //pattern with special regex meaning that the user enters.
                         cells[i] = temp[i].replaceAll("\\Q" + delim + "\\E", ",");
+                        logger.info("!! cell #" + i + ": \"" + cells[i] + "\"");
                     }
 
                     cells[2] = (ele.substring(ele.indexOf(vEnd) + 1));
+                    logger.info("!! cell #2: \"" + cells[2] + "\"");
                     list.add(cells);
                 }
                 else{
@@ -232,7 +235,7 @@ public class CompiledLoad extends AbstractCompiledValue{
             }*/
 
             //-----------------------
-            prev = putRegion.put(String.valueOf(i), new WebTables(elements, i));
+            prev = putRegion.put(String.valueOf(i), new NaiveBayesTrainData(i, elements));
             if(prev != null){
                 logger.info("Previous:" + prev.toString());
             }
