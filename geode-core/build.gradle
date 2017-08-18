@@ -31,8 +31,14 @@ dependencies {
    // Source Dependencies
   compile group: 'com.googlecode.matrix-toolkits-java', name: 'mtj', version: '1.0.4'
   runtime group: 'com.googlecode.matrix-toolkits-java', name: 'mtj', version: '1.0.4'
+//  compile group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.8.1'
+//  runtime group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.8.1'
+
   // External 
   provided files("${System.getProperty('java.home')}/../lib/tools.jar")
+
+  compile 'nz.ac.waikato.cms.weka:weka-stable:3.8.1'
+  runtime 'nz.ac.waikato.cms.weka:weka-stable:3.8.1'
   compile 'com.github.stephenc.findbugs:findbugs-annotations:' + project.'stephenc-findbugs.version'
   compile 'org.jgroups:jgroups:' + project.'jgroups.version'
   compile 'antlr:antlr:' + project.'antlr.version'

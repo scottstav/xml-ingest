@@ -135,7 +135,7 @@ public class CompiledLoad extends AbstractCompiledValue{
             //logger.info("We have : " + ele);
             list.add(ele.split(","));
             while (csv.hasNext()) {
-                String [] cells = new String[8]; //Must be generalized ******
+                String [] cells = new String[3]; //Must be generalized ******
                 String [] temp; // = null;
                 ele = csv.nextLine();
                 count ++;
@@ -149,7 +149,7 @@ public class CompiledLoad extends AbstractCompiledValue{
                         cells[i] = temp[i].replaceAll("\\Q" + delim + "\\E", ",");
                     }
 
-                    cells[7] = (ele.substring(ele.indexOf(vEnd) + 1));
+                    cells[2] = (ele.substring(ele.indexOf(vEnd) + 1));
                     list.add(cells);
                 }
                 else{

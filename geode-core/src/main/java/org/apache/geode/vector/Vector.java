@@ -111,6 +111,11 @@ public class Vector implements DataSerializable {
         data[index] = value;
     }
 
+    public void setDataFromArray(double[] array) {
+        this.data = array.clone();
+        this.size = this.data.length;
+    }
+
     public double getData(int index){
         return data[index];
     }
