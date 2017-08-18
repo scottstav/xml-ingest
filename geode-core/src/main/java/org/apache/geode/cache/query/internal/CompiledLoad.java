@@ -151,6 +151,13 @@ public class CompiledLoad extends AbstractCompiledValue{
                             cells[i] = temp[i].replaceAll("\\Q" + delim + "\\E", ",");
                             logger.info("!! cell #" + i + ": \"" + cells[i] + "\"");
                         }
+                    } else {
+                        for (int i = 0; i < temp.length; i++) {
+                            cells[i] = temp[i];
+                            logger.info("!! cell #" + i + ": \"" + cells[i] + "\"");
+                        }
+//                        cells[0] = temp[0];
+//                        cells[1] = temp[1];
                     }
 
                     cells[2] = (ele.substring(ele.indexOf(vEnd) + 1));
