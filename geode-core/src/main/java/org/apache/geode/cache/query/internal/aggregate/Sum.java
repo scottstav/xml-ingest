@@ -17,7 +17,9 @@
 package org.apache.geode.cache.query.internal.aggregate;
 
 import org.apache.geode.cache.query.QueryService;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.vector.Vector;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.*;
 
@@ -39,16 +41,18 @@ public class Sum extends AbstractAggregator {
   }
   @Override
   public void accumulate(Object value) {
-      try (BufferedWriter bw = new BufferedWriter(new FileWriter("/tmp/accumulate" + Thread.currentThread().getId() + ".log", true))) {
-        bw.write("=== DEBUG === entered aggregate sum ===\n");
-        bw.write("=== DEBUG === value class is === " + value.getClass() + "\n");
+    Logger logger = LogService.getLogger();
+
+    logger.info("=== INFO === entered Sum::accumulate() ===\n");
+    logger.info("=== INFO === value class is === " + value.getClass() + "\n");
         if (value != null && value != QueryService.UNDEFINED) {
           if (value instanceof Number) {
-            bw.write("=== DEBUG === value is a number === " + value.getClass() + "\n");
+            logger.info("=== INFO === value is a number === " + value.getClass() + "\n");
             Number number = (Number) value;
             result += number.doubleValue();
+            logger.info("=== INFO === result: " + result);
           } else if (value instanceof Vector) {
-            bw.write("=== DEBUG === value is a vector === " + value.getClass() + "\n");
+            logger.info("=== INFO === value is a vector === " + value.getClass() + "\n");
 
             Vector svvalue = (Vector) value;
             isVectorAggregate = true;
@@ -56,13 +60,12 @@ public class Sum extends AbstractAggregator {
               VectorSumResult = new Vector(200000);
             }
             VectorSumResult = VectorSumResult.plus(svvalue);
+
+            logger.info("=== INFO === VectorSumResult: " + VectorSumResult.toString());
           } else {
             // ... unknown object
           }
         }
-      } catch (IOException e) {
-        // TODO do something
-      }
   }
 
   @Override
