@@ -51,6 +51,11 @@ public class Vector implements DataSerializable {
     }
 
     double [] data;
+
+    public int getSize() {
+        return size;
+    }
+
     int size;
 
     public Vector(int size){

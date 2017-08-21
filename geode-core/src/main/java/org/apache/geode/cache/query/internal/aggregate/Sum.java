@@ -57,7 +57,7 @@ public class Sum extends AbstractAggregator {
             Vector svvalue = (Vector) value;
             isVectorAggregate = true;
             if (VectorSumResult == null) {
-              VectorSumResult = new Vector(200000);
+              VectorSumResult = new Vector(svvalue.getSize());
             }
             VectorSumResult = VectorSumResult.plus(svvalue);
 
