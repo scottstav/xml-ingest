@@ -650,15 +650,15 @@ public class CompiledSelect extends AbstractCompiledValue {
     }
   }
 
-  protected void evaluateIntoClause(ExecutionContext context, SelectResults result) {
-    Region putRegion = null;
+  protected <E> void evaluateIntoClause(ExecutionContext context, SelectResults<E> result) {
+    Region<Integer, E> putRegion = null;
     if (into != null) {
       CompiledRegion compiledPutRegion = (CompiledRegion) into.getChildren().get(0);
       String putRegionPath = compiledPutRegion.getRegionPath();
       while (putRegion == null) {
         putRegion = context.getCache().getRegion(putRegionPath);
         try {
-          Thread.sleep(100);
+          Thread.sleep(10);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
@@ -670,15 +670,11 @@ public class CompiledSelect extends AbstractCompiledValue {
 
     // SELECT INTO evaluation is implemented here
     if (putRegion != null) {
-      Iterator resultIterator = result.iterator();
-      Random generator = new Random();
-      long insertKey = generator.nextLong();
+      Iterator<E> resultIterator = result.iterator();
+      Integer insertKey = 0;
       while (resultIterator.hasNext()) {
-        while (putRegion.containsKey(insertKey)) {
-          insertKey = generator.nextLong();
-        }
         // only integer key may be inserted by select-into statement
-        putRegion.put(insertKey, resultIterator.next());
+        putRegion.put(++insertKey, resultIterator.next());
         ++insertKey;
       }
     }
