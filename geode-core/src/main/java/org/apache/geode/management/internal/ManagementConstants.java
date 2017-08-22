@@ -34,7 +34,7 @@ public interface ManagementConstants {
   
   public static final String QUERY_DATA_FUNCTION = QueryDataFunction.class.getName();
   
-  public static final int    DEFAULT_QUERY_LIMIT = 1000;
+  public static final int    DEFAULT_QUERY_LIMIT = 1000000;
 	
   public static final long GII_WAIT_TIME_IN_MILLIS = 500;
 	
