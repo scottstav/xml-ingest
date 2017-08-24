@@ -129,5 +129,25 @@ public class Vector implements DataSerializable {
     public String toString() {
         return Arrays.toString(data);
     }
+
+    public Vector applyLaplace(int sampleSize, double alpha) {
+        Vector result = this.clone();
+        for (int i = 0; i < result.size; ++i) {
+            result.data[i] = Math.log(result.data[i] + alpha) - Math.log(result.size * alpha + sampleSize);
+        }
+        return result;
+    }
+
+    public Vector applyLaplace(int sampleSize) {
+        return applyLaplace(sampleSize, 0.5);
+    }
+
+    @Override
+    protected Vector clone() {
+
+        Vector vector = new Vector(this.size);
+        vector.data = this.data.clone();
+        return vector;
+    }
 }
 

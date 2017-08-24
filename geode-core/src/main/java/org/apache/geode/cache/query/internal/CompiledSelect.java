@@ -663,19 +663,20 @@ public class CompiledSelect extends AbstractCompiledValue {
           e.printStackTrace();
         }
       }
-
-//       LogService.getLogger().info("Putting into " + putRegion.getFullPath());
-//       putRegion.put("Test: ", "Success");
     }
 
     // SELECT INTO evaluation is implemented here
     if (putRegion != null) {
+      // the region is rewritten, keys are sequential, max # of keys = max integer
+      // it's already very slow with 10k keys anyway
+      putRegion.clear();
       Iterator<E> resultIterator = result.iterator();
       Integer insertKey = 0;
       while (resultIterator.hasNext()) {
         // only integer key may be inserted by select-into statement
         putRegion.put(++insertKey, resultIterator.next());
         ++insertKey;
+        // todo: don't copy, find a way to reuse a set in a map
       }
     }
   }
