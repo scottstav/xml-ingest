@@ -549,7 +549,7 @@ public class QCompiler implements OQLLexerTokenTypes {
     CompiledRegion region  = (CompiledRegion)pop();
     CompiledLoad element = new CompiledLoad(cName, filePath, delim, vLim, region);  //  createLoad(filePath, region);
 
-    logger.info("Number: " + thing + "vLim: "  + vLim.getSavedPdxString().toString() + " delim: " + delim.getSavedPdxString().toString() + " filePath: " + filePath.getSavedPdxString().toString() + " real : " + region.getRegionPath());
+    logger.info(" I HAVE MADE AN EDIT --- Number: " + thing + "vLim: "  + vLim.getSavedPdxString().toString() + " delim: " + delim.getSavedPdxString().toString() + " filePath: " + filePath.getSavedPdxString().toString() + " real : " + region.getRegionPath());
 
     push(element);
 
